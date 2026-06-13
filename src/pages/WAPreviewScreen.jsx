@@ -50,8 +50,8 @@ export default function WAPreviewScreen() {
               onClick={() => setTab(t.id)} 
               style={{ 
                 flex: 1, 
-                background: tab === t.id ? `${t.color}12` : '#FFFFFF', 
-                border: `2px solid ${tab === t.id ? t.color : '#E5E7EB'}`, 
+                background: tab === t.id ? `${t.color}12` : 'var(--white)', 
+                border: `2px solid ${tab === t.id ? t.color : 'var(--gray-200)'}`, 
                 borderRadius: 12, 
                 padding: '14px', 
                 fontSize: 14, 
@@ -84,7 +84,7 @@ export default function WAPreviewScreen() {
           }}>
             <img src="/relivlogo.jpeg" alt="Reliv AI" style={{ width: 40, height: 40, borderRadius: '50%' }} />
             <div>
-              <p style={{ fontSize: 15, fontWeight: 600, color: '#FFFFFF' }}>Reliv AI</p>
+              <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--white)' }}>Reliv AI</p>
               <p style={{ fontSize: 12, color: '#8696A0' }}>online</p>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function WAPreviewScreen() {
             padding: '18px', 
             fontSize: 17, 
             fontWeight: 700, 
-            color: '#FFFFFF', 
+            color: 'var(--white)', 
             cursor: 'pointer',
             boxShadow: '0 6px 25px rgba(240, 105, 34, 0.35)'
           }}

@@ -111,7 +111,7 @@ export default function RenewPlanScreen() {
               marginBottom: 28,
             }}>
               <span style={{ fontSize: 32, fontWeight: 900, color: '#F06922' }}>₹{price}</span>
-              <span style={{ fontSize: 14, color: '#9CA3AF' }}>for 7 days</span>
+              <span style={{ fontSize: 14, color: 'var(--gray-400)' }}>for 7 days</span>
             </div>
 
             {/* Previous Settings */}
@@ -183,7 +183,7 @@ export default function RenewPlanScreen() {
 
             <button onClick={() => navigate(-1)} style={{
               width: '100%', background: 'transparent', border: 'none',
-              padding: '14px', fontSize: 14, fontWeight: 600, color: '#9CA3AF',
+              padding: '14px', fontSize: 14, fontWeight: 600, color: 'var(--gray-400)',
               cursor: 'pointer', marginTop: 8,
             }}>← Back</button>
           </>

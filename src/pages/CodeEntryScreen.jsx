@@ -81,7 +81,7 @@ export default function CodeEntryScreen() {
       <div style={{ maxWidth: 520, margin: '0 auto' }}>
         {/* Main Card */}
         <div style={{
-          background: '#FFFFFF',
+          background: 'var(--white)',
           borderRadius: 28,
           padding: '48px 44px',
           boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
@@ -126,12 +126,12 @@ export default function CodeEntryScreen() {
                 style={{
                   width: 72,
                   height: 88,
-                  background: d ? 'linear-gradient(135deg, #FFFAF7 0%, #FFF5F0 100%)' : '#FAFAFA',
-                  border: `3px solid ${d ? '#F06922' : error ? '#EF4444' : '#E5E7EB'}`,
+                  background: d ? 'linear-gradient(135deg, #FFFAF7 0%, #FFF5F0 100%)' : 'var(--gray-50)',
+                  border: `3px solid ${d ? '#F06922' : error ? '#EF4444' : 'var(--gray-200)'}`,
                   borderRadius: 20,
                   fontSize: 36,
                   fontWeight: 800,
-                  color: '#111111',
+                  color: 'var(--gray-900)',
                   textAlign: 'center',
                   outline: 'none',
                   transition: 'all 0.3s ease',
@@ -144,7 +144,7 @@ export default function CodeEntryScreen() {
                   e.target.style.transform = 'scale(1.05)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = d ? '#F06922' : '#E5E7EB';
+                  e.target.style.borderColor = d ? '#F06922' : 'var(--gray-200)';
                   e.target.style.boxShadow = d ? '0 8px 30px rgba(240, 105, 34, 0.15)' : 'none';
                   e.target.style.transform = 'scale(1)';
                 }}
@@ -155,7 +155,7 @@ export default function CodeEntryScreen() {
           {/* Demo Hint */}
           <p style={{
             fontSize: 13,
-            color: '#9CA3AF',
+            color: 'var(--gray-400)',
             marginBottom: 28,
             display: 'flex',
             alignItems: 'center',
@@ -183,7 +183,7 @@ export default function CodeEntryScreen() {
               <span style={{ fontSize: 18 }}>⚠️</span>
               <div>
                 <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 600, margin: 0 }}>{error}</p>
-                <p style={{ fontSize: 12, color: '#9CA3AF', margin: '4px 0 0' }}>
+                <p style={{ fontSize: 12, color: 'var(--gray-400)', margin: '4px 0 0' }}>
                   Check your code or try a new number
                 </p>
               </div>
@@ -204,7 +204,7 @@ export default function CodeEntryScreen() {
               padding: '20px',
               fontSize: 18,
               fontWeight: 700,
-              color: isComplete ? '#FFFFFF' : '#9CA3AF',
+              color: isComplete ? 'var(--white)' : 'var(--gray-400)',
               cursor: isComplete && !loading ? 'pointer' : 'not-allowed',
               boxShadow: isComplete ? '0 10px 40px rgba(240, 105, 34, 0.35)' : 'none',
               transition: 'all 0.3s ease',
@@ -220,7 +220,7 @@ export default function CodeEntryScreen() {
                   width: 22,
                   height: 22,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -237,12 +237,12 @@ export default function CodeEntryScreen() {
             alignItems: 'center',
             gap: 16,
             margin: '28px 0',
-            color: '#9CA3AF',
+            color: 'var(--gray-400)',
             fontSize: 13,
           }}>
-            <div style={{ flex: 1, height: 1, background: '#E5E7EB' }} />
+            <div style={{ flex: 1, height: 1, background: 'var(--gray-200)' }} />
             <span>or</span>
-            <div style={{ flex: 1, height: 1, background: '#E5E7EB' }} />
+            <div style={{ flex: 1, height: 1, background: 'var(--gray-200)' }} />
           </div>
 
           {/* New User Button */}
@@ -250,13 +250,13 @@ export default function CodeEntryScreen() {
             onClick={() => navigate('/phone')}
             style={{
               width: '100%',
-              background: '#FFFFFF',
+              background: 'var(--white)',
               border: '2px solid #E5E7EB',
               borderRadius: 14,
               padding: '16px',
               fontSize: 15,
               fontWeight: 600,
-              color: '#666666',
+              color: 'var(--gray-600)',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
               display: 'flex',
@@ -274,7 +274,7 @@ export default function CodeEntryScreen() {
           textAlign: 'center',
           marginTop: 24,
           fontSize: 13,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

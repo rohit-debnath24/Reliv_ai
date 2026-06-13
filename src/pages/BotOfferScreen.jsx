@@ -100,7 +100,7 @@ export default function BotOfferScreen() {
             <span style={{ fontSize: 10 }}>🔥</span>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#FF8A4C', textTransform: 'uppercase', letterSpacing: 1.5 }}>New Product</span>
           </div>
-          <h1 style={{ fontSize: 36, fontWeight: 900, color: '#FFFFFF', marginBottom: 12, letterSpacing: -1, lineHeight: 1.1 }}>
+          <h1 style={{ fontSize: 36, fontWeight: 900, color: 'var(--white)', marginBottom: 12, letterSpacing: -1, lineHeight: 1.1 }}>
             Meet Your Personal<br />
             <span style={{ background: 'linear-gradient(135deg, #F06922, #FF8A4C, #FFB380)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Health Companion</span>
           </h1>
@@ -121,7 +121,7 @@ export default function BotOfferScreen() {
                 {features[activeFeature].icon}
               </div>
               <div>
-                <p style={{ fontSize: 16, fontWeight: 700, color: '#FFFFFF', marginBottom: 4 }}>{features[activeFeature].title}</p>
+                <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--white)', marginBottom: 4 }}>{features[activeFeature].title}</p>
                 <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>{features[activeFeature].desc}</p>
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function BotOfferScreen() {
         }}>
           <div style={{ position: 'absolute', top: 0, right: 0, width: 120, height: 120, background: 'radial-gradient(circle, rgba(240,105,34,0.2), transparent 70%)', borderRadius: '50%' }} />
           <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 8 }}>One-time purchase</div>
-          <div style={{ fontSize: 56, fontWeight: 900, color: '#FFFFFF', lineHeight: 1, marginBottom: 8 }}>
+          <div style={{ fontSize: 56, fontWeight: 900, color: 'var(--white)', lineHeight: 1, marginBottom: 8 }}>
             <span style={{ fontSize: 28, verticalAlign: 'top', opacity: 0.7 }}>₹</span>499
           </div>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)' }}>Free lifetime sync • No subscription ever</p>

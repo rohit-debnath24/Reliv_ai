@@ -65,7 +65,7 @@ export default function MealTimeScreen() {
                         <div
                             key={meal.key}
                             style={{
-                                background: '#FFFFFF',
+                                background: 'var(--white)',
                                 borderRadius: 18,
                                 padding: '24px 28px',
                                 display: 'flex',
@@ -104,7 +104,7 @@ export default function MealTimeScreen() {
                                 }}>
                                     {meal.label}
                                 </p>
-                                <p style={{ fontSize: 13, color: '#9CA3AF' }}>{meal.desc}</p>
+                                <p style={{ fontSize: 13, color: 'var(--gray-400)' }}>{meal.desc}</p>
                             </div>
 
                             {/* Time Input */}
@@ -129,7 +129,7 @@ export default function MealTimeScreen() {
                                     e.target.style.boxShadow = '0 0 0 4px rgba(240, 105, 34, 0.1)';
                                 }}
                                 onBlur={(e) => {
-                                    e.target.style.borderColor = '#E5E7EB';
+                                    e.target.style.borderColor = 'var(--gray-200)';
                                     e.target.style.boxShadow = 'none';
                                 }}
                             />
@@ -148,7 +148,7 @@ export default function MealTimeScreen() {
                         padding: '20px',
                         fontSize: 18,
                         fontWeight: 700,
-                        color: '#FFFFFF',
+                        color: 'var(--white)',
                         cursor: 'pointer',
                         boxShadow: '0 10px 40px rgba(240, 105, 34, 0.35)',
                         transition: 'all 0.3s ease',

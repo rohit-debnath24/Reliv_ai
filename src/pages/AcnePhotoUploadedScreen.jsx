@@ -27,7 +27,7 @@ export default function AcnePhotoUploadedScreen() {
   const typeLabels = {
     active_acne: { label: 'Active Acne', icon: '🔴', color: '#EF4444' },
     blackheads:  { label: 'Blackheads',  icon: '⚫', color: '#374151' },
-    whiteheads:  { label: 'Whiteheads',  icon: '⚪', color: '#9CA3AF' },
+    whiteheads:  { label: 'Whiteheads',  icon: '⚪', color: 'var(--gray-400)' },
     acne_scars:  { label: 'Acne Scars',  icon: '🟤', color: '#92400E' },
     mixed:       { label: 'Mixed Types',  icon: '🎨', color: '#8B5CF6' },
   };
@@ -80,9 +80,9 @@ export default function AcnePhotoUploadedScreen() {
             textAlign: 'center',
             border: '1px solid #E5E7EB',
           }}>
-            <div style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600, marginBottom: 6 }}>SEVERITY</div>
+            <div style={{ fontSize: 12, color: 'var(--gray-400)', fontWeight: 600, marginBottom: 6 }}>SEVERITY</div>
             <div style={{ fontSize: 18, fontWeight: 800, color: sevInfo.color }}>{sevInfo.label}</div>
-            <div style={{ width: '100%', height: 4, background: '#E5E7EB', borderRadius: 2, marginTop: 8, overflow: 'hidden' }}>
+            <div style={{ width: '100%', height: 4, background: 'var(--gray-200)', borderRadius: 2, marginTop: 8, overflow: 'hidden' }}>
               <div style={{ width: `${sevInfo.bar}%`, height: '100%', background: sevInfo.color, borderRadius: 2, transition: 'width 1s ease' }} />
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function AcnePhotoUploadedScreen() {
             textAlign: 'center',
             border: '1px solid #E5E7EB',
           }}>
-            <div style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600, marginBottom: 6 }}>LOCATION</div>
+            <div style={{ fontSize: 12, color: 'var(--gray-400)', fontWeight: 600, marginBottom: 6 }}>LOCATION</div>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#2D3436' }}>
               {(analysis.location || ['cheeks']).map(l => l.charAt(0).toUpperCase() + l.slice(1)).join(', ')}
             </div>
@@ -109,7 +109,7 @@ export default function AcnePhotoUploadedScreen() {
             textAlign: 'center',
             border: '1px solid #E5E7EB',
           }}>
-            <div style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600, marginBottom: 6 }}>LESIONS</div>
+            <div style={{ fontSize: 12, color: 'var(--gray-400)', fontWeight: 600, marginBottom: 6 }}>LESIONS</div>
             <div style={{ fontSize: 24, fontWeight: 800, color: '#F06922' }}>
               {analysis.lesionCount || '—'}
             </div>
@@ -170,7 +170,7 @@ export default function AcnePhotoUploadedScreen() {
               }}
             >
               🗂️ Keep Photo
-              <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 4 }}>For progress tracking</div>
+              <div style={{ fontSize: 11, color: 'var(--gray-400)', marginTop: 4 }}>For progress tracking</div>
             </button>
             <button
               onClick={() => setKeepPhoto(false)}
@@ -188,7 +188,7 @@ export default function AcnePhotoUploadedScreen() {
               }}
             >
               🗑️ Delete Photo
-              <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 4 }}>Remove after analysis</div>
+              <div style={{ fontSize: 11, color: 'var(--gray-400)', marginTop: 4 }}>Remove after analysis</div>
             </button>
           </div>
         </div>

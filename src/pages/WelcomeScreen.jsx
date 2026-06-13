@@ -1,24 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { C, api } from "../utils/constants";
-
-const relivAvatar = "/avatar-removebg-preview.png";
+import { api } from "../utils/constants";
+import "./WelcomeScreen.css";
 
 export default function WelcomeScreen() {
   const navigate = useNavigate();
+
+  // App States
   const [stats, setStats] = useState({
     topUsers: [],
     todayUsers: 47,
     successStories: 12847,
   });
-  const [show, setShow] = useState(false);
-  const [avatarHover, setAvatarHover] = useState(false);
-  // Inactivity attract screen state
   const [inactive, setInactive] = useState(false);
   const [shoutouts, setShoutouts] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const timerRef = useRef();
   const cycleRef = useRef();
+
+  // Theme State
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true; // default to dark
+  });
 
   // Load shoutouts from localStorage
   useEffect(() => {
@@ -54,7 +58,6 @@ export default function WelcomeScreen() {
 
   useEffect(() => {
     api.call("/stats/today").then(setStats).catch(() => { });
-    setTimeout(() => setShow(true), 100);
     resetInactivity();
     const events = ["mousemove", "mousedown", "keydown", "touchstart"];
     const handler = resetInactivity;
@@ -65,26 +68,44 @@ export default function WelcomeScreen() {
     };
   }, []);
 
+  // Scroll and Reveal Observer
+  useEffect(() => {
+    const nav = document.getElementById('nav');
+    const handleScroll = () => {
+      if(window.scrollY > 40) { nav?.classList.add('scrolled'); }
+      else { nav?.classList.remove('scrolled'); }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, {threshold: 0.15});
+    revealEls.forEach(el => obs.observe(el));
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      obs.disconnect();
+    };
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    localStorage.setItem("theme", newTheme ? "dark" : "light");
+    window.dispatchEvent(new Event('themeChange'));
+  };
+
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(180deg, #FFFDFB 0%, #FFF8F3 25%, #FFF0E8 50%, #FFE8DB 100%)',
-        fontFamily: "'Inter', 'Outfit', sans-serif",
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-      onMouseMove={resetInactivity}
-      onKeyDown={resetInactivity}
-      onClick={resetInactivity}
-      onTouchStart={resetInactivity}
-    >
+    <div className={`welcome-landing ${isDark ? 'dark-mode' : 'light-mode'}`} onMouseMove={resetInactivity} onKeyDown={resetInactivity} onClick={resetInactivity} onTouchStart={resetInactivity}>
       {/* Attract/advertisement overlay after inactivity */}
       {inactive && shoutouts.length > 0 && (
         <div
           style={{
-            position: 'fixed', inset: 0, zIndex: 100,
-            background: 'rgba(255,255,255,0.97)',
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(5,5,5,0.97)',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             transition: 'background 0.4s',
           }}
@@ -93,7 +114,7 @@ export default function WelcomeScreen() {
           <div style={{
             background: 'linear-gradient(135deg,#F4610A,#FB923C)',
             borderRadius: 32,
-            boxShadow: '0 24px 80px rgba(244,97,10,0.18)',
+            boxShadow: '0 24px 80px rgba(244,97,10,0.3)',
             padding: 48,
             display: 'flex', flexDirection: 'column', alignItems: 'center',
             maxWidth: 420,
@@ -122,7 +143,7 @@ export default function WelcomeScreen() {
                 {shoutouts[currentIdx]?.type || "Shoutout"}
               </span>
             </div>
-            <h2 style={{ fontFamily: 'Playfair Display,serif', fontSize: 26, fontWeight: 900, color: '#fff', marginBottom: 6, textAlign: 'center' }}>
+            <h2 style={{ fontFamily: 'Playfair Display,serif', fontSize: 26, fontWeight: 900, color: '#fff', marginBottom: 6, textAlign: 'center', letterSpacing: '0' }}>
               {shoutouts[currentIdx]?.name || "Your Name Here"}
             </h2>
             <p style={{ color: '#FED7AA', fontSize: 16, fontWeight: 500, textAlign: 'center', marginBottom: 18, fontStyle: 'italic', maxWidth: 300 }}>
@@ -138,7 +159,7 @@ export default function WelcomeScreen() {
               ))}
             </div>
             <button
-              onClick={() => { setInactive(false); navigate('/ProductShowcaseBoard'); }}
+              onClick={(e) => { e.stopPropagation(); setInactive(false); navigate('/ProductShowcaseBoard'); }}
               style={{
                 background: 'linear-gradient(135deg,#F97316,#F4610A)',
                 color: '#fff', fontWeight: 700, fontSize: 18,
@@ -152,834 +173,319 @@ export default function WelcomeScreen() {
           </div>
         </div>
       )}
-      {/* Animated Mesh Gradient Background */}
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        overflow: 'hidden',
-        pointerEvents: 'none',
-      }}>
-        {/* Soft Gradient Orbs */}
-        <div style={{
-          position: 'absolute',
-          top: '-15%',
-          right: '-10%',
-          width: 700,
-          height: 700,
-          background: 'radial-gradient(circle, rgba(240, 105, 34, 0.08) 0%, rgba(255, 200, 150, 0.04) 40%, transparent 70%)',
-          borderRadius: '50%',
-          animation: 'floatOrb1 20s ease-in-out infinite',
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-20%',
-          left: '-15%',
-          width: 800,
-          height: 800,
-          background: 'radial-gradient(circle, rgba(255, 180, 120, 0.06) 0%, rgba(240, 105, 34, 0.03) 40%, transparent 70%)',
-          borderRadius: '50%',
-          animation: 'floatOrb2 25s ease-in-out infinite',
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: '30%',
-          left: '20%',
-          width: 400,
-          height: 400,
-          background: 'radial-gradient(circle, rgba(255, 220, 180, 0.1) 0%, transparent 60%)',
-          borderRadius: '50%',
-          animation: 'floatOrb3 18s ease-in-out infinite',
-        }} />
-        
-        {/* Subtle Grid Pattern */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `
-            linear-gradient(rgba(240, 105, 34, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(240, 105, 34, 0.02) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-          opacity: 0.5,
-        }} />
 
-        {/* Silk Wave Bottom */}
-        <svg style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          height: '40%',
-          opacity: 0.4,
-        }} viewBox="0 0 1440 400" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="waveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#F06922" stopOpacity="0.1" />
-              <stop offset="50%" stopColor="#FF8C4B" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="#F06922" stopOpacity="0.1" />
-            </linearGradient>
-            <linearGradient id="waveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FFB380" stopOpacity="0.08" />
-              <stop offset="50%" stopColor="#F06922" stopOpacity="0.12" />
-              <stop offset="100%" stopColor="#FFB380" stopOpacity="0.08" />
-            </linearGradient>
-          </defs>
-          <path fill="url(#waveGrad1)" style={{ animation: 'silkWave1 8s ease-in-out infinite' }}>
-            <animate attributeName="d" dur="8s" repeatCount="indefinite" values="
-              M0,200 C360,280 720,120 1080,200 S1440,280 1440,200 L1440,400 L0,400 Z;
-              M0,200 C360,120 720,280 1080,200 S1440,120 1440,200 L1440,400 L0,400 Z;
-              M0,200 C360,280 720,120 1080,200 S1440,280 1440,200 L1440,400 L0,400 Z
-            " />
-          </path>
-          <path fill="url(#waveGrad2)" style={{ animation: 'silkWave2 10s ease-in-out infinite' }}>
-            <animate attributeName="d" dur="10s" repeatCount="indefinite" values="
-              M0,250 C360,180 720,320 1080,250 S1440,180 1440,250 L1440,400 L0,400 Z;
-              M0,250 C360,320 720,180 1080,250 S1440,320 1440,250 L1440,400 L0,400 Z;
-              M0,250 C360,180 720,320 1080,250 S1440,180 1440,250 L1440,400 L0,400 Z
-            " />
-          </path>
-        </svg>
-      </div>
-
-      {/* Header - Clean & Minimal */}
-      <header style={{
-        position: 'relative',
-        zIndex: 10,
-        padding: '28px 60px',
-      }}>
-        <div style={{
-          maxWidth: 1400,
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 18,
-            opacity: show ? 1 : 0,
-            transform: show ? 'translateY(0)' : 'translateY(-20px)',
-            transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-          }}>
-            <div style={{ position: 'relative' }}>
-              {/* Logo Glow */}
-              <div style={{
-                position: 'absolute',
-                inset: -6,
-                background: 'linear-gradient(135deg, #F06922, #FF8C4B)',
-                borderRadius: 20,
-                opacity: 0.2,
-                filter: 'blur(12px)',
-                animation: 'logoGlow 3s ease-in-out infinite',
-              }} />
-              <img
-                src="/relivlogo.jpeg"
-                alt="Reliv AI"
-                style={{
-                  width: 58,
-                  height: 58,
-                  borderRadius: 16,
-                  border: '2px solid rgba(255, 255, 255, 0.8)',
-                  boxShadow: '0 8px 32px rgba(240, 105, 34, 0.2)',
-                  position: 'relative',
-                  zIndex: 1,
-                }}
-              />
-            </div>
-            <div>
-              <h1 style={{
-                fontSize: 34,
-                fontWeight: 800,
-                background: 'linear-gradient(135deg, #1a1a1a 0%, #F06922 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-1px',
-                margin: 0,
-              }}>
-                Reliv AI
-              </h1>
-              <p style={{
-                fontSize: 11,
-                color: '#888',
-                margin: 0,
-                letterSpacing: '2px',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-              }}>
-                Your AI Health Coach
-              </p>
-            </div>
+      <header className="nav" id="nav">
+        <div className="nav-inner">
+          <div className="brand">
+            <div className="brand-mark">R</div>
+            <div className="brand-name">Re<span style={{color: 'var(--coral)'}}>liv</span></div>
           </div>
-          
-          {/* Login Button - Premium Glass */}
-          <button
-            onClick={() => navigate('/code')}
-            style={{
-              background: 'rgba(255, 255, 255, 0.7)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(240, 105, 34, 0.15)',
-              borderRadius: 14,
-              padding: '14px 28px',
-              fontSize: 14,
-              fontWeight: 600,
-              color: '#333',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 24px rgba(240, 105, 34, 0.08)',
-              opacity: show ? 1 : 0,
-              transform: show ? 'translateY(0)' : 'translateY(-20px)',
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.95)';
-              e.target.style.borderColor = 'rgba(240, 105, 34, 0.3)';
-              e.target.style.boxShadow = '0 8px 40px rgba(240, 105, 34, 0.15)';
-              e.target.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.7)';
-              e.target.style.borderColor = 'rgba(240, 105, 34, 0.15)';
-              e.target.style.boxShadow = '0 4px 24px rgba(240, 105, 34, 0.08)';
-              e.target.style.transform = 'translateY(0)';
-            }}
-          >
-            🔑 Login with Code
-          </button>
+          <nav className="nav-links">
+            <a href="#day">How it works</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#proof">Reviews</a>
+          </nav>
+          <div className="nav-right">
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+              {isDark ? "☀️" : "🌙"}
+            </button>
+            <button onClick={() => navigate('/code')} className="nav-cta">Login with code</button>
+          </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <main style={{
-        maxWidth: 1400,
-        margin: '0 auto',
-        padding: '40px 60px 80px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 100,
-        alignItems: 'center',
-        minHeight: 'calc(100vh - 150px)',
-        position: 'relative',
-        zIndex: 5,
-      }}>
-        {/* Left Content */}
-        <div style={{
-          opacity: show ? 1 : 0,
-          transform: show ? 'translateY(0)' : 'translateY(40px)',
-          transition: 'all 1s cubic-bezier(0.4, 0, 0.2, 1)',
-        }}>
-          {/* Premium Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 12,
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            padding: '14px 26px',
-            borderRadius: 50,
-            marginBottom: 36,
-            border: '1px solid rgba(240, 105, 34, 0.12)',
-            boxShadow: '0 8px 40px rgba(240, 105, 34, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
-            position: 'relative',
-            overflow: 'hidden',
-          }}>
-            {/* Shimmer Effect */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: '-100%',
-              width: '100%',
-              height: '100%',
-              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)',
-              animation: 'shimmerSweep 3s ease-in-out infinite',
-            }} />
-            <span style={{ fontSize: 20 }}>🏥</span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: '#333' }}>
-              AI-Powered Personal Health
-            </span>
-            <span style={{
-              background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
-              color: '#FFFFFF',
-              fontSize: 10,
-              fontWeight: 700,
-              padding: '6px 14px',
-              borderRadius: 20,
-              boxShadow: '0 4px 16px rgba(34, 197, 94, 0.3)',
-            }}>
-              NEW
-            </span>
-          </div>
-
-          {/* Main Heading */}
-          <h1 style={{
-            fontSize: 68,
-            fontWeight: 800,
-            color: '#1a1a1a',
-            lineHeight: 1.05,
-            letterSpacing: '-3px',
-            marginBottom: 28,
-          }}>
-            Transform Your
-            <br />
-            Health with{' '}
-            <span style={{
-              position: 'relative',
-              display: 'inline-block',
-            }}>
-              <span style={{
-                background: 'linear-gradient(135deg, #F06922 0%, #FF6B35 50%, #E85C25 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}>
-                AI
-              </span>
-              {/* Underline Glow */}
-              <div style={{
-                position: 'absolute',
-                bottom: 2,
-                left: 0,
-                width: '100%',
-                height: 6,
-                background: 'linear-gradient(90deg, #F06922, #FF8C4B, #F06922)',
-                borderRadius: 3,
-                boxShadow: '0 4px 20px rgba(240, 105, 34, 0.4)',
-              }} />
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p style={{
-            fontSize: 20,
-            color: '#666',
-            lineHeight: 1.8,
-            marginBottom: 44,
-            maxWidth: 520,
-            fontWeight: 400,
-          }}>
-            Personalized diet plans, workout routines, and daily WhatsApp reminders —
-            all powered by AI for just{' '}
-            <span style={{
-              color: '#F06922',
-              fontWeight: 800,
-              position: 'relative',
-            }}>
-              ₹9/day
-              <span style={{
-                position: 'absolute',
-                bottom: -2,
-                left: 0,
-                width: '100%',
-                height: 2,
-                background: '#F06922',
-                borderRadius: 1,
-              }} />
-            </span>
-          </p>
-
-          {/* CTA Buttons */}
-          <div style={{ display: 'flex', gap: 20, marginBottom: 56 }}>
-            {/* Primary CTA */}
-            <button
-              onClick={() => navigate("/phone")}
-              style={{
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 14,
-                background: 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)',
-                border: 'none',
-                borderRadius: 20,
-                padding: '24px 48px',
-                fontSize: 18,
-                fontWeight: 700,
-                color: '#FFFFFF',
-                cursor: 'pointer',
-                boxShadow: '0 16px 48px rgba(240, 105, 34, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                overflow: 'hidden',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 24px 64px rgba(240, 105, 34, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1) inset';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = '0 16px 48px rgba(240, 105, 34, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) inset';
-              }}
-            >
-              {/* Wave Shine Effect */}
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                left: '-100%',
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent)',
-                animation: 'waveShine 2.5s ease-in-out infinite',
-              }} />
-              <span style={{ position: 'relative', zIndex: 1 }}>Start Free Trial</span>
-              <svg style={{ position: 'relative', zIndex: 1 }} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-
-            {/* Secondary CTA */}
-            <button
-              onClick={() => navigate('/code')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                background: 'rgba(255, 255, 255, 0.8)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '2px solid rgba(240, 105, 34, 0.15)',
-                borderRadius: 20,
-                padding: '22px 40px',
-                fontSize: 16,
-                fontWeight: 600,
-                color: '#444',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.04)',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = '#FFFFFF';
-                e.target.style.borderColor = '#F06922';
-                e.target.style.color = '#F06922';
-                e.target.style.boxShadow = '0 12px 40px rgba(240, 105, 34, 0.12)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.8)';
-                e.target.style.borderColor = 'rgba(240, 105, 34, 0.15)';
-                e.target.style.color = '#444';
-                e.target.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.04)';
-              }}
-            >
-              🔄 Returning User
-            </button>
-
-            {/* Public Board CTA */}
-            <button
-              onClick={() => navigate('/ProductShowcaseBoard')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                background: 'linear-gradient(135deg, #FFF7ED 0%, #FED7AA 100%)',
-                border: '2px solid #F4610A',
-                borderRadius: 20,
-                padding: '18px 32px',
-                fontSize: 15,
-                fontWeight: 700,
-                color: '#F4610A',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 6px 24px rgba(244,97,10,0.10)',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'linear-gradient(135deg, #F4610A, #FB923C)';
-                e.target.style.color = '#fff';
-                e.target.style.boxShadow = '0 12px 40px rgba(244,97,10,0.25)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'linear-gradient(135deg, #FFF7ED 0%, #FED7AA 100%)';
-                e.target.style.color = '#F4610A';
-                e.target.style.boxShadow = '0 6px 24px rgba(244,97,10,0.10)';
-              }}
-            >
-              🎉 Public Shoutout Board
-            </button>
-          </div>
-
-          {/* Trust Badges */}
-          <div style={{
-            display: 'flex',
-            gap: 32,
-            paddingTop: 32,
-            borderTop: '1px solid rgba(240, 105, 34, 0.1)',
-          }}>
-            {[
-              { icon: '🔒', text: 'Bank-Grade Security' },
-              { icon: '✅', text: '50,000+ Users' },
-              { icon: '⭐', text: '4.9/5 Rating' },
-            ].map((badge, i) => (
-              <div key={i} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                opacity: show ? 1 : 0,
-                transform: show ? 'translateY(0)' : 'translateY(10px)',
-                transition: `all 0.6s ease ${0.5 + i * 0.15}s`,
-              }}>
-                <span style={{ fontSize: 22 }}>{badge.icon}</span>
-                <span style={{ fontSize: 14, color: '#666', fontWeight: 500 }}>{badge.text}</span>
-              </div>
-            ))}
-          </div>
+      {/* ============ MARQUEE ============ */}
+      <div className="marquee" style={{ marginTop: '80px' }}>
+        <div className="marquee-track" id="marquee" style={{ animation: 'scrollx 38s linear infinite' }}>
+          <div className="marquee-item"><span className="strong">{stats.successStories}+</span> success stories <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">4.9★</span> average rating <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">HIPAA</span> compliant <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">Bank-grade</span> security <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">Endorsed</span> by experts <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">₹9/day</span> — all inclusive <span className="sep">◆</span></div>
+          {/* Duplicated for seamless loop */}
+          <div className="marquee-item"><span className="strong">{stats.successStories}+</span> success stories <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">4.9★</span> average rating <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">HIPAA</span> compliant <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">Bank-grade</span> security <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">Endorsed</span> by experts <span className="sep">◆</span></div>
+          <div className="marquee-item"><span className="strong">₹9/day</span> — all inclusive <span className="sep">◆</span></div>
         </div>
+      </div>
 
-        {/* Right Content - Premium Glass Card */}
-        <div style={{
-          position: 'relative',
-          opacity: show ? 1 : 0,
-          transform: show ? 'translateX(0)' : 'translateX(60px)',
-          transition: 'all 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s',
-        }}>
-          {/* Main Premium Card */}
-          <div style={{
-            position: 'relative',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%)',
-            backdropFilter: 'blur(40px)',
-            WebkitBackdropFilter: 'blur(40px)',
-            borderRadius: 40,
-            padding: 48,
-            border: '1px solid rgba(255, 255, 255, 0.9)',
-            boxShadow: `
-              0 40px 100px rgba(240, 105, 34, 0.12),
-              0 20px 60px rgba(0, 0, 0, 0.05),
-              inset 0 1px 1px rgba(255, 255, 255, 1),
-              inset 0 -1px 1px rgba(240, 105, 34, 0.05)
-            `,
-            overflow: 'hidden',
-            zIndex: 2,
-          }}>
-            {/* Light Reflection Top */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '50%',
-              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, transparent 100%)',
-              pointerEvents: 'none',
-            }} />
-            
-            {/* Shimmer Sweep */}
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: '-100%',
-              width: '100%',
-              height: '100%',
-              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
-              animation: 'shimmerSweep 4s ease-in-out infinite',
-              pointerEvents: 'none',
-            }} />
-
-            {/* Avatar Section */}
-            <div style={{
-              textAlign: 'center',
-              marginBottom: 36,
-              position: 'relative',
-              zIndex: 1,
-            }}>
-              <div
-                style={{
-                  position: 'relative',
-                  display: 'inline-block',
-                }}
-                onMouseEnter={() => setAvatarHover(true)}
-                onMouseLeave={() => setAvatarHover(false)}
-              >
-                {/* Avatar Glow Ring */}
-                <div style={{
-                  position: 'absolute',
-                  inset: -14,
-                  background: 'conic-gradient(from 0deg, #F06922, #FF8C4B, #FFB380, #FF8C4B, #F06922)',
-                  borderRadius: '50%',
-                  animation: 'rotateGlow 6s linear infinite',
-                  opacity: 0.3,
-                  filter: 'blur(16px)',
-                }} />
-                <div style={{
-                  position: 'absolute',
-                  inset: -4,
-                  background: 'linear-gradient(135deg, #F06922, #FF8C4B)',
-                  borderRadius: '50%',
-                  padding: 3,
-                }}>
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    background: '#FFF',
-                    borderRadius: '50%',
-                  }} />
-                </div>
-                <img
-                  src={relivAvatar}
-                  alt="Reliv AI Assistant"
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    border: '4px solid #FFFFFF',
-                    boxShadow: '0 20px 50px rgba(240, 105, 34, 0.25)',
-                    transform: avatarHover ? 'scale(1.06)' : 'scale(1)',
-                    transition: 'transform 0.4s ease',
-                    position: 'relative',
-                    zIndex: 1,
-                  }}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #F06922 0%, #FF8C4B 100%); display: flex; align-items: center; justify-content: center; font-size: 52px; box-shadow: 0 20px 50px rgba(240, 105, 34, 0.25);">🧑‍⚕️</div>';
-                  }}
-                />
-              </div>
-
-              {/* Speech Bubble */}
-              <div style={{
-                background: 'linear-gradient(135deg, #FFF9F5 0%, #FFF3EC 100%)',
-                padding: '16px 28px',
-                borderRadius: 28,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 12,
-                marginTop: 24,
-                border: '1px solid rgba(240, 105, 34, 0.1)',
-                boxShadow: '0 8px 32px rgba(240, 105, 34, 0.08)',
-              }}>
-                <span style={{ fontSize: 24, animation: 'wave 2.5s ease-in-out infinite', display: 'inline-block' }}>👋</span>
-                <span style={{ fontSize: 15, fontWeight: 600, color: '#333' }}>
-                  Hi! I'm your AI Health Coach
-                </span>
-              </div>
+      {/* ============ HERO ============ */}
+      <section className="hero" style={{ paddingTop: '80px' }}>
+        <div className="wrap hero-grid">
+          <div>
+            <span className="hero-eyebrow"><span className="dot"></span> AI-Powered Personal Health</span>
+            <h1>Transform your health,<br/>one <span style={{color: 'var(--coral)'}}>WhatsApp</span><br/>message at a time.</h1>
+            <p className="lead">
+              Reliv's AI coach builds your diet plan, your workout routine, and your daily reminders —
+              then sends them straight to the app you already check 40 times a day. All for <strong>less than your daily chai</strong>,
+              at <span className="price">₹9/day</span>.
+            </p>
+            <div className="hero-ctas">
+              <button onClick={() => navigate('/phone')} className="btn-primary">Start your free trial</button>
+              <button onClick={() => navigate('/ProductShowcaseBoard')} className="btn-ghost">Public shoutout board</button>
             </div>
+            <div className="hero-stats">
+              <div className="hero-stat"><span className="num">{stats.todayUsers}+</span><span className="lbl">Users Today</span></div>
+              <div className="hero-stat"><span className="num">4.9</span><span className="lbl">Average rating</span></div>
+              <div className="hero-stat"><span className="num">HIPAA</span><span className="lbl">Compliant by design</span></div>
+            </div>
+          </div>
 
-            {/* Champions Leaderboard */}
-            <div style={{ marginBottom: 32, position: 'relative', zIndex: 1 }}>
-              <h3 style={{
-                fontSize: 12,
-                fontWeight: 700,
-                color: '#F06922',
-                textTransform: 'uppercase',
-                letterSpacing: '2px',
-                marginBottom: 18,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 10,
-              }}>
-                <span>🏆</span> Today's Champions
-              </h3>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: 14,
-              }}>
-                {[
-                  { name: 'Rahul', streak: '23 days', medal: '🥇', bg: 'linear-gradient(135deg, #FFFBF0 0%, #FFF4DC 100%)', border: '#FFE4A8', glow: 'rgba(255, 200, 100, 0.4)' },
-                  { name: 'Priya', streak: '19 days', medal: '🥈', bg: 'linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%)', border: '#E8E8E8', glow: 'rgba(200, 200, 200, 0.3)' },
-                  { name: 'Amit', streak: '15 days', medal: '🥉', bg: 'linear-gradient(135deg, #FFF8F4 0%, #FFEDE4 100%)', border: '#FFDCC8', glow: 'rgba(255, 180, 140, 0.3)' },
-                ].map((user, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      background: user.bg,
-                      border: `2px solid ${user.border}`,
-                      borderRadius: 20,
-                      padding: '20px 16px',
-                      textAlign: 'center',
-                      opacity: show ? 1 : 0,
-                      transform: show ? 'scale(1)' : 'scale(0.8)',
-                      transition: `all 0.6s ease ${0.6 + i * 0.1}s`,
-                      boxShadow: i === 0 ? `0 8px 32px ${user.glow}` : '0 4px 16px rgba(0, 0, 0, 0.04)',
-                    }}
-                  >
-                    <div style={{ fontSize: 34, marginBottom: 8 }}>{user.medal}</div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a' }}>{user.name}</div>
-                    <div style={{
-                      fontSize: 12,
-                      color: i === 0 ? '#F06922' : '#666',
-                      fontWeight: 600,
-                      marginTop: 4,
-                    }}>
-                      {user.streak} 🔥
-                    </div>
+          <div className="hero-visual">
+            <div className="phone">
+              <div className="phone-screen">
+                <div className="chat-head">
+                  <div className="chat-avatar">R</div>
+                  <div className="chat-head-info">
+                    <div className="name">Reliv AI Coach</div>
+                    <div className="status">online</div>
                   </div>
-                ))}
+                </div>
+                <div className="chat-body">
+                  <div className="bubble in">Good morning Aarav ☀️ Here's today's plan based on your goal — lose 4kg by August.<span className="time">7:02 AM</span></div>
+                  <div className="bubble in"><strong>Breakfast:</strong> Moong dal chilla + curd, 320 kcal. Want the recipe?<span className="time">7:02 AM</span></div>
+                  <div className="bubble out">Yes please 🙏<span className="time">7:05 AM</span></div>
+                  <div className="bubble in"><strong>Workout:</strong> 25-min lower body session at 6 PM. I'll check in after 💪<span className="time">5:55 PM</span></div>
+                  <div className="typing"><span></span><span></span><span></span></div>
+                  <div className="bubble in">You're 3 days into your streak 🔥 Log dinner when you're ready.<span className="time">9:10 PM</span></div>
+                </div>
               </div>
             </div>
-
-            {/* Stats Row */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 48,
-              paddingTop: 28,
-              borderTop: '1px solid rgba(240, 105, 34, 0.1)',
-              position: 'relative',
-              zIndex: 1,
-            }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  fontSize: 32,
-                  fontWeight: 800,
-                  background: 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}>{stats.todayUsers}</div>
-                <div style={{ fontSize: 12, color: '#888', fontWeight: 500, marginTop: 4 }}>Users Today</div>
-              </div>
-              <div style={{ width: 1, background: 'rgba(240, 105, 34, 0.1)' }} />
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  fontSize: 32,
-                  fontWeight: 800,
-                  background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}>{stats.successStories.toLocaleString()}+</div>
-                <div style={{ fontSize: 12, color: '#888', fontWeight: 500, marginTop: 4 }}>Success Stories</div>
-              </div>
+            <div className="float-card streak" style={{ top: '10%', right: '-15%', padding: '12px 20px', gap: '10px', transform: 'rotate(-2deg)' }}>
+              <span style={{ color: '#22C55E', fontSize: '10px' }}>🟢</span>
+              <div className="ftitle" style={{ fontSize: '0.85rem' }}>Synced with WhatsApp</div>
+            </div>
+            <div className="float-card progress" style={{ left: '-15%', bottom: '12%', padding: '12px 20px', gap: '10px', transform: 'rotate(2deg)' }}>
+              <span style={{fontSize: "1.2rem"}}>🔥</span>
+              <div className="ftitle" style={{ fontSize: '0.85rem' }}>12-day streak</div>
             </div>
           </div>
-
-          {/* Floating Elements */}
-          <div style={{
-            position: 'absolute',
-            top: -20,
-            right: -30,
-            background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
-            color: '#FFFFFF',
-            padding: '14px 24px',
-            borderRadius: 18,
-            fontSize: 14,
-            fontWeight: 700,
-            boxShadow: '0 12px 40px rgba(34, 197, 94, 0.35)',
-            transform: show ? 'rotate(6deg) scale(1)' : 'rotate(6deg) scale(0)',
-            transition: 'transform 0.6s ease 0.7s',
-            zIndex: 3,
-          }}>
-            ✨ Free Trial Available!
-          </div>
-
-          <div style={{
-            position: 'absolute',
-            bottom: 50,
-            left: -45,
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.9)',
-            padding: '16px 24px',
-            borderRadius: 18,
-            fontSize: 14,
-            fontWeight: 600,
-            color: '#333',
-            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            transform: show ? 'rotate(-4deg) scale(1)' : 'rotate(-4deg) scale(0)',
-            transition: 'transform 0.6s ease 0.8s',
-            zIndex: 3,
-          }}>
-            <span style={{ fontSize: 22 }}>💪</span>
-            Lost 5kg in 2 weeks!
-          </div>
-
-          {/* Decorative Elements */}
-          <div style={{
-            position: 'absolute',
-            top: '25%',
-            right: -50,
-            fontSize: 28,
-            animation: 'float 3s ease-in-out infinite',
-            opacity: show ? 0.8 : 0,
-            transition: 'opacity 0.5s ease 1s',
-          }}>✨</div>
-          <div style={{
-            position: 'absolute',
-            bottom: '30%',
-            left: -35,
-            fontSize: 24,
-            animation: 'float 4s ease-in-out infinite 1s',
-            opacity: show ? 0.6 : 0,
-            transition: 'opacity 0.5s ease 1.2s',
-          }}>💫</div>
-          <div style={{
-            position: 'absolute',
-            top: '60%',
-            right: -40,
-            fontSize: 20,
-            animation: 'float 3.5s ease-in-out infinite 0.5s',
-            opacity: show ? 0.5 : 0,
-            transition: 'opacity 0.5s ease 1.4s',
-          }}>🌟</div>
         </div>
-      </main>
+      </section>
 
-      {/* Animation Keyframes */}
-      <style>{`
-        @keyframes floatOrb1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-40px, 30px) scale(1.05); }
-          66% { transform: translate(30px, -40px) scale(0.95); }
-        }
-        @keyframes floatOrb2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(50px, -30px) scale(1.08); }
-          66% { transform: translate(-30px, 40px) scale(0.92); }
-        }
-        @keyframes floatOrb3 {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(40px, 30px); }
-        }
-        @keyframes logoGlow {
-          0%, 100% { opacity: 0.2; transform: scale(1); }
-          50% { opacity: 0.35; transform: scale(1.1); }
-        }
-        @keyframes shimmerSweep {
-          0% { left: -100%; }
-          50%, 100% { left: 100%; }
-        }
-        @keyframes waveShine {
-          0% { left: -100%; }
-          50%, 100% { left: 100%; }
-        }
-        @keyframes rotateGlow {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        @keyframes wave {
-          0% { transform: rotate(0deg); }
-          10% { transform: rotate(14deg); }
-          20% { transform: rotate(-8deg); }
-          30% { transform: rotate(14deg); }
-          40% { transform: rotate(-4deg); }
-          50% { transform: rotate(10deg); }
-          60% { transform: rotate(0deg); }
-          100% { transform: rotate(0deg); }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-        @keyframes silkWave1 {
-          0%, 100% { transform: translateX(0); }
-          50% { transform: translateX(2%); }
-        }
-        @keyframes silkWave2 {
-          0%, 100% { transform: translateX(0); }
-          50% { transform: translateX(-2%); }
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-          main {
-            grid-template-columns: 1fr !important;
-            padding: 40px 24px !important;
-            gap: 50px !important;
-          }
-        }
-      `}</style>
+      {/* ============ DAY TIMELINE ============ */}
+      <section id="day">
+        <div className="wrap">
+          <div className="head reveal">
+            <span className="tag">A typical day</span>
+            <h2>Three nudges. Zero apps to open.</h2>
+            <p>No dashboards to check, no logging marathons. Reliv reaches you exactly when it matters — and quietly rebuilds tomorrow's plan around how today went.</p>
+          </div>
+          <div className="day-rail reveal">
+            <div className="day-line"></div>
+            <div className="day-line active-line"></div>
+            <div className="day-grid">
+              <div className="day-col">
+                <div className="day-node"></div>
+                <div className="day-content">
+                  <span className="day-time">07:00 — Morning</span>
+                  <h3>Your day, planned</h3>
+                  <p>A custom breakfast and macro target lands before you've poured your coffee.</p>
+                  <div className="day-quote"><span className="who">Reliv AI Coach</span>"Breakfast: Moong dal chilla + curd — 320 kcal. Tap for the recipe."</div>
+                </div>
+              </div>
+              <div className="day-col">
+                <div className="day-node"></div>
+                <div className="day-content">
+                  <span className="day-time">13:00 — Midday</span>
+                  <h3>A gentle check-in</h3>
+                  <p>Reliv asks how lunch went and rebalances the rest of your day if you went off-script.</p>
+                  <div className="day-quote"><span className="who">Reliv AI Coach</span>"Lunch logged ✅ Dinner's been adjusted — lighter on carbs tonight."</div>
+                </div>
+              </div>
+              <div className="day-col">
+                <div className="day-node"></div>
+                <div className="day-content">
+                  <span className="day-time">18:00 — Evening</span>
+                  <h3>Move, then unwind</h3>
+                  <p>A short, doable workout reminder — followed by tomorrow's preview nudge.</p>
+                  <div className="day-quote"><span className="who">Reliv AI Coach</span>"25-min lower body session ready. I'll check in after 💪"</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FEATURES (BENTO) ============ */}
+      <section id="features">
+        <div className="wrap">
+          <div className="head reveal">
+            <span className="tag">What's inside</span>
+            <h2>Everything a trainer and dietitian do — minus the waitlist.</h2>
+            <p>Four systems, one quiet daily habit.</p>
+          </div>
+          <div className="bento">
+            <div className="bcard large reveal">
+              <span className="b-tag">01 · Nutrition</span>
+              <h3>Personalized diet plans</h3>
+              <p>Built around your goals, preferences, and what's actually in your kitchen — recalculated weekly as your weight and habits shift.</p>
+              <div className="mini-chat">
+                <div className="mini-bubble"><b>Reliv:</b> Tonight's dinner — palak paneer (light), 1 roti, cucumber salad. 410 kcal.</div>
+                <div className="mini-bubble alt">Swap paneer for tofu?</div>
+                <div className="mini-bubble"><b>Reliv:</b> Done ✅ Updated to 365 kcal — protein target still on track.</div>
+              </div>
+            </div>
+            <div className="bcard reveal">
+              <div className="b-icon coral">📲</div>
+              <h3>WhatsApp reminders</h3>
+              <p>Meals, workouts, water, and sleep — delivered where you already live, no extra app required.</p>
+            </div>
+            <div className="bcard reveal">
+              <div className="b-icon sage">🏋️</div>
+              <h3>Adaptive workouts</h3>
+              <p>Routines that scale with your equipment, time, and energy — from 10-minute resets to full sessions.</p>
+            </div>
+            <div className="bcard wide reveal">
+              <div className="b-icon gold">📈</div>
+              <h3>Progress tracking that actually adapts</h3>
+              <p>Streaks, weight trends, and weekly summaries your AI coach uses to fine-tune tomorrow's plan — visible at a glance.</p>
+              <div className="spark">
+                <div style={{height: "30%"}}></div>
+                <div style={{height: "45%"}}></div>
+                <div style={{height: "38%"}}></div>
+                <div style={{height: "60%"}}></div>
+                <div style={{height: "52%"}}></div>
+                <div style={{height: "82%"}}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ PRICING ============ */}
+      <section className="pricing" id="pricing">
+        <div className="lamp-container">
+          <div className="lamp-wire"></div>
+          <div className="lamp-head"></div>
+          <div className="lamp-cone">
+            <div className="lamp-beam"></div>
+            <div className="lamp-dust-wrapper">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <div key={i} className={`dust d${i}`}></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="wrap price-shell">
+          <div className="reveal">
+            <span className="tag">Pricing</span>
+            <h2>Cheaper than the coffee you'll skip.</h2>
+            <p className="lede">One transparent price. No hidden tiers, no surprise renewals — cancel from WhatsApp, anytime, in one message.</p>
+            <ul className="price-checklist">
+              <li><span className="tick">✓</span> Personalized diet & workout plans, updated weekly</li>
+              <li><span className="tick">✓</span> Daily WhatsApp coaching — no app to install</li>
+              <li><span className="tick">✓</span> Progress tracking & weekly summaries</li>
+              <li><span className="tick">✓</span> Bank-grade security, HIPAA-compliant by design</li>
+            </ul>
+            <div className="hero-ctas">
+              <button onClick={() => navigate('/phone')} className="btn-primary">Start your free trial</button>
+              <button onClick={() => navigate('/code')} className="btn-ghost">Returning user? Log in</button>
+            </div>
+          </div>
+          <div className="price-card reveal">
+            <div className="price-tag-row">
+              <span className="price-amount">₹9</span>
+              <span className="price-period">/ day, billed monthly</span>
+            </div>
+            <div className="price-note">That's ₹270/month for a coach, a nutritionist, and a planner.</div>
+            <div className="compare">
+              <div className="crow"><span className="item">☕ Cup of chai</span><span className="amt">₹10–15</span></div>
+              <div className="crow"><span className="item">🚗 Short auto ride</span><span className="amt">₹30–50</span></div>
+              <div className="crow"><span className="item">🥤 Café cold coffee</span><span className="amt">₹120+</span></div>
+              <div className="crow hi"><span className="item">🤖 Reliv — full day of AI coaching</span><span className="amt">₹9</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ STATS + TESTIMONIALS ============ */}
+      <section id="proof">
+        <div className="wrap">
+          <div className="head reveal">
+            <span className="tag">Trusted by thousands</span>
+            <h2>Real people, real streaks.</h2>
+          </div>
+          <div className="stat-row">
+            <div className="stat reveal"><span className="num">{stats.successStories}+</span><span className="lbl">SUCCESS STORIES</span></div>
+            <div className="stat reveal"><span className="num">4.9★</span><span className="lbl">AVERAGE RATING</span></div>
+            <div className="stat reveal"><span className="num">12min</span><span className="lbl">AVG. DAILY WORKOUT</span></div>
+            <div className="stat reveal"><span className="num">₹9</span><span className="lbl">PER DAY, ALL-IN</span></div>
+          </div>
+          <div className="testi-grid">
+            <div className="testi reveal">
+              <span className="quote-mark">"</span>
+              <div className="stars">★★★★★</div>
+              <p>I stopped overthinking what to eat. Reliv just tells me, and I do it. Six kilos down in two months.</p>
+              <div className="who"><div className="av">PS</div> Priya S., Pune</div>
+            </div>
+            <div className="testi reveal">
+              <span className="quote-mark">"</span>
+              <div className="stars">★★★★★</div>
+              <p>The WhatsApp reminders are the whole trick. I never open another fitness app, and I never miss a day.</p>
+              <div className="who"><div className="av">RK</div> Rohit K., Bengaluru</div>
+            </div>
+            <div className="testi reveal">
+              <span className="quote-mark">"</span>
+              <div className="stars">★★★★★</div>
+              <p>Felt like having a dietitian on call for the price of a cutting chai. Worth every rupee.</p>
+              <div className="who"><div className="av">AM</div> Anjali M., Delhi</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FINAL CTA ============ */}
+      <section className="final">
+        <div className="wrap final-inner">
+          <h2 className="reveal">Your AI coach is <em>one message</em> away.</h2>
+          <p className="reveal">Start your free trial today — no credit card, no app download, just WhatsApp.</p>
+          <div className="hero-ctas reveal">
+            <button onClick={() => navigate('/phone')} className="btn-primary">Start your free trial</button>
+            <button onClick={() => navigate('/code')} className="btn-ghost">Returning user? Log in</button>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div className="wrap">
+          <div className="foot-inner">
+            <div>
+              <div className="foot-brand">Re<span>liv</span></div>
+              <p style={{fontSize: "0.88rem", maxWidth: "260px"}}>AI-powered personal health, delivered on WhatsApp — for ₹9/day.</p>
+            </div>
+            <div className="foot-cols">
+              <div className="foot-col">
+                <h4>Product</h4>
+                <a href="#day">How it works</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+              </div>
+              <div className="foot-col">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+              </div>
+              <div className="foot-col">
+                <h4>Legal</h4>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+              </div>
+            </div>
+          </div>
+          <div className="foot-bottom">
+            <span>© 2026 Reliv. All rights reserved.</span>
+            <span>Bank-grade security · HIPAA compliant</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

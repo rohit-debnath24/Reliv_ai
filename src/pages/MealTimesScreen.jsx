@@ -47,7 +47,7 @@ export default function MealTimesScreen() {
             <div 
               key={meal.id} 
               style={{ 
-                background: '#FFFFFF', 
+                background: 'var(--white)', 
                 borderRadius: 16, 
                 padding: '18px 20px', 
                 border: '1px solid #FFD296',
@@ -122,7 +122,7 @@ export default function MealTimesScreen() {
             padding: '18px', 
             fontSize: 17, 
             fontWeight: 700, 
-            color: '#FFFFFF', 
+            color: 'var(--white)', 
             cursor: 'pointer',
             boxShadow: '0 6px 25px rgba(34, 197, 94, 0.35)',
             transition: 'all 0.2s'

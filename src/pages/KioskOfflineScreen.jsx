@@ -47,7 +47,7 @@ export default function KioskOfflineScreen() {
       <h1 style={{ fontSize: 32, fontWeight: 900, color: '#FFF', marginBottom: 8 }}>
         Kiosk Offline
       </h1>
-      <p style={{ fontSize: 16, color: '#9CA3AF', lineHeight: 1.6, maxWidth: 400, marginBottom: 32 }}>
+      <p style={{ fontSize: 16, color: 'var(--gray-400)', lineHeight: 1.6, maxWidth: 400, marginBottom: 32 }}>
         We lost connection to the server. Don't worry — we're trying to reconnect automatically.
       </p>
 
@@ -60,7 +60,7 @@ export default function KioskOfflineScreen() {
         border: '1px solid rgba(255,255,255,0.1)',
         marginBottom: 24,
       }}>
-        <div style={{ fontSize: 14, color: checking ? '#FFA500' : '#9CA3AF', fontWeight: 600 }}>
+        <div style={{ fontSize: 14, color: checking ? '#FFA500' : 'var(--gray-400)', fontWeight: 600 }}>
           {checking ? '🔄 Checking connection...' : '⏳ Next retry in 5 seconds'}
         </div>
         <div style={{ fontSize: 12, color: '#6B7280', marginTop: 8 }}>

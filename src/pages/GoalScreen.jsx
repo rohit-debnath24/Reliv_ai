@@ -93,7 +93,7 @@ export default function GoalScreen() {
                                 style={{
                                     background: isSelected
                                         ? 'linear-gradient(135deg, #FFFFFF 0%, #FFF9F5 100%)'
-                                        : '#FFFFFF',
+                                        : 'var(--white)',
                                     borderRadius: 18,
                                     padding: '26px 28px',
                                     display: 'flex',
@@ -185,7 +185,7 @@ export default function GoalScreen() {
                         padding: '20px',
                         fontSize: 18,
                         fontWeight: 700,
-                        color: goals.length > 0 ? '#FFFFFF' : '#9CA3AF',
+                        color: goals.length > 0 ? 'var(--white)' : 'var(--gray-400)',
                         cursor: goals.length > 0 ? 'pointer' : 'not-allowed',
                         boxShadow: goals.length > 0 ? '0 10px 40px rgba(240, 105, 34, 0.35)' : 'none',
                         transition: 'all 0.3s ease',

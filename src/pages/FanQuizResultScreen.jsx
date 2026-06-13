@@ -80,7 +80,7 @@ export default function FanQuizResultScreen() {
             <div style={{
                 maxWidth: 520,
                 width: '100%',
-                background: '#FFFFFF',
+                background: 'var(--white)',
                 borderRadius: 32,
                 padding: '48px 44px',
                 boxShadow: '0 24px 80px rgba(0,0,0,0.1)',
@@ -121,7 +121,7 @@ export default function FanQuizResultScreen() {
                     <div style={{
                         width: '100%',
                         height: '100%',
-                        background: '#FFFFFF',
+                        background: 'var(--white)',
                         borderRadius: '50%',
                         display: 'flex',
                         alignItems: 'center',
@@ -155,7 +155,7 @@ export default function FanQuizResultScreen() {
                             padding: '20px',
                             fontSize: 17,
                             fontWeight: 700,
-                            color: '#FFFFFF',
+                            color: 'var(--white)',
                             cursor: 'pointer',
                             boxShadow: `0 10px 40px ${info.color}40`,
                         }}
@@ -167,7 +167,7 @@ export default function FanQuizResultScreen() {
                         onClick={() => navigate('/fan-quiz-type')}
                         style={{
                             width: '100%',
-                            background: '#FFFFFF',
+                            background: 'var(--white)',
                             border: '2px solid #E5E7EB',
                             borderRadius: 14,
                             padding: '16px',

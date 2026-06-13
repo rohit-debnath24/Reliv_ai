@@ -71,7 +71,7 @@ export default function FriendQuestionsScreen() {
             <div
               key={index}
               style={{
-                background: '#FFFFFF',
+                background: 'var(--white)',
                 borderRadius: 20,
                 padding: '28px',
                 border: '2px solid #E5E7EB',
@@ -129,7 +129,7 @@ export default function FriendQuestionsScreen() {
                     transition: 'all 0.3s ease',
                   }}
                   onFocus={(e) => e.target.style.borderColor = '#8B5CF6'}
-                  onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--gray-200)'}
                 />
               </div>
 
@@ -170,7 +170,7 @@ export default function FriendQuestionsScreen() {
                       transition: 'all 0.3s ease',
                     }}
                     onFocus={(e) => e.target.style.borderColor = '#8B5CF6'}
-                    onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
+                    onBlur={(e) => e.target.style.borderColor = 'var(--gray-200)'}
                   />
                 </div>
               </div>
@@ -192,7 +192,7 @@ export default function FriendQuestionsScreen() {
             padding: '20px',
             fontSize: 18,
             fontWeight: 700,
-            color: isValid ? '#FFFFFF' : '#9CA3AF',
+            color: isValid ? 'var(--white)' : 'var(--gray-400)',
             cursor: isValid ? 'pointer' : 'not-allowed',
             boxShadow: isValid ? '0 10px 40px rgba(139, 92, 246, 0.35)' : 'none',
             transition: 'all 0.3s ease',

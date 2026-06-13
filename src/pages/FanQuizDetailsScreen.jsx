@@ -74,7 +74,7 @@ export default function FanQuizDetailsScreen() {
 
                 {/* Schedule */}
                 <div style={{
-                    background: '#FFFFFF',
+                    background: 'var(--white)',
                     borderRadius: 24,
                     padding: '32px',
                     boxShadow: '0 10px 40px rgba(0,0,0,0.06)',
@@ -83,7 +83,7 @@ export default function FanQuizDetailsScreen() {
                     <h3 style={{
                         fontSize: 14,
                         fontWeight: 700,
-                        color: '#9CA3AF',
+                        color: 'var(--gray-400)',
                         textTransform: 'uppercase',
                         letterSpacing: '1px',
                         marginBottom: 24,
@@ -116,7 +116,7 @@ export default function FanQuizDetailsScreen() {
                                 <div style={{
                                     flex: 1,
                                     padding: '14px 18px',
-                                    background: '#FAFAFA',
+                                    background: 'var(--gray-50)',
                                     borderRadius: 12,
                                 }}>
                                     <p style={{ fontSize: 14, fontWeight: 600, color: '#111', marginBottom: 2 }}>
@@ -140,7 +140,7 @@ export default function FanQuizDetailsScreen() {
                         padding: '20px',
                         fontSize: 18,
                         fontWeight: 700,
-                        color: '#FFFFFF',
+                        color: 'var(--white)',
                         cursor: 'pointer',
                         boxShadow: `0 10px 40px ${info.color}40`,
                     }}

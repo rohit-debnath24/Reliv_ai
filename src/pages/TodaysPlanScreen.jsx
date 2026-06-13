@@ -114,7 +114,7 @@ export default function TodaysPlanScreen() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: 15, fontWeight: 700, color: '#111' }}>{task.label}</p>
-                  <p style={{ fontSize: 12, color: '#9CA3AF' }}>{task.done}/{task.target} {task.unit} today</p>
+                  <p style={{ fontSize: 12, color: 'var(--gray-400)' }}>{task.done}/{task.target} {task.unit} today</p>
                 </div>
                 <div style={{
                   background: task.done >= task.target ? '#ECFDF5' : `${task.color}12`,

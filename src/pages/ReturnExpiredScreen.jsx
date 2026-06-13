@@ -22,7 +22,7 @@ export default function ReturnExpiredScreen() {
             <div style={{
                 maxWidth: 560,
                 width: '100%',
-                background: '#FFFFFF',
+                background: 'var(--white)',
                 borderRadius: 32,
                 padding: '48px 44px',
                 boxShadow: '0 24px 80px rgba(240, 105, 34, 0.1)',
@@ -68,7 +68,7 @@ export default function ReturnExpiredScreen() {
 
                 {/* Progress Card */}
                 <div style={{
-                    background: '#FAFAFA',
+                    background: 'var(--gray-50)',
                     borderRadius: 18,
                     padding: '24px',
                     marginBottom: 32,
@@ -85,7 +85,7 @@ export default function ReturnExpiredScreen() {
                         ].map((stat, i) => (
                             <div key={i} style={{ textAlign: 'center' }}>
                                 <p style={{ fontSize: 24, fontWeight: 800, color: stat.color }}>{stat.value}</p>
-                                <p style={{ fontSize: 11, color: '#9CA3AF' }}>{stat.label}</p>
+                                <p style={{ fontSize: 11, color: 'var(--gray-400)' }}>{stat.label}</p>
                             </div>
                         ))}
                     </div>
@@ -119,7 +119,7 @@ export default function ReturnExpiredScreen() {
                             padding: '20px',
                             fontSize: 17,
                             fontWeight: 700,
-                            color: '#FFFFFF',
+                            color: 'var(--white)',
                             cursor: 'pointer',
                             boxShadow: '0 10px 40px rgba(240, 105, 34, 0.35)',
                             display: 'flex',
@@ -135,7 +135,7 @@ export default function ReturnExpiredScreen() {
                         onClick={() => navigate('/change-plan')}
                         style={{
                             width: '100%',
-                            background: '#FFFFFF',
+                            background: 'var(--white)',
                             border: '2px solid #E5E7EB',
                             borderRadius: 14,
                             padding: '16px',

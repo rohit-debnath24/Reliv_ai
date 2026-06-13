@@ -67,7 +67,7 @@ export default function FriendSizeScreen() {
               style={{
                 background: selected === opt.value
                   ? 'linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 100%)'
-                  : '#FFFFFF',
+                  : 'var(--white)',
                 borderRadius: 18,
                 padding: '24px 28px',
                 display: 'flex',
@@ -122,7 +122,7 @@ export default function FriendSizeScreen() {
               {/* Price */}
               <div style={{ textAlign: 'right' }}>
                 <p style={{ fontSize: 22, fontWeight: 800, color: '#8B5CF6' }}>{opt.price}</p>
-                <p style={{ fontSize: 12, color: '#9CA3AF' }}>total/week</p>
+                <p style={{ fontSize: 12, color: 'var(--gray-400)' }}>total/week</p>
               </div>
             </div>
           ))}
@@ -142,7 +142,7 @@ export default function FriendSizeScreen() {
             padding: '20px',
             fontSize: 18,
             fontWeight: 700,
-            color: selected ? '#FFFFFF' : '#9CA3AF',
+            color: selected ? 'var(--white)' : 'var(--gray-400)',
             cursor: selected ? 'pointer' : 'not-allowed',
             boxShadow: selected ? '0 10px 40px rgba(139, 92, 246, 0.35)' : 'none',
             transition: 'all 0.3s ease',

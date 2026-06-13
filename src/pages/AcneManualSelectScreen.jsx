@@ -33,7 +33,7 @@ export default function AcneManualSelectScreen() {
       icon: '⚪',
       title: 'Whiteheads',
       desc: 'Closed comedones under the surface',
-      color: '#9CA3AF',
+      color: 'var(--gray-400)',
       tips: ['Gentle retinol', 'Non-comedogenic products', 'Chemical exfoliation'],
     },
     {
@@ -83,7 +83,7 @@ export default function AcneManualSelectScreen() {
               style={{
                 background: selected === t.id
                   ? `linear-gradient(135deg, ${t.color}10 0%, ${t.color}18 100%)`
-                  : '#FFFFFF',
+                  : 'var(--white)',
                 border: selected === t.id ? `3px solid ${t.color}` : '2px solid #E5E7EB',
                 borderRadius: 16,
                 padding: '20px 24px',
@@ -178,7 +178,7 @@ export default function AcneManualSelectScreen() {
             padding: '18px',
             fontSize: 17,
             fontWeight: 700,
-            color: selected ? '#FFF' : '#9CA3AF',
+            color: selected ? '#FFF' : 'var(--gray-400)',
             cursor: selected ? 'pointer' : 'not-allowed',
             boxShadow: selected ? '0 8px 30px rgba(240,105,34,0.3)' : 'none',
             transition: 'all 0.3s ease',

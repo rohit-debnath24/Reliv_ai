@@ -14,7 +14,7 @@ export default function ReturnTodayScreen() {
     <Layout title="Today's Plan" subtitle="Here's what to focus on today">
       <div style={{ maxWidth: 520, margin: '0 auto' }}>
         {/* Today's Goals */}
-        <div style={{ background: '#FFFFFF', borderRadius: 20, padding: 24, border: '1px solid #FFD296', marginBottom: 20, boxShadow: '0 4px 20px rgba(240, 105, 34, 0.08)' }}>
+        <div style={{ background: 'var(--white)', borderRadius: 20, padding: 24, border: '1px solid #FFD296', marginBottom: 20, boxShadow: '0 4px 20px rgba(240, 105, 34, 0.08)' }}>
           <h3 style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 18 }}>🎯 Today's Goals</h3>
           {todayPlan.map((item, i) => (
             <div key={i} style={{ background: 'linear-gradient(135deg, #FFF5F0 0%, #FFEEE5 100%)', borderRadius: 14, padding: '16px 20px', marginBottom: i < 2 ? 12 : 0, display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -42,7 +42,7 @@ export default function ReturnTodayScreen() {
         </div>
 
         {/* Done Button */}
-        <button onClick={() => navigate('/')} style={{ width: '100%', background: 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)', border: 'none', borderRadius: 14, padding: '18px', fontSize: 17, fontWeight: 700, color: '#FFFFFF', cursor: 'pointer', boxShadow: '0 6px 25px rgba(240, 105, 34, 0.35)' }}>
+        <button onClick={() => navigate('/')} style={{ width: '100%', background: 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)', border: 'none', borderRadius: 14, padding: '18px', fontSize: 17, fontWeight: 700, color: 'var(--white)', cursor: 'pointer', boxShadow: '0 6px 25px rgba(240, 105, 34, 0.35)' }}>
           Got It! Let's Go! 🚀
         </button>
       </div>

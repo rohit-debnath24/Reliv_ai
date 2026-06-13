@@ -73,7 +73,7 @@ export default function FanQuizTypeScreen() {
               onMouseEnter={() => setHovered(cat.id)}
               onMouseLeave={() => setHovered(null)}
               style={{
-                background: '#FFFFFF',
+                background: 'var(--white)',
                 borderRadius: 24,
                 padding: '36px 24px',
                 textAlign: 'center',

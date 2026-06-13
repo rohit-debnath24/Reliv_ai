@@ -80,7 +80,7 @@ export default function SoloQuestionsScreen() {
                         justifyContent: 'space-between',
                         marginBottom: 10,
                         fontSize: 13,
-                        color: '#9CA3AF',
+                        color: 'var(--gray-400)',
                     }}>
                         <span>Question {currentQ + 1} of {questions.length}</span>
                         <span>{Math.round(progress)}%</span>
@@ -103,7 +103,7 @@ export default function SoloQuestionsScreen() {
 
                 {/* Question Card */}
                 <div style={{
-                    background: '#FFFFFF',
+                    background: 'var(--white)',
                     borderRadius: 24,
                     padding: '40px 36px',
                     boxShadow: '0 16px 50px rgba(240, 105, 34, 0.1)',
@@ -136,7 +136,7 @@ export default function SoloQuestionsScreen() {
                                         padding: '18px 22px',
                                         background: isSelected
                                             ? 'linear-gradient(135deg, #FFF5F0 0%, #FFEEDD 100%)'
-                                            : '#FAFAFA',
+                                            : 'var(--gray-50)',
                                         border: isSelected ? '2px solid #F06922' : '2px solid transparent',
                                         borderRadius: 14,
                                         cursor: 'pointer',
@@ -177,7 +177,7 @@ export default function SoloQuestionsScreen() {
                             padding: '20px',
                             fontSize: 18,
                             fontWeight: 700,
-                            color: '#FFFFFF',
+                            color: 'var(--white)',
                             cursor: 'pointer',
                             boxShadow: '0 10px 40px rgba(240, 105, 34, 0.35)',
                             animation: 'fadeIn 0.3s ease',

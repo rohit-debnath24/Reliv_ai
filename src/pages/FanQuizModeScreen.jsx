@@ -70,7 +70,7 @@ export default function FanQuizModeScreen() {
                             style={{
                                 background: selected === mode.id
                                     ? 'linear-gradient(135deg, #FFFFFF 0%, #FFF9F5 100%)'
-                                    : '#FFFFFF',
+                                    : 'var(--white)',
                                 borderRadius: 20,
                                 padding: '28px',
                                 display: 'flex',
@@ -177,7 +177,7 @@ export default function FanQuizModeScreen() {
                         padding: '20px',
                         fontSize: 18,
                         fontWeight: 700,
-                        color: selected ? '#FFFFFF' : '#9CA3AF',
+                        color: selected ? 'var(--white)' : 'var(--gray-400)',
                         cursor: selected ? 'pointer' : 'not-allowed',
                         boxShadow: selected ? '0 10px 40px rgba(240, 105, 34, 0.35)' : 'none',
                         transition: 'all 0.3s ease',

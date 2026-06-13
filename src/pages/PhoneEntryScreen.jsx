@@ -34,7 +34,7 @@ export default function PhoneEntryScreen() {
       <div style={{ maxWidth: 520, margin: '0 auto' }}>
         {/* Main Card */}
         <div style={{
-          background: '#FFFFFF',
+          background: 'var(--white)',
           borderRadius: 28,
           padding: '48px 44px',
           boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
@@ -61,7 +61,7 @@ export default function PhoneEntryScreen() {
             <label style={{
               display: 'block',
               fontSize: 14,
-              color: '#666666',
+              color: 'var(--gray-600)',
               marginBottom: 12,
               fontWeight: 600,
               letterSpacing: '0.3px',
@@ -101,13 +101,13 @@ export default function PhoneEntryScreen() {
                 placeholder="Enter 10-digit number"
                 style={{
                   flex: 1,
-                  background: focused === 'phone' ? '#FFFAF7' : '#FAFAFA',
-                  border: `2px solid ${focused === 'phone' ? '#F06922' : error ? '#EF4444' : '#E5E7EB'}`,
+                  background: focused === 'phone' ? 'var(--cream-100)' : 'var(--gray-50)',
+                  border: `2px solid ${focused === 'phone' ? '#F06922' : error ? '#EF4444' : 'var(--gray-200)'}`,
                   borderRadius: 14,
                   padding: '18px 20px',
                   fontSize: 18,
                   fontWeight: 600,
-                  color: '#111111',
+                  color: 'var(--gray-900)',
                   outline: 'none',
                   transition: 'all 0.3s ease',
                   letterSpacing: '1px',
@@ -124,15 +124,15 @@ export default function PhoneEntryScreen() {
               alignItems: 'center',
               gap: 8,
               fontSize: 14,
-              color: '#666666',
+              color: 'var(--gray-600)',
               marginBottom: 12,
               fontWeight: 600,
             }}>
               <span style={{ fontSize: 16 }}>🎁</span>
               Referral Code
               <span style={{
-                background: '#E5E7EB',
-                color: '#9CA3AF',
+                background: 'var(--gray-200)',
+                color: 'var(--gray-400)',
                 fontSize: 11,
                 fontWeight: 600,
                 padding: '3px 10px',
@@ -151,13 +151,13 @@ export default function PhoneEntryScreen() {
               placeholder="Enter code for bonus"
               style={{
                 width: '100%',
-                background: focused === 'referral' ? '#FFFAF7' : '#FAFAFA',
-                border: `2px solid ${focused === 'referral' ? '#F06922' : '#E5E7EB'}`,
+                background: focused === 'referral' ? 'var(--cream-100)' : 'var(--gray-50)',
+                border: `2px solid ${focused === 'referral' ? '#F06922' : 'var(--gray-200)'}`,
                 borderRadius: 14,
                 padding: '18px 20px',
                 fontSize: 16,
                 fontWeight: 500,
-                color: '#111111',
+                color: 'var(--gray-900)',
                 outline: 'none',
                 transition: 'all 0.3s ease',
                 textTransform: 'uppercase',
@@ -167,7 +167,7 @@ export default function PhoneEntryScreen() {
             />
             <p style={{
               fontSize: 13,
-              color: '#9CA3AF',
+              color: 'var(--gray-400)',
               marginTop: 10,
               display: 'flex',
               alignItems: 'center',
@@ -210,7 +210,7 @@ export default function PhoneEntryScreen() {
               padding: '20px',
               fontSize: 18,
               fontWeight: 700,
-              color: phone.length === 10 ? '#FFFFFF' : '#9CA3AF',
+              color: phone.length === 10 ? 'var(--white)' : 'var(--gray-400)',
               cursor: phone.length === 10 && !loading ? 'pointer' : 'not-allowed',
               boxShadow: phone.length === 10 ? '0 10px 40px rgba(240, 105, 34, 0.35)' : 'none',
               transition: 'all 0.3s ease',
@@ -227,7 +227,7 @@ export default function PhoneEntryScreen() {
                   width: 22,
                   height: 22,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -252,7 +252,7 @@ export default function PhoneEntryScreen() {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 8,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
           fontSize: 13,
         }}>
           <span style={{ fontSize: 16 }}>🔒</span>

@@ -81,7 +81,7 @@ export default function WeeklySoloPayScreen() {
               }}>
                 ₹29
               </div>
-              <div style={{ fontSize: 13, color: '#9CA3AF', fontWeight: 500 }}>
+              <div style={{ fontSize: 13, color: 'var(--gray-400)', fontWeight: 500 }}>
                 per week
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function WeeklySoloPayScreen() {
             <h3 style={{
               fontSize: 13,
               fontWeight: 700,
-              color: '#9CA3AF',
+              color: 'var(--gray-400)',
               textTransform: 'uppercase',
               letterSpacing: '1px',
               marginBottom: 20,
@@ -158,7 +158,7 @@ export default function WeeklySoloPayScreen() {
               padding: '22px',
               fontSize: 18,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: loading ? 'not-allowed' : 'pointer',
               boxShadow: '0 10px 40px rgba(240, 105, 34, 0.35)',
               transition: 'all 0.3s ease',
@@ -174,7 +174,7 @@ export default function WeeklySoloPayScreen() {
                   width: 24,
                   height: 24,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />

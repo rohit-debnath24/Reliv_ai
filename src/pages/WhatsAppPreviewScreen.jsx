@@ -46,7 +46,7 @@ export default function WhatsAppPreviewScreen() {
                 transform: show ? 'translateY(0)' : 'translateY(-20px)',
                 transition: 'all 0.5s ease',
             }}>
-                <h1 style={{ fontSize: 28, fontWeight: 800, color: '#FFFFFF', marginBottom: 8 }}>
+                <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--white)', marginBottom: 8 }}>
                     📱 WhatsApp Preview
                 </h1>
                 <p style={{ fontSize: 14, color: '#8696A0' }}>
@@ -197,7 +197,7 @@ export default function WhatsAppPreviewScreen() {
                     padding: '18px 48px',
                     fontSize: 16,
                     fontWeight: 700,
-                    color: '#FFFFFF',
+                    color: 'var(--white)',
                     cursor: 'pointer',
                     boxShadow: '0 10px 40px rgba(37, 211, 102, 0.3)',
                     display: 'flex',

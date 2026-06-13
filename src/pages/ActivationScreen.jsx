@@ -59,7 +59,7 @@ export default function ActivationScreen() {
       <div style={{
         maxWidth: 560,
         width: '100%',
-        background: '#FFFFFF',
+        background: 'var(--white)',
         borderRadius: 32,
         padding: '56px 48px',
         boxShadow: '0 24px 80px rgba(240, 105, 34, 0.15)',
@@ -84,7 +84,7 @@ export default function ActivationScreen() {
           boxShadow: '0 16px 50px rgba(34, 197, 94, 0.35)',
           animation: 'pulse 2s ease-in-out infinite',
         }}>
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--white)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 6L9 17l-5-5" />
           </svg>
         </div>
@@ -93,7 +93,7 @@ export default function ActivationScreen() {
         <h1 style={{
           fontSize: 32,
           fontWeight: 800,
-          color: '#111111',
+          color: 'var(--gray-900)',
           marginBottom: 12,
           letterSpacing: '-1px',
         }}>
@@ -102,7 +102,7 @@ export default function ActivationScreen() {
 
         <p style={{
           fontSize: 17,
-          color: '#666666',
+          color: 'var(--gray-600)',
           lineHeight: 1.6,
           marginBottom: 36,
         }}>
@@ -119,7 +119,7 @@ export default function ActivationScreen() {
         }}>
           <p style={{
             fontSize: 13,
-            color: '#9CA3AF',
+            color: 'var(--gray-400)',
             textTransform: 'uppercase',
             letterSpacing: '1px',
             fontWeight: 600,
@@ -138,7 +138,7 @@ export default function ActivationScreen() {
                 style={{
                   width: 56,
                   height: 68,
-                  background: '#FFFFFF',
+                  background: 'var(--white)',
                   border: '2px solid #F06922',
                   borderRadius: 14,
                   display: 'flex',
@@ -165,7 +165,7 @@ export default function ActivationScreen() {
 
         {/* What's Next */}
         <div style={{
-          background: '#FAFAFA',
+          background: 'var(--gray-50)',
           borderRadius: 16,
           padding: '24px',
           marginBottom: 32,
@@ -230,7 +230,7 @@ export default function ActivationScreen() {
               padding: '20px',
               fontSize: 17,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: 'pointer',
               boxShadow: '0 10px 40px rgba(240, 105, 34, 0.35)',
               display: 'flex',
@@ -252,7 +252,7 @@ export default function ActivationScreen() {
               padding: '18px',
               fontSize: 16,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: 'pointer',
               boxShadow: '0 8px 30px rgba(37, 211, 102, 0.3)',
               display: 'flex',
@@ -271,13 +271,13 @@ export default function ActivationScreen() {
             onClick={() => navigate('/')}
             style={{
               width: '100%',
-              background: '#FFFFFF',
+              background: 'var(--white)',
               border: '2px solid #E5E7EB',
               borderRadius: 14,
               padding: '16px',
               fontSize: 15,
               fontWeight: 600,
-              color: '#666666',
+              color: 'var(--gray-600)',
               cursor: 'pointer',
             }}
           >

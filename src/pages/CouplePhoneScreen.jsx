@@ -63,7 +63,7 @@ export default function CouplePhoneScreen() {
             <label style={{
               display: 'block',
               fontSize: 14,
-              color: '#666666',
+              color: 'var(--gray-600)',
               marginBottom: 10,
               fontWeight: 600,
             }}>
@@ -78,13 +78,13 @@ export default function CouplePhoneScreen() {
               placeholder="Enter their name"
               style={{
                 width: '100%',
-                background: focused === 'name' ? '#FFFAF7' : '#FAFAFA',
-                border: `2px solid ${focused === 'name' ? '#EC4899' : '#E5E7EB'}`,
+                background: focused === 'name' ? 'var(--cream-100)' : 'var(--gray-50)',
+                border: `2px solid ${focused === 'name' ? '#EC4899' : 'var(--gray-200)'}`,
                 borderRadius: 14,
                 padding: '18px 20px',
                 fontSize: 17,
                 fontWeight: 500,
-                color: '#111111',
+                color: 'var(--gray-900)',
                 outline: 'none',
                 transition: 'all 0.3s ease',
                 boxShadow: focused === 'name' ? '0 0 0 4px rgba(236, 72, 153, 0.1)' : 'none',
@@ -97,7 +97,7 @@ export default function CouplePhoneScreen() {
             <label style={{
               display: 'block',
               fontSize: 14,
-              color: '#666666',
+              color: 'var(--gray-600)',
               marginBottom: 10,
               fontWeight: 600,
             }}>
@@ -128,13 +128,13 @@ export default function CouplePhoneScreen() {
                 placeholder="10-digit number"
                 style={{
                   flex: 1,
-                  background: focused === 'phone' ? '#FFFAF7' : '#FAFAFA',
-                  border: `2px solid ${focused === 'phone' ? '#EC4899' : error ? '#EF4444' : '#E5E7EB'}`,
+                  background: focused === 'phone' ? 'var(--cream-100)' : 'var(--gray-50)',
+                  border: `2px solid ${focused === 'phone' ? '#EC4899' : error ? '#EF4444' : 'var(--gray-200)'}`,
                   borderRadius: 14,
                   padding: '18px 20px',
                   fontSize: 17,
                   fontWeight: 600,
-                  color: '#111111',
+                  color: 'var(--gray-900)',
                   outline: 'none',
                   transition: 'all 0.3s ease',
                   letterSpacing: '1px',
@@ -175,7 +175,7 @@ export default function CouplePhoneScreen() {
               padding: '20px',
               fontSize: 18,
               fontWeight: 700,
-              color: phone.length === 10 && name.trim() ? '#FFFFFF' : '#9CA3AF',
+              color: phone.length === 10 && name.trim() ? 'var(--white)' : 'var(--gray-400)',
               cursor: phone.length === 10 && name.trim() && !loading ? 'pointer' : 'not-allowed',
               boxShadow: phone.length === 10 && name.trim() ? '0 10px 40px rgba(236, 72, 153, 0.35)' : 'none',
               transition: 'all 0.3s ease',
@@ -191,7 +191,7 @@ export default function CouplePhoneScreen() {
                   width: 22,
                   height: 22,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -208,7 +208,7 @@ export default function CouplePhoneScreen() {
           textAlign: 'center',
           marginTop: 24,
           fontSize: 13,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

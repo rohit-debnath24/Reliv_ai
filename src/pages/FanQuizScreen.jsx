@@ -92,7 +92,7 @@ export default function FanQuizScreen() {
                 {/* Progress */}
                 <div style={{
                     height: 8,
-                    background: '#E5E7EB',
+                    background: 'var(--gray-200)',
                     borderRadius: 8,
                     marginBottom: 32,
                     overflow: 'hidden',
@@ -108,7 +108,7 @@ export default function FanQuizScreen() {
 
                 {/* Question Card */}
                 <div style={{
-                    background: '#FFFFFF',
+                    background: 'var(--white)',
                     borderRadius: 24,
                     padding: '40px 36px',
                     boxShadow: '0 16px 50px rgba(0,0,0,0.08)',
@@ -146,7 +146,7 @@ export default function FanQuizScreen() {
                                                 ? '#FEE2E2'
                                                 : selected === i
                                                     ? '#F5F5F5'
-                                                    : '#FAFAFA',
+                                                    : 'var(--gray-50)',
                                         border: showCorrect
                                             ? '2px solid #22C55E'
                                             : isWrong
@@ -178,7 +178,7 @@ export default function FanQuizScreen() {
                     textAlign: 'center',
                     marginTop: 24,
                     fontSize: 14,
-                    color: '#9CA3AF',
+                    color: 'var(--gray-400)',
                 }}>
                     Score: {score}/{currentQ + (selected !== null ? 1 : 0)}
                 </div>

@@ -203,7 +203,7 @@ export default function BotPurchaseScreen() {
               boxShadow: '0 16px 48px rgba(240,105,34,0.35)', animation: 'botFloat 4s ease-in-out infinite',
             }}>🤖</div>
             <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, color: '#FFFFFF', marginBottom: 6 }}>Reliv Pet Bot</h2>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--white)', marginBottom: 6 }}>Reliv Pet Bot</h2>
               <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginBottom: 10 }}>IoT Health Companion</p>
               <div style={{ fontSize: 36, fontWeight: 900 }}>
                 <span style={{ background: 'linear-gradient(135deg, #F06922, #FF8A4C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>₹499</span>
@@ -244,7 +244,7 @@ export default function BotPurchaseScreen() {
               </div>
             ))}
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: '#FFFFFF' }}>Total</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--white)' }}>Total</span>
               <span style={{ fontSize: 24, fontWeight: 900, background: 'linear-gradient(135deg, #F06922, #FF8A4C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>₹499</span>
             </div>
           </div>
@@ -265,7 +265,7 @@ export default function BotPurchaseScreen() {
         {step === 'processing' && (
           <div style={{ background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(40px)', borderRadius: 32, padding: '80px 40px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.08)' }}>
             <div style={{ fontSize: 72, marginBottom: 28, animation: 'botFloat 1.5s ease-in-out infinite' }}>💳</div>
-            <h3 style={{ fontSize: 24, fontWeight: 800, color: '#FFFFFF', marginBottom: 10 }}>Processing Payment...</h3>
+            <h3 style={{ fontSize: 24, fontWeight: 800, color: 'var(--white)', marginBottom: 10 }}>Processing Payment...</h3>
             <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)' }}>Please wait while we confirm</p>
             <div style={{ width: 200, height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, margin: '28px auto 0', overflow: 'hidden' }}>
               <div style={{ width: '100%', height: '100%', background: 'linear-gradient(90deg, #F06922, #FF8A4C)', borderRadius: 2, animation: 'loadSlide 1.5s ease-in-out infinite' }} />

@@ -21,7 +21,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #FFFAF7 0%, #FFF5F0 50%, #FFEEDD 100%)',
+      background: 'transparent',
       backgroundAttachment: 'fixed',
       fontFamily: "'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif",
       position: 'relative',
@@ -35,7 +35,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
           top: 0,
           zIndex: 1000,
           background: scrolled
-            ? 'rgba(255, 255, 255, 0.95)'
+            ? 'var(--white)'
             : 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)',
           backdropFilter: scrolled ? 'blur(20px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
@@ -68,7 +68,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
                 padding: '12px 20px',
                 fontSize: 14,
                 fontWeight: 600,
-                color: scrolled ? '#FFFFFF' : '#FFFFFF',
+                color: scrolled ? 'var(--white)' : 'var(--white)',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 boxShadow: scrolled ? '0 4px 15px rgba(240, 105, 34, 0.3)' : 'none',
@@ -137,7 +137,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
                 <h1 style={{
                   fontSize: scrolled ? 22 : 26,
                   fontWeight: 800,
-                  color: scrolled ? '#F06922' : '#FFFFFF',
+                  color: scrolled ? '#F06922' : 'var(--white)',
                   letterSpacing: '-0.5px',
                   margin: 0,
                   transition: 'all 0.3s ease',
@@ -150,7 +150,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
                     fontSize: 10,
                     fontWeight: 700,
                     background: scrolled ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)' : 'rgba(255, 255, 255, 0.25)',
-                    color: '#FFFFFF',
+                    color: 'var(--white)',
                     padding: '4px 10px',
                     borderRadius: 20,
                     textTransform: 'uppercase',
@@ -161,7 +161,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
                 </h1>
                 <p style={{
                   fontSize: 12,
-                  color: scrolled ? '#666666' : 'rgba(255, 255, 255, 0.85)',
+                  color: scrolled ? 'var(--gray-600)' : 'rgba(255, 255, 255, 0.85)',
                   margin: '2px 0 0',
                   fontWeight: 500,
                   transition: 'all 0.3s ease',
@@ -183,21 +183,21 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                background: scrolled ? '#FFF5F0' : 'rgba(255, 255, 255, 0.15)',
+                background: scrolled ? 'var(--cream-200)' : 'rgba(255, 255, 255, 0.15)',
                 border: scrolled ? '1px solid #FFD296' : '1px solid rgba(255, 255, 255, 0.3)',
                 borderRadius: 10,
                 padding: '10px 16px',
                 fontSize: 13,
                 fontWeight: 600,
-                color: scrolled ? '#F06922' : '#FFFFFF',
+                color: scrolled ? '#F06922' : 'var(--white)',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = scrolled ? '#FFEEDD' : 'rgba(255, 255, 255, 0.25)';
+                e.target.style.background = scrolled ? 'var(--cream-300)' : 'rgba(255, 255, 255, 0.25)';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = scrolled ? '#FFF5F0' : 'rgba(255, 255, 255, 0.15)';
+                e.target.style.background = scrolled ? 'var(--cream-200)' : 'rgba(255, 255, 255, 0.15)';
               }}
             >
               <span>💬</span> Help
@@ -228,7 +228,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
               <h2 style={{
                 fontSize: 36,
                 fontWeight: 800,
-                color: '#111111',
+                color: 'var(--gray-900)',
                 marginBottom: 12,
                 letterSpacing: '-1px',
                 lineHeight: 1.2,
@@ -239,7 +239,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
             {subtitle && (
               <p style={{
                 fontSize: 17,
-                color: '#666666',
+                color: 'var(--gray-600)',
                 lineHeight: 1.6,
                 maxWidth: 500,
                 margin: '0 auto',
@@ -263,7 +263,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
       {/* Footer */}
       <footer style={{
         borderTop: '1px solid rgba(240, 105, 34, 0.1)',
-        background: 'rgba(255, 255, 255, 0.5)',
+        background: 'var(--cream-100)',
         padding: '24px 40px',
         textAlign: 'center',
       }}>
@@ -273,7 +273,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
           justifyContent: 'center',
           gap: 24,
           fontSize: 13,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
         }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span>🔒</span> Bank-Grade Security

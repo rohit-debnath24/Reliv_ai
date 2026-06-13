@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reliv — Your AI Health Coach, on WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,400..600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#11140F;
+    --ink-soft:#1B1F17;
+    --cream:#F7F4EC;
+    --paper:#FCFAF4;
+    --coral:#FF5C35;
+    --coral-dim:#FFB199;
+    --sage:#7C9885;
+    --sage-deep:#445A4C;
+    --gold:#E3B873;
+    --line-dark:rgba(255,255,255,0.10);
+    --line-light:#E6E1D2;
+    --muted-dark:#A7AC9D;
+    --muted-light:#75786C;
+    --radius-lg:28px;
+    --radius-md:18px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  .wrap{max-width:1240px; margin:0 auto; padding:0 40px;}
+
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    line-height:1.08;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  img,svg{display:block;}
+
+  ::selection{background:var(--coral); color:#fff;}
+
+  /* ============ NAV ============ */
+  header.nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    padding:22px 0;
+    transition:background .4s ease, border-color .4s ease, padding .3s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.nav.scrolled{
+    background:rgba(247,244,236,0.78);
+    backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid var(--line-light);
+    padding:14px 0;
+  }
+  .nav-inner{
+    max-width:1240px; margin:0 auto; padding:0 40px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px;
+    background:var(--coral);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Fraunces',serif; font-weight:700; font-size:1.05rem;
+  }
+  .brand-name{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.28rem;
+    color:#fff; transition:color .4s ease;
+    letter-spacing:-0.01em;
+  }
+  header.nav.scrolled .brand-name{color:var(--ink);}
+
+  .nav-links{display:flex; gap:38px; font-size:0.92rem; font-weight:500;}
+  .nav-links a{
+    color:rgba(255,255,255,0.72); transition:color .3s ease;
+  }
+  .nav-links a:hover{color:#fff;}
+  header.nav.scrolled .nav-links a{color:var(--muted-light);}
+  header.nav.scrolled .nav-links a:hover{color:var(--ink);}
+
+  .nav-cta{
+    background:var(--coral); color:#fff;
+    padding:11px 24px; border-radius:999px;
+    font-size:0.88rem; font-weight:600;
+    transition:transform .2s ease, box-shadow .2s ease;
+    box-shadow:0 8px 20px -8px rgba(255,92,53,0.7);
+  }
+  .nav-cta:hover{transform:translateY(-2px); box-shadow:0 12px 26px -8px rgba(255,92,53,0.8);}
+
+  @media (max-width:880px){.nav-links{display:none;}}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(ellipse 70% 50% at 18% -10%, rgba(255,92,53,0.28), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 10%, rgba(124,152,133,0.30), transparent 60%),
+      var(--ink);
+    color:#fff;
+    padding:170px 0 120px;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events:none;
+    mix-blend-mode:overlay;
+  }
+  .hero-grid{
+    position:relative; z-index:2;
+    display:grid; grid-template-columns:1.08fr 0.92fr;
+    gap:60px; align-items:center;
+  }
+  .hero-eyebrow{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--coral-dim);
+    border:1px solid var(--line-dark);
+    background:rgba(255,255,255,0.04);
+    padding:8px 16px; border-radius:999px;
+    margin-bottom:32px;
+  }
+  .hero-eyebrow .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--coral);
+    animation:pulse 2.4s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(255,92,53,0.55);}
+    50%{box-shadow:0 0 0 6px rgba(255,92,53,0);}
+  }
+
+  .hero h1{
+    font-size:clamp(2.9rem, 5.6vw, 4.7rem);
+    font-weight:600;
+    margin-bottom:28px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--coral-dim);
+  }
+  .hero .lead{
+    font-size:1.12rem;
+    color:rgba(255,255,255,0.66);
+    max-width:480px;
+    margin-bottom:40px;
+    font-weight:400;
+  }
+  .hero .lead .price{
+    font-family:'IBM Plex Mono', monospace;
+    color:#fff;
+    background:rgba(255,92,53,0.18);
+    border:1px solid rgba(255,92,53,0.35);
+    padding:2px 9px; border-radius:6px; font-weight:500;
+  }
+
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:64px;}
+  .btn-primary{
+    background:var(--coral); color:#fff;
+    padding:16px 32px; border-radius:999px;
+    font-weight:600; font-size:0.96rem;
+    box-shadow:0 14px 30px -12px rgba(255,92,53,0.65);
+    transition:transform .2s ease, box-shadow .2s ease;
+    display:inline-block;
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 18px 36px -12px rgba(255,92,53,0.8);}
+  .btn-ghost{
+    color:#fff;
+    padding:16px 28px; border-radius:999px;
+    font-weight:500; font-size:0.96rem;
+    border:1px solid var(--line-dark);
+    transition:border-color .2s ease, background .2s ease;
+    display:inline-block;
+  }
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.35); background:rgba(255,255,255,0.04);}
+
+  .hero-stats{
+    display:flex; gap:46px;
+    border-top:1px solid var(--line-dark);
+    padding-top:30px;
+  }
+  .hero-stat .num{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.9rem;
+    display:block;
+  }
+  .hero-stat .lbl{
+    font-size:0.8rem; color:var(--muted-dark); margin-top:4px;
+  }
+
+  /* phone mockup */
+  .hero-visual{position:relative; display:flex; justify-content:center;}
+  .phone{
+    width:308px;
+    background:linear-gradient(160deg,#23291F,#11140F);
+    border-radius:38px;
+    padding:14px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 50px 100px -40px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02);
+    position:relative;
+  }
+  .phone::before{
+    content:"";
+    position:absolute; top:26px; left:50%; transform:translateX(-50%);
+    width:90px; height:24px; background:#0B0D09; border-radius:14px;
+  }
+  .phone-screen{
+    background:#EFEAE0; border-radius:28px; overflow:hidden; padding-top:36px;
+  }
+  .chat-head{
+    background:var(--sage-deep); color:#fff;
+    padding:14px 18px 16px; display:flex; align-items:center; gap:12px;
+  }
+  .chat-avatar{
+    width:36px; height:36px; border-radius:50%;
+    background:var(--coral);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:0.9rem; flex-shrink:0;
+  }
+  .chat-head-info .name{font-weight:600; font-size:0.92rem;}
+  .chat-head-info .status{font-size:0.68rem; opacity:0.7; font-family:'IBM Plex Mono',monospace; letter-spacing:0.04em;}
+
+  .chat-body{padding:18px 14px 30px; display:flex; flex-direction:column; gap:10px; min-height:400px;}
+  .bubble{
+    max-width:84%; padding:11px 14px; border-radius:14px;
+    font-size:0.82rem; line-height:1.45;
+    opacity:0; transform:translateY(10px);
+    animation:rise .55s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .bubble.in{background:#fff; align-self:flex-start; border-bottom-left-radius:4px; box-shadow:0 1px 2px rgba(0,0,0,0.05);}
+  .bubble.out{background:#D7ECCF; align-self:flex-end; border-bottom-right-radius:4px;}
+  .bubble strong{color:var(--sage-deep);}
+  .bubble .time{display:block; margin-top:5px; font-size:0.64rem; color:#9A9C8E; font-family:'IBM Plex Mono',monospace; text-align:right;}
+  @keyframes rise{to{opacity:1; transform:translateY(0);}}
+  .bubble:nth-child(1){animation-delay:.3s;}
+  .bubble:nth-child(2){animation-delay:1.0s;}
+  .bubble:nth-child(3){animation-delay:1.9s;}
+  .bubble:nth-child(4){animation-delay:2.7s;}
+  .bubble:nth-child(6){animation-delay:4.3s;}
+
+  .typing{
+    align-self:flex-start; background:#fff; border-radius:14px; border-bottom-left-radius:4px;
+    padding:11px 16px; display:flex; gap:4px;
+    opacity:0; animation:typeflash 5s ease-in-out infinite;
+  }
+  .typing span{width:6px; height:6px; border-radius:50%; background:#C7C9BC; animation:bounce 1s infinite;}
+  .typing span:nth-child(2){animation-delay:.15s;}
+  .typing span:nth-child(3){animation-delay:.3s;}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-4px);}}
+  @keyframes typeflash{0%,55%{opacity:0;} 60%,80%{opacity:1;} 85%,100%{opacity:0;}}
+
+  .float-card{
+    position:absolute; background:#fff; color:var(--ink);
+    border-radius:16px; padding:14px 18px;
+    box-shadow:0 24px 50px -20px rgba(0,0,0,0.45);
+    display:flex; align-items:center; gap:12px;
+  }
+  .float-card.streak{top:8%; right:-8%; transform:rotate(-3deg);}
+  .float-card.progress{bottom:10%; left:-12%; transform:rotate(3deg);}
+  .float-card .ftitle{font-size:0.78rem; font-weight:600;}
+  .float-card .fsub{font-size:0.68rem; color:var(--muted-light); font-family:'IBM Plex Mono',monospace;}
+
+  @media (max-width:920px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1; margin-bottom:30px;}
+    .float-card{display:none;}
+    .hero-stats{flex-wrap:wrap; gap:30px;}
+  }
+
+  /* ============ MARQUEE ============ */
+  .marquee{
+    border-top:1px solid var(--line-light);
+    border-bottom:1px solid var(--line-light);
+    overflow:hidden; padding:22px 0;
+    background:var(--paper);
+  }
+  .marquee-track{
+    display:flex; gap:0; width:max-content;
+    animation:scrollx 38s linear infinite;
+  }
+  .marquee-item{
+    display:flex; align-items:center; gap:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--muted-light); white-space:nowrap; padding:0 34px;
+  }
+  .marquee-item .strong{color:var(--ink); font-weight:600;}
+  .marquee-item .sep{color:var(--coral);}
+  @keyframes scrollx{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+
+  /* ============ SECTION SHARED ============ */
+  section{padding:120px 0;}
+  .head{max-width:660px; margin-bottom:64px;}
+  .head .tag{
+    font-family:'IBM Plex Mono', monospace; font-size:0.76rem;
+    letter-spacing:0.18em; text-transform:uppercase; color:var(--coral);
+    display:block; margin-bottom:18px;
+  }
+  .head h2{font-size:clamp(2rem, 3.6vw, 3rem); margin-bottom:18px;}
+  .head p{color:var(--muted-light); font-size:1.05rem; max-width:540px;}
+
+  /* ============ DAY TIMELINE ============ */
+  .day-rail{position:relative;}
+  .day-line{
+    position:absolute; top:13px; left:6%; right:6%; height:1px; background:var(--line-light);
+    z-index:0;
+  }
+  .day-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:36px; position:relative; z-index:1;}
+  .day-col{display:flex; flex-direction:column;}
+  .day-node{
+    width:26px; height:26px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--coral);
+    margin-bottom:22px; position:relative;
+  }
+  .day-node::after{
+    content:""; position:absolute; inset:6px; border-radius:50%; background:var(--coral);
+  }
+  .day-time{font-family:'IBM Plex Mono',monospace; font-size:0.76rem; letter-spacing:0.1em; color:var(--coral); font-weight:600; margin-bottom:10px; text-transform:uppercase;}
+  .day-col h3{font-size:1.32rem; margin-bottom:10px; font-weight:600;}
+  .day-col p{color:var(--muted-light); font-size:0.94rem; margin-bottom:18px;}
+  .day-quote{
+    background:var(--paper); border:1px solid var(--line-light); border-radius:14px;
+    padding:14px 16px; font-size:0.85rem; color:var(--ink);
+    border-bottom-left-radius:4px;
+  }
+  .day-quote .who{font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:var(--sage-deep); display:block; margin-bottom:5px; letter-spacing:0.06em; text-transform:uppercase;}
+
+  @media (max-width:880px){
+    .day-grid{grid-template-columns:1fr; gap:50px;}
+    .day-line{display:none;}
+  }
+
+  /* ============ BENTO FEATURES ============ */
+  .bento{
+    display:grid;
+    grid-template-columns:1.35fr 1fr 1fr;
+    grid-template-rows:auto auto;
+    gap:24px;
+  }
+  .bcard{
+    background:var(--paper); border:1px solid var(--line-light); border-radius:var(--radius-md);
+    padding:34px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .bcard:hover{transform:translateY(-4px); box-shadow:0 22px 44px -28px rgba(17,20,15,0.25); border-color:rgba(17,20,15,0.12);}
+  .bcard.large{grid-column:1; grid-row:1 / 3; display:flex; flex-direction:column;}
+  .bcard.wide{grid-column:2 / 4; grid-row:2;}
+  .b-tag{font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--sage-deep); margin-bottom:16px; display:block;}
+  .bcard h3{font-size:1.5rem; margin-bottom:12px; font-weight:600;}
+  .bcard.large h3{font-size:1.9rem;}
+  .bcard p{color:var(--muted-light); font-size:0.96rem;}
+
+  .mini-chat{
+    margin-top:26px; background:#fff; border:1px solid var(--line-light); border-radius:14px;
+    padding:16px; display:flex; flex-direction:column; gap:10px; flex-grow:1;
+  }
+  .mini-bubble{
+    background:var(--cream); border-radius:12px; padding:10px 13px; font-size:0.84rem;
+    border-bottom-left-radius:3px; max-width:88%;
+  }
+  .mini-bubble.alt{align-self:flex-end; background:#E1EEDC; border-bottom-left-radius:12px; border-bottom-right-radius:3px;}
+  .mini-bubble b{color:var(--sage-deep);}
+
+  .b-icon{
+    width:48px; height:48px; border-radius:13px; display:flex; align-items:center; justify-content:center;
+    margin-bottom:20px; font-size:1.35rem;
+  }
+  .b-icon.coral{background:#FFE3D9; color:var(--coral);}
+  .b-icon.sage{background:#E1EAE3; color:var(--sage-deep);}
+  .b-icon.gold{background:#FBEAD2; color:#B97D2D;}
+
+  .spark{display:flex; align-items:flex-end; gap:6px; height:54px; margin-top:22px;}
+  .spark div{flex:1; background:var(--sage); border-radius:4px 4px 0 0; opacity:0.85;}
+  .spark div:nth-child(6){background:var(--coral); opacity:1;}
+
+  @media (max-width:980px){
+    .bento{grid-template-columns:1fr 1fr;}
+    .bcard.large{grid-column:1/3; grid-row:1;}
+    .bcard.wide{grid-column:1/3; grid-row:3;}
+  }
+  @media (max-width:620px){
+    .bento{grid-template-columns:1fr;}
+    .bcard.large,.bcard.wide{grid-column:1; grid-row:auto;}
+  }
+
+  /* ============ PRICING ============ */
+  .pricing{
+    background:var(--ink); color:#fff; position:relative; overflow:hidden;
+  }
+  .pricing::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 60% 50% at 80% 20%, rgba(255,92,53,0.18), transparent 60%);
+  }
+  .pricing .tag{color:var(--coral-dim);}
+  .price-shell{position:relative; z-index:1; display:grid; grid-template-columns:1fr 1.1fr; gap:70px; align-items:center;}
+  .price-shell h2{color:#fff;}
+  .price-shell .lede{color:rgba(255,255,255,0.62); font-size:1.05rem; max-width:430px; margin:18px 0 34px;}
+  .price-checklist{display:flex; flex-direction:column; gap:14px; margin-bottom:36px;}
+  .price-checklist li{display:flex; gap:12px; align-items:flex-start; font-size:0.94rem; color:rgba(255,255,255,0.85); list-style:none;}
+  .price-checklist .tick{
+    width:20px; height:20px; border-radius:50%; background:rgba(255,92,53,0.18); border:1px solid rgba(255,92,53,0.4);
+    color:var(--coral-dim); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.7rem; margin-top:2px;
+  }
+
+  .price-card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:var(--radius-lg);
+    padding:46px;
+    backdrop-filter:blur(6px);
+  }
+  .price-tag-row{display:flex; align-items:baseline; gap:10px; margin-bottom:6px;}
+  .price-amount{font-family:'Fraunces',serif; font-weight:600; font-size:4.4rem; line-height:1; color:#fff;}
+  .price-period{font-size:1.05rem; color:rgba(255,255,255,0.55);}
+  .price-note{font-size:0.88rem; color:rgba(255,255,255,0.45); margin-bottom:30px;}
+  .compare{display:flex; flex-direction:column;}
+  .crow{display:flex; justify-content:space-between; align-items:center; padding:13px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.92rem;}
+  .crow:first-child{border-top:1px solid rgba(255,255,255,0.08);}
+  .crow .item{color:rgba(255,255,255,0.7);}
+  .crow .amt{font-family:'IBM Plex Mono',monospace; color:rgba(255,255,255,0.35);}
+  .crow.hi .item{color:#fff; font-weight:600;}
+  .crow.hi .amt{color:var(--coral-dim); font-weight:600;}
+
+  @media (max-width:920px){
+    .price-shell{grid-template-columns:1fr; gap:46px;}
+  }
+
+  /* ============ STATS + TESTIMONIALS ============ */
+  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:36px; margin-bottom:80px;}
+  .stat{border-left:1px solid var(--line-light); padding-left:22px;}
+  .stat .num{font-family:'Fraunces',serif; font-weight:600; font-size:3rem; line-height:1;}
+  .stat .lbl{font-size:0.86rem; color:var(--muted-light); margin-top:8px; font-family:'IBM Plex Mono',monospace; letter-spacing:0.04em;}
+  @media (max-width:880px){.stat-row{grid-template-columns:repeat(2,1fr); gap:40px 28px;}}
+
+  .testi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .testi{background:var(--paper); border:1px solid var(--line-light); border-radius:var(--radius-md); padding:32px; transition:transform .3s ease;}
+  .testi:hover{transform:translateY(-4px);}
+  .testi .quote-mark{font-family:'Fraunces',serif; font-size:3rem; color:var(--coral); line-height:0.5; margin-bottom:14px; display:block;}
+  .testi .stars{color:var(--coral); font-size:0.85rem; margin-bottom:14px;}
+  .testi p{font-size:0.96rem; margin-bottom:22px;}
+  .testi .who{display:flex; align-items:center; gap:12px; font-size:0.84rem; color:var(--muted-light);}
+  .who .av{width:38px; height:38px; border-radius:50%; background:var(--sage); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:600; font-size:0.85rem;}
+  @media (max-width:980px){.testi-grid{grid-template-columns:1fr;}}
+
+  /* ============ FINAL CTA ============ */
+  .final{
+    background:var(--ink); color:#fff; text-align:center; position:relative; overflow:hidden;
+  }
+  .final::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 60% 60% at 50% 0%, rgba(255,92,53,0.22), transparent 65%);
+  }
+  .final-inner{position:relative; z-index:1; max-width:720px; margin:0 auto;}
+  .final h2{font-size:clamp(2.4rem, 5.5vw, 4rem); margin-bottom:22px; color:#fff;}
+  .final h2 em{color:var(--coral-dim); font-style:italic; font-weight:400;}
+  .final p{color:rgba(255,255,255,0.6); font-size:1.08rem; margin-bottom:42px;}
+  .final .hero-ctas{justify-content:center;}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--ink); color:rgba(255,255,255,0.55); padding:54px 0 40px; border-top:1px solid var(--line-dark);}
+  .foot-inner{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:30px;}
+  .foot-brand{color:#fff; font-family:'Fraunces',serif; font-size:1.3rem; font-weight:600; margin-bottom:10px;}
+  .foot-brand span{color:var(--coral);}
+  .foot-cols{display:flex; gap:60px; flex-wrap:wrap;}
+  .foot-col h4{font-family:'IBM Plex Mono',monospace; font-size:0.74rem; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:14px; font-weight:500;}
+  .foot-col a{display:block; font-size:0.9rem; margin-bottom:9px; color:rgba(255,255,255,0.65); transition:color .2s;}
+  .foot-col a:hover{color:#fff;}
+  .foot-bottom{
+    margin-top:50px; padding-top:24px; border-top:1px solid var(--line-dark);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-size:0.82rem; color:rgba(255,255,255,0.35);
+  }
+
+  /* reveal */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);}
+  .reveal.visible{opacity:1; transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reveal{opacity:1; transform:none;}
+    .bubble,.typing{opacity:1; transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      <div class="brand-name">Reliv</div>
+    </div>
+    <nav class="nav-links">
+      <a href="#day">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#proof">Reviews</a>
+    </nav>
+    <a href="#pricing" class="nav-cta">Start free trial</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hero-eyebrow"><span class="dot"></span> AI-Powered Personal Health</span>
+      <h1>Transform your health, <em>one message</em> at a time.</h1>
+      <p class="lead">
+        Reliv's AI coach designs your diet plan, your workouts, and your daily check-ins —
+        then delivers them straight to WhatsApp. The coaching of a clinic, the cost of a cup of chai,
+        at <span class="price">₹9/day</span>.
+      </p>
+      <div class="hero-ctas">
+        <a href="#pricing" class="btn-primary">Start your free trial</a>
+        <a href="#day" class="btn-ghost">See a day with Reliv</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="num">50K+</span><span class="lbl">Active users</span></div>
+        <div class="hero-stat"><span class="num">4.9</span><span class="lbl">Average rating</span></div>
+        <div class="hero-stat"><span class="num">HIPAA</span><span class="lbl">Compliant by design</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="chat-head">
+            <div class="chat-avatar">R</div>
+            <div class="chat-head-info">
+              <div class="name">Reliv AI Coach</div>
+              <div class="status">online</div>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="bubble in">Good morning Aarav ☀️ Here's today's plan based on your goal — lose 4kg by August.<span class="time">7:02 AM</span></div>
+            <div class="bubble in"><strong>Breakfast:</strong> Moong dal chilla + curd, 320 kcal. Want the recipe?<span class="time">7:02 AM</span></div>
+            <div class="bubble out">Yes please 🙏<span class="time">7:05 AM</span></div>
+            <div class="bubble in"><strong>Workout:</strong> 25-min lower body session at 6 PM. I'll check in after 💪<span class="time">5:55 PM</span></div>
+            <div class="typing"><span></span><span></span><span></span></div>
+            <div class="bubble in">You're 3 days into your streak 🔥 Log dinner when you're ready.<span class="time">9:10 PM</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="float-card streak">
+        <div style="font-size:1.4rem;">🔥</div>
+        <div><div class="ftitle">12-day streak</div><div class="fsub">PERSONAL BEST</div></div>
+      </div>
+      <div class="float-card progress">
+        <svg width="44" height="44" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="26" stroke="#EFEAE0" stroke-width="6" fill="none"/>
+          <circle cx="32" cy="32" r="26" stroke="#FF5C35" stroke-width="6" fill="none" stroke-dasharray="163" stroke-dashoffset="29" stroke-linecap="round" transform="rotate(-90 32 32)"/>
+        </svg>
+        <div><div class="ftitle">82% complete</div><div class="fsub">TODAY'S PLAN</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee">
+  <div class="marquee-track" id="marquee">
+    <div class="marquee-item"><span class="strong">50,000+</span> users <span class="sep">◆</span></div>
+    <div class="marquee-item"><span class="strong">4.9★</span> average rating <span class="sep">◆</span></div>
+    <div class="marquee-item"><span class="strong">HIPAA</span> compliant <span class="sep">◆</span></div>
+    <div class="marquee-item"><span class="strong">Bank-grade</span> security <span class="sep">◆</span></div>
+    <div class="marquee-item"><span class="strong">Endorsed</span> by experts <span class="sep">◆</span></div>
+    <div class="marquee-item"><span class="strong">₹9/day</span> — all inclusive <span class="sep">◆</span></div>
+  </div>
+</div>
+
+<!-- ============ DAY TIMELINE ============ -->
+<section id="day">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="tag">A typical day</span>
+      <h2>Three nudges. Zero apps to open.</h2>
+      <p>No dashboards to check, no logging marathons. Reliv reaches you exactly when it matters — and quietly rebuilds tomorrow's plan around how today went.</p>
+    </div>
+    <div class="day-rail">
+      <div class="day-line"></div>
+      <div class="day-grid">
+        <div class="day-col reveal">
+          <div class="day-node"></div>
+          <span class="day-time">07:00 — Morning</span>
+          <h3>Your day, planned</h3>
+          <p>A custom breakfast and macro target lands before you've poured your coffee.</p>
+          <div class="day-quote"><span class="who">Reliv AI Coach</span>"Breakfast: Moong dal chilla + curd — 320 kcal. Tap for the recipe."</div>
+        </div>
+        <div class="day-col reveal">
+          <div class="day-node"></div>
+          <span class="day-time">13:00 — Midday</span>
+          <h3>A gentle check-in</h3>
+          <p>Reliv asks how lunch went and rebalances the rest of your day if you went off-script.</p>
+          <div class="day-quote"><span class="who">Reliv AI Coach</span>"Lunch logged ✅ Dinner's been adjusted — lighter on carbs tonight."</div>
+        </div>
+        <div class="day-col reveal">
+          <div class="day-node"></div>
+          <span class="day-time">18:00 — Evening</span>
+          <h3>Move, then unwind</h3>
+          <p>A short, doable workout reminder — followed by tomorrow's preview and a wind-down nudge.</p>
+          <div class="day-quote"><span class="who">Reliv AI Coach</span>"25-min lower body session ready. I'll check in after 💪"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES (BENTO) ============ -->
+<section id="features">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="tag">What's inside</span>
+      <h2>Everything a trainer and dietitian do — minus the waitlist.</h2>
+      <p>Four systems, one quiet daily habit.</p>
+    </div>
+    <div class="bento">
+      <div class="bcard large reveal">
+        <span class="b-tag">01 · Nutrition</span>
+        <h3>Personalized diet plans</h3>
+        <p>Built around your goals, preferences, and what's actually in your kitchen — recalculated weekly as your weight and habits shift.</p>
+        <div class="mini-chat">
+          <div class="mini-bubble"><b>Reliv:</b> Tonight's dinner — palak paneer (light), 1 roti, cucumber salad. 410 kcal.</div>
+          <div class="mini-bubble alt">Swap paneer for tofu?</div>
+          <div class="mini-bubble"><b>Reliv:</b> Done ✅ Updated to 365 kcal — protein target still on track.</div>
+        </div>
+      </div>
+      <div class="bcard reveal">
+        <div class="b-icon coral">📲</div>
+        <h3>WhatsApp reminders</h3>
+        <p>Meals, workouts, water, and sleep — delivered where you already live, no extra app required.</p>
+      </div>
+      <div class="bcard reveal">
+        <div class="b-icon sage">🏋️</div>
+        <h3>Adaptive workouts</h3>
+        <p>Routines that scale with your equipment, time, and energy — from 10-minute resets to full sessions.</p>
+      </div>
+      <div class="bcard wide reveal">
+        <div class="b-icon gold">📈</div>
+        <h3>Progress tracking that actually adapts</h3>
+        <p>Streaks, weight trends, and weekly summaries your AI coach uses to fine-tune tomorrow's plan — visible at a glance.</p>
+        <div class="spark">
+          <div style="height:30%"></div>
+          <div style="height:45%"></div>
+          <div style="height:38%"></div>
+          <div style="height:60%"></div>
+          <div style="height:52%"></div>
+          <div style="height:82%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="pricing" id="pricing">
+  <div class="wrap price-shell">
+    <div class="reveal">
+      <span class="tag">Pricing</span>
+      <h2>Cheaper than the coffee you'll skip.</h2>
+      <p class="lede">One transparent price. No hidden tiers, no surprise renewals — cancel from WhatsApp, anytime, in one message.</p>
+      <ul class="price-checklist">
+        <li><span class="tick">✓</span> Personalized diet & workout plans, updated weekly</li>
+        <li><span class="tick">✓</span> Daily WhatsApp coaching — no app to install</li>
+        <li><span class="tick">✓</span> Progress tracking & weekly summaries</li>
+        <li><span class="tick">✓</span> Bank-grade security, HIPAA-compliant by design</li>
+      </ul>
+      <div class="hero-ctas">
+        <a href="#" class="btn-primary">Start your free trial</a>
+        <a href="#" class="btn-ghost">Returning user? Log in</a>
+      </div>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-tag-row">
+        <span class="price-amount">₹9</span>
+        <span class="price-period">/ day, billed monthly</span>
+      </div>
+      <div class="price-note">That's ₹270/month for a coach, a nutritionist, and a planner.</div>
+      <div class="compare">
+        <div class="crow"><span class="item">☕ Cup of chai</span><span class="amt">₹10–15</span></div>
+        <div class="crow"><span class="item">🚗 Short auto ride</span><span class="amt">₹30–50</span></div>
+        <div class="crow"><span class="item">🥤 Café cold coffee</span><span class="amt">₹120+</span></div>
+        <div class="crow hi"><span class="item">🤖 Reliv — full day of AI coaching</span><span class="amt">₹9</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS + TESTIMONIALS ============ -->
+<section id="proof">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="tag">Trusted by thousands</span>
+      <h2>Real people, real streaks.</h2>
+    </div>
+    <div class="stat-row">
+      <div class="stat reveal"><span class="num">50K+</span><span class="lbl">ACTIVE USERS</span></div>
+      <div class="stat reveal"><span class="num">4.9★</span><span class="lbl">AVERAGE RATING</span></div>
+      <div class="stat reveal"><span class="num">12min</span><span class="lbl">AVG. DAILY WORKOUT</span></div>
+      <div class="stat reveal"><span class="num">₹9</span><span class="lbl">PER DAY, ALL-IN</span></div>
+    </div>
+    <div class="testi-grid">
+      <div class="testi reveal">
+        <span class="quote-mark">"</span>
+        <div class="stars">★★★★★</div>
+        <p>I stopped overthinking what to eat. Reliv just tells me, and I do it. Six kilos down in two months.</p>
+        <div class="who"><div class="av">PS</div> Priya S., Pune</div>
+      </div>
+      <div class="testi reveal">
+        <span class="quote-mark">"</span>
+        <div class="stars">★★★★★</div>
+        <p>The WhatsApp reminders are the whole trick. I never open another fitness app, and I never miss a day.</p>
+        <div class="who"><div class="av">RK</div> Rohit K., Bengaluru</div>
+      </div>
+      <div class="testi reveal">
+        <span class="quote-mark">"</span>
+        <div class="stars">★★★★★</div>
+        <p>Felt like having a dietitian on call for the price of a cutting chai. Worth every rupee.</p>
+        <div class="who"><div class="av">AM</div> Anjali M., Delhi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final">
+  <div class="wrap final-inner">
+    <h2 class="reveal">Your AI coach is <em>one message</em> away.</h2>
+    <p class="reveal">Start your free trial today — no credit card, no app download, just WhatsApp.</p>
+    <div class="hero-ctas reveal">
+      <a href="#" class="btn-primary">Start your free trial</a>
+      <a href="#" class="btn-ghost">Returning user? Log in</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <div>
+        <div class="foot-brand">Re<span>liv</span></div>
+        <p style="font-size:0.88rem; max-width:260px;">AI-powered personal health, delivered on WhatsApp — for ₹9/day.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Product</h4>
+          <a href="#day">How it works</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="foot-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Reliv. All rights reserved.</span>
+      <span>Bank-grade security · HIPAA compliant</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 40){ nav.classList.add('scrolled'); }
+    else{ nav.classList.remove('scrolled'); }
+  });
+
+  // duplicate marquee for seamless loop
+  const m = document.getElementById('marquee');
+  m.innerHTML += m.innerHTML;
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>

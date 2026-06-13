@@ -145,7 +145,7 @@ export default function MakeEasierScreen() {
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: 13, fontWeight: 700, color: '#111' }}>{s.label}</p>
                 </div>
-                <span style={{ fontSize: 12, color: '#9CA3AF', textDecoration: 'line-through' }}>{s.current}</span>
+                <span style={{ fontSize: 12, color: 'var(--gray-400)', textDecoration: 'line-through' }}>{s.current}</span>
                 <span style={{
                   fontSize: 14, fontWeight: 800, color: s.color,
                   background: `${s.color}10`, padding: '4px 10px', borderRadius: 8,

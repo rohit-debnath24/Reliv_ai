@@ -52,7 +52,7 @@ export default function ReturningPayScreen() {
 
           {/* User Info */}
           <div style={{
-            background: '#FAFAFA',
+            background: 'var(--gray-50)',
             borderRadius: 14,
             padding: '18px 24px',
             marginBottom: 28,
@@ -95,7 +95,7 @@ export default function ReturningPayScreen() {
             textAlign: 'center',
             marginBottom: 28,
           }}>
-            <p style={{ fontSize: 14, color: '#9CA3AF', marginBottom: 8 }}>Weekly Plan</p>
+            <p style={{ fontSize: 14, color: 'var(--gray-400)', marginBottom: 8 }}>Weekly Plan</p>
             <p style={{ fontSize: 48, fontWeight: 800, color: '#F06922' }}>₹29</p>
             <p style={{ fontSize: 13, color: '#666' }}>8 days access (incl. bonus)</p>
           </div>
@@ -112,7 +112,7 @@ export default function ReturningPayScreen() {
               padding: '22px',
               fontSize: 18,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: loading ? 'not-allowed' : 'pointer',
               boxShadow: '0 10px 40px rgba(240, 105, 34, 0.35)',
               display: 'flex',
@@ -127,7 +127,7 @@ export default function ReturningPayScreen() {
                   width: 24,
                   height: 24,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -143,7 +143,7 @@ export default function ReturningPayScreen() {
         <p style={{
           textAlign: 'center',
           fontSize: 13,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

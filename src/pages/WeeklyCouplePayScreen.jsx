@@ -71,7 +71,7 @@ export default function WeeklyCouplePayScreen() {
               }}>
                 ₹54
               </div>
-              <div style={{ fontSize: 13, color: '#9CA3AF', fontWeight: 500 }}>
+              <div style={{ fontSize: 13, color: 'var(--gray-400)', fontWeight: 500 }}>
                 per week
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function WeeklyCouplePayScreen() {
               padding: '22px',
               fontSize: 18,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: loading ? 'not-allowed' : 'pointer',
               boxShadow: '0 10px 40px rgba(236, 72, 153, 0.35)',
               transition: 'all 0.3s ease',
@@ -182,7 +182,7 @@ export default function WeeklyCouplePayScreen() {
                   width: 24,
                   height: 24,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -200,7 +200,7 @@ export default function WeeklyCouplePayScreen() {
         <div style={{
           textAlign: 'center',
           fontSize: 13,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

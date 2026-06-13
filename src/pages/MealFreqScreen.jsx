@@ -22,8 +22,8 @@ export default function MealFreqScreen() {
               key={m.id} 
               onClick={() => setSelected(m.id)} 
               style={{ 
-                background: selected === m.id ? '#FFF5F0' : '#FFFFFF', 
-                border: `2px solid ${selected === m.id ? '#F06922' : '#E5E7EB'}`, 
+                background: selected === m.id ? 'var(--cream-200)' : 'var(--white)', 
+                border: `2px solid ${selected === m.id ? '#F06922' : 'var(--gray-200)'}`, 
                 borderRadius: 16, 
                 padding: '20px 24px', 
                 cursor: 'pointer', 
@@ -41,7 +41,7 @@ export default function MealFreqScreen() {
                   width: 24, 
                   height: 24, 
                   borderRadius: '50%', 
-                  border: `2px solid ${selected === m.id ? '#F06922' : '#E5E7EB'}`,
+                  border: `2px solid ${selected === m.id ? '#F06922' : 'var(--gray-200)'}`,
                   background: selected === m.id ? '#F06922' : 'transparent',
                   display: 'flex',
                   alignItems: 'center',
@@ -91,13 +91,13 @@ export default function MealFreqScreen() {
           disabled={!selected} 
           style={{ 
             width: '100%', 
-            background: selected ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)' : '#E5E7EB', 
+            background: selected ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)' : 'var(--gray-200)', 
             border: 'none', 
             borderRadius: 14, 
             padding: '18px', 
             fontSize: 17, 
             fontWeight: 700, 
-            color: selected ? '#FFFFFF' : '#9CA3AF', 
+            color: selected ? 'var(--white)' : 'var(--gray-400)', 
             cursor: selected ? 'pointer' : 'not-allowed',
             boxShadow: selected ? '0 6px 25px rgba(240, 105, 34, 0.35)' : 'none',
             transition: 'all 0.2s'

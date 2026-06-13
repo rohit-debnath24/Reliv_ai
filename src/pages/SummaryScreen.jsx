@@ -57,7 +57,7 @@ export default function SummaryScreen() {
       <div style={{ maxWidth: 580, margin: '0 auto' }}>
         {/* Main Card */}
         <div style={{
-          background: '#FFFFFF',
+          background: 'var(--white)',
           borderRadius: 28,
           padding: '36px 32px',
           boxShadow: '0 20px 60px rgba(240, 105, 34, 0.1)',
@@ -96,7 +96,7 @@ export default function SummaryScreen() {
             </div>
             <div style={{ textAlign: 'right' }}>
               <p style={{ fontSize: 28, fontWeight: 800, color: plan.color }}>{plan.price}</p>
-              <p style={{ fontSize: 12, color: '#9CA3AF' }}>per week</p>
+              <p style={{ fontSize: 12, color: 'var(--gray-400)' }}>per week</p>
             </div>
           </div>
 
@@ -120,7 +120,7 @@ export default function SummaryScreen() {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '16px 20px',
-                  background: '#FAFAFA',
+                  background: 'var(--gray-50)',
                   borderRadius: 14,
                   opacity: showItems ? 1 : 0,
                   transform: showItems ? 'translateY(0)' : 'translateY(10px)',
@@ -170,7 +170,7 @@ export default function SummaryScreen() {
               padding: '22px',
               fontSize: 18,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: loading ? 'not-allowed' : 'pointer',
               boxShadow: '0 10px 40px rgba(34, 197, 94, 0.35)',
               transition: 'all 0.3s ease',
@@ -186,7 +186,7 @@ export default function SummaryScreen() {
                   width: 24,
                   height: 24,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -222,7 +222,7 @@ export default function SummaryScreen() {
                 alignItems: 'center',
                 gap: 6,
                 fontSize: 13,
-                color: '#9CA3AF',
+                color: 'var(--gray-400)',
                 fontWeight: 500,
               }}
             >

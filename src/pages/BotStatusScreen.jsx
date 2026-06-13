@@ -111,7 +111,7 @@ export default function BotStatusScreen() {
             border: '1px solid rgba(255,255,255,0.08)', marginBottom: 12,
           }}>
             <div style={{
-              width: 10, height: 10, borderRadius: '50%', background: '#9CA3AF',
+              width: 10, height: 10, borderRadius: '50%', background: 'var(--gray-400)',
               animation: 'offlinePulse 2s infinite',
             }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>Offline — Unpaired</span>

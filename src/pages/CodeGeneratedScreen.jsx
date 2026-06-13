@@ -107,7 +107,7 @@ export default function CodeGeneratedScreen() {
             {accessCode.split('').map((digit, i) => (
               <div key={i} style={{
                 width: 64, height: 76,
-                background: '#FFFFFF', borderRadius: 18,
+                background: 'var(--white)', borderRadius: 18,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 34, fontWeight: 900, color: '#F06922',
                 boxShadow: '0 6px 24px rgba(240,105,34,0.15)',
@@ -169,7 +169,7 @@ export default function CodeGeneratedScreen() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 14, fontWeight: 800, color: '#F06922',
           }}>{countdown}</div>
-          <span style={{ fontSize: 13, color: '#9CA3AF' }}>Auto-continuing...</span>
+          <span style={{ fontSize: 13, color: 'var(--gray-400)' }}>Auto-continuing...</span>
         </div>
       </div>
 

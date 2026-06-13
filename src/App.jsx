@@ -2,6 +2,7 @@ import ProductShowcaseBoard from './pages/ProductShowcaseBoard.jsx';
 import CreateShoutoutScreen from './pages/CreateShoutoutScreen.jsx';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // ═══ ENTRY & AUTH ═══
 import WelcomeScreen from './pages/WelcomeScreen.jsx';
@@ -92,6 +93,20 @@ import PaymentFailedScreen from './pages/PaymentFailedScreen.jsx';
 import TrialUsedScreen from './pages/TrialUsedScreen.jsx';
 
 export default function App() {
+	useEffect(() => {
+		const applyTheme = () => {
+			const isDark = localStorage.getItem('theme') !== 'light';
+			if (isDark) {
+				document.body.classList.add('dark');
+			} else {
+				document.body.classList.remove('dark');
+			}
+		};
+		applyTheme();
+		window.addEventListener('themeChange', applyTheme);
+		return () => window.removeEventListener('themeChange', applyTheme);
+	}, []);
+
 	return (
 		<BrowserRouter>
 			<Routes>

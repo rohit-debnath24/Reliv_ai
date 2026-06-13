@@ -63,6 +63,29 @@
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+body.dark {
+  /* Cream Palette inverted to Ink */
+  --cream-50: #0B0D0A;
+  --cream-100: #11140F;
+  --cream-200: #161A13;
+  --cream-300: #1B1F17;
+  --cream-400: #252A1F;
+  --cream-500: #323A2A;
+
+  /* Neutrals inverted */
+  --white: #1B1F17;
+  --gray-50: #22271F;
+  --gray-100: #2B3226;
+  --gray-200: #353D2F;
+  --gray-300: #445A4C;
+  --gray-400: #7C9885;
+  --gray-500: #A7AC9D;
+  --gray-600: #E6E1D2;
+  --gray-700: #F7F4EC;
+  --gray-800: #FCFAF4;
+  --gray-900: #FFFFFF;
+}
+
 /* ═══ BASE STYLES ═══ */
 * {
   box-sizing: border-box;
@@ -84,6 +107,11 @@ body {
   color: var(--gray-900);
   line-height: 1.6;
   overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+body.dark {
+  background: linear-gradient(180deg, #11140F 0%, #161A13 50%, #1B1F17 100%);
 }
 
 /* Custom Scrollbar */

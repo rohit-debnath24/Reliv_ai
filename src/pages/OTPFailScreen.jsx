@@ -9,7 +9,7 @@ export default function OTPFailScreen() {
       <div style={{ maxWidth: 520, margin: '0 auto', textAlign: 'center' }}>
         {/* Main Card */}
         <div style={{
-          background: '#FFFFFF',
+          background: 'var(--white)',
           borderRadius: 28,
           padding: '56px 48px',
           boxShadow: '0 20px 60px rgba(239, 68, 68, 0.1)',
@@ -35,7 +35,7 @@ export default function OTPFailScreen() {
           <h1 style={{
             fontSize: 28,
             fontWeight: 800,
-            color: '#111111',
+            color: 'var(--gray-900)',
             marginBottom: 12,
             letterSpacing: '-0.5px',
           }}>
@@ -45,7 +45,7 @@ export default function OTPFailScreen() {
           {/* Message */}
           <p style={{
             fontSize: 16,
-            color: '#666666',
+            color: 'var(--gray-600)',
             lineHeight: 1.7,
             marginBottom: 36,
             maxWidth: 360,
@@ -84,7 +84,7 @@ export default function OTPFailScreen() {
                 padding: '18px',
                 fontSize: 16,
                 fontWeight: 700,
-                color: '#FFFFFF',
+                color: 'var(--white)',
                 cursor: 'pointer',
                 boxShadow: '0 8px 30px rgba(240, 105, 34, 0.3)',
                 transition: 'all 0.3s ease',
@@ -101,13 +101,13 @@ export default function OTPFailScreen() {
               onClick={() => navigate('/')}
               style={{
                 width: '100%',
-                background: '#FFFFFF',
+                background: 'var(--white)',
                 border: '2px solid #E5E7EB',
                 borderRadius: 14,
                 padding: '16px',
                 fontSize: 15,
                 fontWeight: 600,
-                color: '#666666',
+                color: 'var(--gray-600)',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
               }}
@@ -121,7 +121,7 @@ export default function OTPFailScreen() {
         <p style={{
           marginTop: 28,
           fontSize: 13,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

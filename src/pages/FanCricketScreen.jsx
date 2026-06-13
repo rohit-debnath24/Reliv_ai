@@ -110,7 +110,7 @@ export default function FanCricketScreen() {
               style={{
                 background: selected === player.id
                   ? `linear-gradient(135deg, ${currentCategory.color}10 0%, ${currentCategory.color}20 100%)`
-                  : '#FFFFFF',
+                  : 'var(--white)',
                 borderRadius: 20,
                 padding: '24px 28px',
                 display: 'flex',
@@ -188,7 +188,7 @@ export default function FanCricketScreen() {
                 </p>
                 <p style={{
                   fontSize: 11,
-                  color: '#9CA3AF',
+                  color: 'var(--gray-400)',
                 }}>
                   today only
                 </p>
@@ -227,7 +227,7 @@ export default function FanCricketScreen() {
           animation: 'fadeIn 0.3s ease',
         }}>
           <div style={{
-            background: '#FFFFFF',
+            background: 'var(--white)',
             borderRadius: 28,
             padding: '40px',
             maxWidth: 480,
@@ -307,7 +307,7 @@ export default function FanCricketScreen() {
                 padding: '20px',
                 fontSize: 17,
                 fontWeight: 700,
-                color: '#FFFFFF',
+                color: 'var(--white)',
                 cursor: 'pointer',
                 marginBottom: 14,
                 boxShadow: `0 10px 35px ${currentCategory.color}40`,

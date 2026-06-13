@@ -130,7 +130,7 @@ export default function CategoryScreen() {
                   ? c.isHeroTraining
                     ? `linear-gradient(135deg, ${c.color}15 0%, ${c.color}25 100%)`
                     : 'linear-gradient(135deg, #FFFFFF 0%, #FFF9F5 100%)'
-                  : '#FFFFFF',
+                  : 'var(--white)',
                 borderRadius: 20,
                 padding: c.isHeroTraining ? '32px 24px' : '28px 24px',
                 cursor: 'pointer',
@@ -169,7 +169,7 @@ export default function CategoryScreen() {
                   right: '50%',
                   transform: 'translateX(50%)',
                   background: `linear-gradient(135deg, ${c.color} 0%, ${c.color}dd 100%)`,
-                  color: '#FFFFFF',
+                  color: 'var(--white)',
                   fontSize: 11,
                   fontWeight: 700,
                   padding: '6px 16px',
@@ -271,7 +271,7 @@ export default function CategoryScreen() {
             padding: '20px',
             fontSize: 18,
             fontWeight: 700,
-            color: selected ? '#FFFFFF' : '#9CA3AF',
+            color: selected ? 'var(--white)' : 'var(--gray-400)',
             cursor: selected ? 'pointer' : 'not-allowed',
             boxShadow: selected
               ? selected === 'hero-training' && currentHero

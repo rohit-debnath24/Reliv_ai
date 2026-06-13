@@ -107,7 +107,7 @@ export default function OTPScreen() {
       <div style={{ maxWidth: 520, margin: '0 auto' }}>
         {/* Main Card */}
         <div style={{
-          background: '#FFFFFF',
+          background: 'var(--white)',
           borderRadius: 28,
           padding: '48px 44px',
           boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
@@ -138,14 +138,14 @@ export default function OTPScreen() {
           {/* Instruction */}
           <p style={{
             fontSize: 15,
-            color: '#666666',
+            color: 'var(--gray-600)',
             marginBottom: 32,
             lineHeight: 1.6,
           }}>
             Check your WhatsApp for the verification code<br />
             <span style={{
               fontSize: 13,
-              color: '#9CA3AF',
+              color: 'var(--gray-400)',
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
@@ -177,12 +177,12 @@ export default function OTPScreen() {
                 style={{
                   width: 72,
                   height: 88,
-                  background: d ? 'linear-gradient(135deg, #FFFAF7 0%, #FFF5F0 100%)' : '#FAFAFA',
-                  border: `3px solid ${d ? '#F06922' : error ? '#EF4444' : '#E5E7EB'}`,
+                  background: d ? 'linear-gradient(135deg, #FFFAF7 0%, #FFF5F0 100%)' : 'var(--gray-50)',
+                  border: `3px solid ${d ? '#F06922' : error ? '#EF4444' : 'var(--gray-200)'}`,
                   borderRadius: 20,
                   fontSize: 36,
                   fontWeight: 800,
-                  color: '#111111',
+                  color: 'var(--gray-900)',
                   textAlign: 'center',
                   outline: 'none',
                   transition: 'all 0.3s ease',
@@ -195,7 +195,7 @@ export default function OTPScreen() {
                   e.target.style.transform = 'scale(1.05)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = d ? '#F06922' : '#E5E7EB';
+                  e.target.style.borderColor = d ? '#F06922' : 'var(--gray-200)';
                   e.target.style.boxShadow = d ? '0 8px 30px rgba(240, 105, 34, 0.15)' : 'none';
                   e.target.style.transform = 'scale(1)';
                 }}
@@ -220,7 +220,7 @@ export default function OTPScreen() {
               <span style={{ fontSize: 18 }}>⚠️</span>
               <div>
                 <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 600, margin: 0 }}>{error}</p>
-                <p style={{ fontSize: 12, color: '#9CA3AF', margin: '4px 0 0' }}>
+                <p style={{ fontSize: 12, color: 'var(--gray-400)', margin: '4px 0 0' }}>
                   Attempts remaining: {3 - attempts}
                 </p>
               </div>
@@ -243,7 +243,7 @@ export default function OTPScreen() {
               padding: '20px',
               fontSize: 18,
               fontWeight: 700,
-              color: isComplete ? '#FFFFFF' : '#9CA3AF',
+              color: isComplete ? 'var(--white)' : 'var(--gray-400)',
               cursor: isComplete && !loading ? 'pointer' : 'not-allowed',
               boxShadow: isComplete ? '0 10px 40px rgba(34, 197, 94, 0.35)' : 'none',
               transition: 'all 0.3s ease',
@@ -259,7 +259,7 @@ export default function OTPScreen() {
                   width: 22,
                   height: 22,
                   border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#FFFFFF',
+                  borderTopColor: 'var(--white)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -285,9 +285,9 @@ export default function OTPScreen() {
             justifyContent: 'center',
             gap: 6,
           }}>
-            <span style={{ fontSize: 14, color: '#9CA3AF' }}>Didn't receive?</span>
+            <span style={{ fontSize: 14, color: 'var(--gray-400)' }}>Didn't receive?</span>
             {resendTimer > 0 ? (
-              <span style={{ fontSize: 14, color: '#666666', fontWeight: 600 }}>
+              <span style={{ fontSize: 14, color: 'var(--gray-600)', fontWeight: 600 }}>
                 Resend in {resendTimer}s
               </span>
             ) : (
@@ -314,7 +314,7 @@ export default function OTPScreen() {
           textAlign: 'center',
           marginTop: 24,
           fontSize: 13,
-          color: '#9CA3AF',
+          color: 'var(--gray-400)',
         }}>
           Wrong number?{' '}
           <span

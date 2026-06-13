@@ -105,7 +105,7 @@ export default function GroupTypeScreen() {
               style={{
                 background: selected === p.id
                   ? `linear-gradient(135deg, ${p.color}08 0%, ${p.color}15 100%)`
-                  : '#FFFFFF',
+                  : 'var(--white)',
                 borderRadius: 24,
                 padding: '32px 28px',
                 cursor: loading ? 'wait' : 'pointer',
@@ -137,7 +137,7 @@ export default function GroupTypeScreen() {
                   top: -12,
                   right: 20,
                   background: p.tagColor,
-                  color: '#FFFFFF',
+                  color: 'var(--white)',
                   fontSize: 11,
                   fontWeight: 700,
                   padding: '6px 14px',
@@ -220,7 +220,7 @@ export default function GroupTypeScreen() {
                 </span>
                 <span style={{
                   fontSize: 14,
-                  color: '#9CA3AF',
+                  color: 'var(--gray-400)',
                   fontWeight: 500,
                 }}>
                   {p.period}
@@ -282,7 +282,7 @@ export default function GroupTypeScreen() {
             padding: '22px',
             fontSize: 18,
             fontWeight: 700,
-            color: selected ? '#FFFFFF' : '#9CA3AF',
+            color: selected ? 'var(--white)' : 'var(--gray-400)',
             cursor: selected && !loading ? 'pointer' : 'not-allowed',
             boxShadow: selected ? '0 12px 45px rgba(240, 105, 34, 0.35)' : 'none',
             transition: 'all 0.3s ease',
@@ -298,7 +298,7 @@ export default function GroupTypeScreen() {
                 width: 22,
                 height: 22,
                 border: '3px solid rgba(255,255,255,0.3)',
-                borderTopColor: '#FFFFFF',
+                borderTopColor: 'var(--white)',
                 borderRadius: '50%',
                 animation: 'spin 0.8s linear infinite',
               }} />

@@ -70,7 +70,7 @@ export default function AcneTimeoutScreen() {
               transition: 'all 0.2s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#FFF5F0';
+              e.currentTarget.style.background = 'var(--cream-200)';
               e.currentTarget.style.transform = 'scale(1.02)';
             }}
             onMouseLeave={(e) => {

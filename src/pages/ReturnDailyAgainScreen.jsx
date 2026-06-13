@@ -28,7 +28,7 @@ export default function ReturnDailyAgainScreen() {
       <div style={{
         maxWidth: 560,
         width: '100%',
-        background: '#FFFFFF',
+        background: 'var(--white)',
         borderRadius: 32,
         padding: '48px 44px',
         boxShadow: '0 24px 80px rgba(240, 105, 34, 0.1)',
@@ -113,7 +113,7 @@ export default function ReturnDailyAgainScreen() {
               padding: '20px',
               fontSize: 17,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: 'pointer',
               boxShadow: '0 10px 40px rgba(245, 158, 11, 0.35)',
               display: 'flex',
@@ -135,7 +135,7 @@ export default function ReturnDailyAgainScreen() {
               padding: '20px',
               fontSize: 17,
               fontWeight: 700,
-              color: '#FFFFFF',
+              color: 'var(--white)',
               cursor: 'pointer',
               boxShadow: '0 10px 40px rgba(139, 92, 246, 0.35)',
               display: 'flex',
@@ -151,7 +151,7 @@ export default function ReturnDailyAgainScreen() {
             onClick={() => navigate('/group-type')}
             style={{
               width: '100%',
-              background: '#FFFFFF',
+              background: 'var(--white)',
               border: '2px solid #E5E7EB',
               borderRadius: 14,
               padding: '16px',

@@ -37,7 +37,7 @@ export default function DailyPayScreen() {
             <div style={{ maxWidth: 520, margin: '0 auto' }}>
                 {/* Main Card */}
                 <div style={{
-                    background: '#FFFFFF',
+                    background: 'var(--white)',
                     borderRadius: 28,
                     padding: '40px 36px',
                     boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
@@ -80,7 +80,7 @@ export default function DailyPayScreen() {
                         <h3 style={{
                             fontSize: 13,
                             fontWeight: 700,
-                            color: '#9CA3AF',
+                            color: 'var(--gray-400)',
                             textTransform: 'uppercase',
                             letterSpacing: '1px',
                             marginBottom: 18,
@@ -100,13 +100,13 @@ export default function DailyPayScreen() {
                                         alignItems: 'center',
                                         gap: 14,
                                         padding: '16px 18px',
-                                        background: '#FAFAFA',
+                                        background: 'var(--gray-50)',
                                         borderRadius: 14,
                                     }}
                                 >
                                     <span style={{ fontSize: 22 }}>{item.icon}</span>
                                     <div>
-                                        <p style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 600 }}>{item.time}</p>
+                                        <p style={{ fontSize: 12, color: 'var(--gray-400)', fontWeight: 600 }}>{item.time}</p>
                                         <p style={{ fontSize: 14, color: '#333', fontWeight: 500 }}>{item.text}</p>
                                     </div>
                                 </div>
@@ -127,7 +127,7 @@ export default function DailyPayScreen() {
                         <p style={{ fontSize: 44, fontWeight: 800, color: info.color, marginBottom: 4 }}>
                             ₹{info.price}
                         </p>
-                        <p style={{ fontSize: 13, color: '#9CA3AF' }}>No subscription • Pay once</p>
+                        <p style={{ fontSize: 13, color: 'var(--gray-400)' }}>No subscription • Pay once</p>
                     </div>
 
                     {/* Pay Button */}
@@ -142,7 +142,7 @@ export default function DailyPayScreen() {
                             padding: '22px',
                             fontSize: 18,
                             fontWeight: 700,
-                            color: '#FFFFFF',
+                            color: 'var(--white)',
                             cursor: loading ? 'not-allowed' : 'pointer',
                             boxShadow: `0 10px 40px ${info.color}40`,
                             display: 'flex',
@@ -157,7 +157,7 @@ export default function DailyPayScreen() {
                                     width: 24,
                                     height: 24,
                                     border: '3px solid rgba(255,255,255,0.3)',
-                                    borderTopColor: '#FFFFFF',
+                                    borderTopColor: 'var(--white)',
                                     borderRadius: '50%',
                                     animation: 'spin 0.8s linear infinite',
                                 }} />
@@ -173,7 +173,7 @@ export default function DailyPayScreen() {
                 <p style={{
                     textAlign: 'center',
                     fontSize: 13,
-                    color: '#9CA3AF',
+                    color: 'var(--gray-400)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

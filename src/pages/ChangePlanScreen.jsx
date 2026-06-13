@@ -116,7 +116,7 @@ export default function ChangePlanScreen() {
                 <p style={{ fontSize: 16, fontWeight: 700, color: '#111' }}>
                   {plan.label} {plan.id === currentPlan ? '(Current)' : ''}
                 </p>
-                <p style={{ fontSize: 12, color: '#9CA3AF' }}>{plan.desc}</p>
+                <p style={{ fontSize: 12, color: 'var(--gray-400)' }}>{plan.desc}</p>
               </div>
               <span style={{
                 fontSize: 14, fontWeight: 800, color: plan.color,

@@ -34,7 +34,7 @@ export default function DailyFriendsPayScreen() {
         >
             <div style={{ maxWidth: 520, margin: '0 auto' }}>
                 <div style={{
-                    background: '#FFFFFF',
+                    background: 'var(--white)',
                     borderRadius: 28,
                     padding: '40px 36px',
                     boxShadow: '0 20px 60px rgba(139, 92, 246, 0.1)',
@@ -87,7 +87,7 @@ export default function DailyFriendsPayScreen() {
 
                     {/* Features */}
                     <div style={{
-                        background: '#FAFAFA',
+                        background: 'var(--gray-50)',
                         borderRadius: 16,
                         padding: '20px',
                         marginBottom: 28,
@@ -110,7 +110,7 @@ export default function DailyFriendsPayScreen() {
                         textAlign: 'center',
                         marginBottom: 28,
                     }}>
-                        <p style={{ fontSize: 14, color: '#9CA3AF', marginBottom: 8 }}>For {friendCount} friends</p>
+                        <p style={{ fontSize: 14, color: 'var(--gray-400)', marginBottom: 8 }}>For {friendCount} friends</p>
                         <p style={{ fontSize: 48, fontWeight: 800, color: '#8B5CF6' }}>₹{totalPrice}</p>
                         <p style={{ fontSize: 13, color: '#666' }}>₹{perPerson} per person</p>
                     </div>
@@ -127,7 +127,7 @@ export default function DailyFriendsPayScreen() {
                             padding: '22px',
                             fontSize: 18,
                             fontWeight: 700,
-                            color: '#FFFFFF',
+                            color: 'var(--white)',
                             cursor: loading ? 'not-allowed' : 'pointer',
                             boxShadow: '0 10px 40px rgba(139, 92, 246, 0.35)',
                             display: 'flex',
@@ -142,7 +142,7 @@ export default function DailyFriendsPayScreen() {
                                     width: 24,
                                     height: 24,
                                     border: '3px solid rgba(255,255,255,0.3)',
-                                    borderTopColor: '#FFFFFF',
+                                    borderTopColor: 'var(--white)',
                                     borderRadius: '50%',
                                     animation: 'spin 0.8s linear infinite',
                                 }} />
@@ -154,7 +154,7 @@ export default function DailyFriendsPayScreen() {
                     </button>
                 </div>
 
-                <p style={{ textAlign: 'center', fontSize: 13, color: '#9CA3AF' }}>
+                <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--gray-400)' }}>
                     🔒 Secure payment • Valid for 24 hours
                 </p>
             </div>

@@ -340,7 +340,7 @@ export default function HeroRoutineScreen() {
               onClick={() => setActiveTab(tab.id)}
               style={{
                 flex: 1,
-                background: activeTab === tab.id ? '#FFFFFF' : 'transparent',
+                background: activeTab === tab.id ? 'var(--white)' : 'transparent',
                 border: 'none',
                 borderRadius: 10,
                 padding: '14px 20px',
@@ -359,7 +359,7 @@ export default function HeroRoutineScreen() {
 
         {/* Tab Content */}
         <div style={{
-          background: '#FFFFFF',
+          background: 'var(--white)',
           borderRadius: 20,
           padding: '28px',
           marginBottom: 28,
@@ -376,7 +376,7 @@ export default function HeroRoutineScreen() {
                     alignItems: 'center',
                     gap: 16,
                     padding: '16px',
-                    background: '#FAFAFA',
+                    background: 'var(--gray-50)',
                     borderRadius: 14,
                     borderLeft: `4px solid ${athlete.color}`,
                     opacity: showContent ? 1 : 0,
@@ -530,7 +530,7 @@ export default function HeroRoutineScreen() {
             padding: '22px',
             fontSize: 18,
             fontWeight: 700,
-            color: '#FFFFFF',
+            color: 'var(--white)',
             cursor: 'pointer',
             boxShadow: `0 12px 45px ${athlete.color}40`,
             transition: 'all 0.3s ease',
