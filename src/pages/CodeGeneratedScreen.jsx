@@ -102,22 +102,25 @@ export default function CodeGeneratedScreen() {
         {/* Code Display */}
         <div style={{
           background: 'var(--cream-200)',
-          borderRadius: 22, padding: '30px 32px', marginBottom: 24,
+          borderRadius: 22, 
+          padding: 'clamp(20px, 5vw, 30px) clamp(16px, 4vw, 32px)', 
+          marginBottom: 24,
           border: '2px solid var(--cream-400)',
           boxShadow: 'var(--shadow-sm)',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           <p style={{ fontSize: 11, fontWeight: 800, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: 3, marginBottom: 18 }}>
             Your Access Code
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(4px, 2vw, 12px)' }}>
             {accessCode.split('').map((digit, i) => (
-              <div key={i} style={{
-                width: 64, height: 76,
-                background: 'var(--white)', borderRadius: 18,
+              <div key={i} className="code-digit-box" style={{
+                flex: 1,
+                maxWidth: 64,
+                aspectRatio: '64/76',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 34, fontWeight: 900, color: 'var(--primary)',
-                boxShadow: 'var(--shadow-xs)',
-                border: '2px solid var(--gray-200)',
+                fontSize: 'clamp(36px, 10vw, 42px)', fontWeight: 900, color: 'var(--primary)',
                 fontFamily: "'Outfit', monospace",
                 animation: `popIn 0.4s ease ${i * 0.1}s both`,
               }}>
@@ -180,6 +183,19 @@ export default function CodeGeneratedScreen() {
       </div>
 
       <style>{`
+        .code-digit-box {
+          background: transparent;
+          border: none;
+          box-shadow: none;
+        }
+        @media (min-width: 640px) {
+          .code-digit-box {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            box-shadow: var(--shadow-xs);
+            border-radius: 18px;
+          }
+        }
         @keyframes floatOrb1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-20px,30px); } }
         @keyframes floatOrb2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(25px,-20px); } }
         @keyframes bounceIn { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
