@@ -1103,6 +1103,15 @@ body.dark {
 }
 
 /* ═══ RESPONSIVE ADJUSTMENTS ═══ */
+.main-card-padding {
+  padding: 80px 64px;
+}
+@media (max-width: 640px) {
+  .main-card-padding {
+    padding: 40px 32px;
+  }
+}
+
 @media (max-width: 768px) {
   .btn-lg {
     padding: 16px 32px;

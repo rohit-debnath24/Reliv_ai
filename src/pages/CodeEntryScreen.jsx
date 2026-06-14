@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import Silk from './Silk';
 import { C } from '../utils/constants';
 
 export default function CodeEntryScreen() {
@@ -72,33 +73,45 @@ export default function CodeEntryScreen() {
   const isComplete = code.every(d => d);
 
   return (
-    <Layout
-      title="Welcome Back! 👋"
-      subtitle="Enter your 4-digit access code to continue"
-      showBack
-      onBack={() => navigate('/')}
-    >
-      <div style={{ maxWidth: 520, margin: '0 auto' }}>
+    <>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, opacity: 0.8, pointerEvents: 'none' }}>
+        <Silk
+          speed={5}
+          scale={1}
+          color="#ff6627"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
+      <Layout
+        title="Welcome Back! 👋"
+        subtitle="Enter your 4-digit access code to continue"
+        showBack
+        onBack={() => navigate('/')}
+      >
+      <div style={{ maxWidth: 600, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Main Card */}
-        <div style={{
-          background: 'var(--white)',
-          borderRadius: 28,
-          padding: '48px 44px',
-          boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
-          border: '1px solid rgba(240, 105, 34, 0.08)',
-          textAlign: 'center',
-        }}>
+        <div 
+          className="main-card-padding"
+          style={{
+            background: 'var(--white)',
+            borderRadius: 32,
+            boxShadow: 'var(--shadow-xl)',
+            border: '1px solid var(--gray-200)',
+            textAlign: 'center',
+          }}
+        >
           {/* Icon */}
           <div style={{
             width: 90,
             height: 90,
-            background: 'linear-gradient(135deg, #FFF5F0 0%, #FFEEDD 100%)',
+            background: 'var(--cream-200)',
             borderRadius: 26,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 28px',
-            border: '1px solid rgba(240, 105, 34, 0.15)',
+            border: '1px solid var(--cream-400)',
             fontSize: 44,
           }}>
             🔑
@@ -126,8 +139,8 @@ export default function CodeEntryScreen() {
                 style={{
                   width: 72,
                   height: 88,
-                  background: d ? 'linear-gradient(135deg, #FFFAF7 0%, #FFF5F0 100%)' : 'var(--gray-50)',
-                  border: `3px solid ${d ? '#F06922' : error ? '#EF4444' : 'var(--gray-200)'}`,
+                  background: d ? 'var(--white)' : 'var(--gray-50)',
+                  border: `2px solid ${d ? 'var(--primary)' : error ? 'var(--error)' : 'var(--gray-200)'}`,
                   borderRadius: 20,
                   fontSize: 36,
                   fontWeight: 800,
@@ -136,15 +149,15 @@ export default function CodeEntryScreen() {
                   outline: 'none',
                   transition: 'all 0.3s ease',
                   boxShadow: d ? '0 8px 30px rgba(240, 105, 34, 0.15)' : 'none',
-                  caretColor: '#F06922',
+                  caretColor: 'var(--primary)',
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = '#F06922';
+                  e.target.style.borderColor = 'var(--primary)';
                   e.target.style.boxShadow = '0 0 0 4px rgba(240, 105, 34, 0.15)';
                   e.target.style.transform = 'scale(1.05)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = d ? '#F06922' : 'var(--gray-200)';
+                  e.target.style.borderColor = d ? 'var(--primary)' : 'var(--gray-200)';
                   e.target.style.boxShadow = d ? '0 8px 30px rgba(240, 105, 34, 0.15)' : 'none';
                   e.target.style.transform = 'scale(1)';
                 }}
@@ -163,14 +176,14 @@ export default function CodeEntryScreen() {
             gap: 6,
           }}>
             <span>💡</span>
-            Demo codes: <strong style={{ color: '#F06922' }}>9876</strong> or <strong style={{ color: '#F06922' }}>6241</strong>
+            Demo codes: <strong style={{ color: 'var(--primary)' }}>9876</strong> or <strong style={{ color: 'var(--primary)' }}>6241</strong>
           </p>
 
           {/* Error Message */}
           {error && (
             <div style={{
-              background: 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)',
-              border: '1px solid #EF4444',
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.5)',
               borderRadius: 14,
               padding: '16px 20px',
               marginBottom: 24,
@@ -182,7 +195,7 @@ export default function CodeEntryScreen() {
             }}>
               <span style={{ fontSize: 18 }}>⚠️</span>
               <div>
-                <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 600, margin: 0 }}>{error}</p>
+                <p style={{ fontSize: 14, color: '#FCA5A5', fontWeight: 600, margin: 0 }}>{error}</p>
                 <p style={{ fontSize: 12, color: 'var(--gray-400)', margin: '4px 0 0' }}>
                   Check your code or try a new number
                 </p>
@@ -197,8 +210,8 @@ export default function CodeEntryScreen() {
             style={{
               width: '100%',
               background: isComplete
-                ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)'
-                : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
+                ? 'var(--primary)'
+                : 'var(--gray-200)',
               border: 'none',
               borderRadius: 16,
               padding: '20px',
@@ -206,7 +219,7 @@ export default function CodeEntryScreen() {
               fontWeight: 700,
               color: isComplete ? 'var(--white)' : 'var(--gray-400)',
               cursor: isComplete && !loading ? 'pointer' : 'not-allowed',
-              boxShadow: isComplete ? '0 10px 40px rgba(240, 105, 34, 0.35)' : 'none',
+              boxShadow: isComplete ? 'var(--shadow-glow)' : 'none',
               transition: 'all 0.3s ease',
               display: 'flex',
               alignItems: 'center',
@@ -251,7 +264,7 @@ export default function CodeEntryScreen() {
             style={{
               width: '100%',
               background: 'var(--white)',
-              border: '2px solid #E5E7EB',
+              border: '2px solid var(--gray-200)',
               borderRadius: 14,
               padding: '16px',
               fontSize: 15,
@@ -285,7 +298,6 @@ export default function CodeEntryScreen() {
         </p>
       </div>
 
-      {/* Animation Keyframes */}
       <style>{`
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
@@ -298,5 +310,6 @@ export default function CodeEntryScreen() {
         }
       `}</style>
     </Layout>
+    </>
   );
 }

@@ -120,7 +120,7 @@ export default function OTPScreen() {
       <div className="w-full px-4 sm:px-0" style={{ maxWidth: 600, margin: '0 auto' }}>
         {/* Main Card */}
         <div 
-          className="px-8 py-10 sm:px-16 sm:py-20"
+          className="main-card-padding"
           style={{
             background: 'var(--white)',
             borderRadius: 32,

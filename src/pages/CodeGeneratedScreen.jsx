@@ -73,15 +73,17 @@ export default function CodeGeneratedScreen() {
       <div style={{ position: 'absolute', bottom: -80, right: -60, width: 250, height: 250, borderRadius: '50%', background: 'radial-gradient(circle, rgba(240,105,34,0.08) 0%, transparent 70%)', animation: 'floatOrb2 10s ease-in-out infinite', pointerEvents: 'none' }} />
 
       <div style={{
-        maxWidth: 560, width: '100%', position: 'relative', zIndex: 1,
-        background: 'rgba(255,255,255,0.85)',
-        backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)',
-        borderRadius: 32, padding: '52px 44px',
-        boxShadow: '0 24px 80px rgba(34,197,94,0.12), 0 0 0 1px rgba(255,255,255,0.8)',
+        maxWidth: 600, width: '100%', position: 'relative', zIndex: 1,
+        background: 'var(--white)',
+        borderRadius: 32,
+        boxShadow: 'var(--shadow-xl)',
+        border: '1px solid var(--gray-200)',
         textAlign: 'center',
         opacity: show ? 1 : 0, transform: show ? 'scale(1)' : 'scale(0.93)',
         transition: 'all 0.7s cubic-bezier(0.16,1,0.3,1)',
-      }}>
+      }}
+      className="main-card-padding"
+      >
         {/* Success Icon */}
         <div style={{
           width: 100, height: 100,
@@ -92,19 +94,19 @@ export default function CodeGeneratedScreen() {
           animation: 'bounceIn 0.7s ease',
         }}>🎉</div>
 
-        <h1 style={{ fontSize: 30, fontWeight: 800, color: '#111', marginBottom: 8 }}>Account Created!</h1>
-        <p style={{ fontSize: 15, color: '#666', marginBottom: 36, lineHeight: 1.6 }}>
+        <h1 style={{ fontSize: 30, fontWeight: 800, color: 'var(--gray-900)', marginBottom: 8 }}>Account Created!</h1>
+        <p style={{ fontSize: 15, color: 'var(--gray-600)', marginBottom: 36, lineHeight: 1.6 }}>
           Save this code — you'll need it to log back in
         </p>
 
         {/* Code Display */}
         <div style={{
-          background: 'linear-gradient(135deg, #FFF5F0 0%, #FFEEDD 100%)',
+          background: 'var(--cream-200)',
           borderRadius: 22, padding: '30px 32px', marginBottom: 24,
-          border: '2px solid rgba(240,105,34,0.15)',
-          boxShadow: '0 8px 32px rgba(240,105,34,0.1)',
+          border: '2px solid var(--cream-400)',
+          boxShadow: 'var(--shadow-sm)',
         }}>
-          <p style={{ fontSize: 11, fontWeight: 800, color: '#F06922', textTransform: 'uppercase', letterSpacing: 3, marginBottom: 18 }}>
+          <p style={{ fontSize: 11, fontWeight: 800, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: 3, marginBottom: 18 }}>
             Your Access Code
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
@@ -113,9 +115,9 @@ export default function CodeGeneratedScreen() {
                 width: 64, height: 76,
                 background: 'var(--white)', borderRadius: 18,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 34, fontWeight: 900, color: '#F06922',
-                boxShadow: '0 6px 24px rgba(240,105,34,0.15)',
-                border: '2px solid rgba(240,105,34,0.12)',
+                fontSize: 34, fontWeight: 900, color: 'var(--primary)',
+                boxShadow: 'var(--shadow-xs)',
+                border: '2px solid var(--gray-200)',
                 fontFamily: "'Outfit', monospace",
                 animation: `popIn 0.4s ease ${i * 0.1}s both`,
               }}>
@@ -141,12 +143,12 @@ export default function CodeGeneratedScreen() {
 
         {/* WhatsApp Sent */}
         <div style={{
-          background: 'rgba(0,0,0,0.02)', borderRadius: 14, padding: '14px 24px', marginBottom: 32,
+          background: 'var(--gray-50)', borderRadius: 14, padding: '14px 24px', marginBottom: 32,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-          border: '1px solid rgba(0,0,0,0.04)',
+          border: '1px solid var(--gray-200)',
         }}>
           <span style={{ fontSize: 16 }}>📱</span>
-          <span style={{ fontSize: 13, color: '#666' }}>Code sent to your WhatsApp</span>
+          <span style={{ fontSize: 13, color: 'var(--gray-600)' }}>Code sent to your WhatsApp</span>
         </div>
 
         {/* Continue */}
@@ -169,9 +171,9 @@ export default function CodeGeneratedScreen() {
         <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
           <div style={{
             width: 32, height: 32, borderRadius: '50%',
-            background: 'rgba(240,105,34,0.08)', border: '2px solid rgba(240,105,34,0.15)',
+            background: 'var(--cream-200)', border: '2px solid var(--cream-400)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 14, fontWeight: 800, color: '#F06922',
+            fontSize: 14, fontWeight: 800, color: 'var(--primary)',
           }}>{countdown}</div>
           <span style={{ fontSize: 13, color: 'var(--gray-400)' }}>Auto-continuing...</span>
         </div>
