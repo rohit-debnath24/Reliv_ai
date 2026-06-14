@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { C, api } from '../utils/constants';
@@ -12,6 +12,21 @@ export default function PhoneEntryScreen() {
   const [focused, setFocused] = useState(null);
   const [showSetup, setShowSetup] = useState(false);
   const [hasConfirmedSetup, setHasConfirmedSetup] = useState(false);
+
+  // Theme State
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true; // default to dark
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   const handleSubmit = async () => {
     if (phone.length !== 10) return setError('Enter valid 10-digit number');
@@ -33,7 +48,14 @@ export default function PhoneEntryScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1, overflow: 'hidden', background: '#11140F' }}>
+      <div className={isDark ? 'dark-mode' : 'light-mode'} style={{ 
+        position: 'fixed', 
+        inset: 0, 
+        zIndex: -1, 
+        overflow: 'hidden', 
+        background: isDark ? '#11140F' : '#F9F6F0',
+        transition: 'background 0.4s ease'
+      }}>
         {/* Left Spotlight */}
         <div className="spotlight-lamp left">
           <div className="lamp-wire"></div>
@@ -65,8 +87,8 @@ export default function PhoneEntryScreen() {
       <Layout 
         title="Let's Get Started" 
         subtitle="Enter your phone number to begin your health transformation" 
-        titleColor="#ffffff"
-        subtitleColor="rgba(255, 255, 255, 0.9)"
+        titleColor={isDark ? "#ffffff" : "#11140F"}
+        subtitleColor={isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(17, 20, 15, 0.7)"}
         showBack 
         onBack={() => navigate('/')}
       >
@@ -445,6 +467,10 @@ export default function PhoneEntryScreen() {
           background: rgba(255,255,255,0.12);
         }
 
+        .light-mode .lamp-wire {
+          background: rgba(17,20,15,0.12);
+        }
+
         .lamp-head {
           width: 32px;
           height: 16px;
@@ -490,6 +516,11 @@ export default function PhoneEntryScreen() {
           box-shadow: 0 0 6px rgba(240, 105, 34, 0.8);
           opacity: 0;
           pointer-events: none;
+        }
+
+        .light-mode .dust {
+          background: rgba(240, 105, 34, 0.8);
+          box-shadow: 0 0 6px rgba(240, 105, 34, 0.4);
         }
 
         .dust:nth-child(odd) { animation: float-dust-1 8s linear infinite; }
