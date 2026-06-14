@@ -694,10 +694,40 @@
 }
 
 @media (max-width: 920px) {
-  .welcome-landing .hero-grid { grid-template-columns: 1fr; }
-  .welcome-landing .hero-visual { order: -1; margin-bottom: 30px; }
+  .welcome-landing .hero-grid { 
+    display: flex;
+    flex-direction: column;
+  }
+  .welcome-landing .hero-content {
+    display: contents;
+  }
+  .welcome-landing .hero-text {
+    order: 1;
+  }
+  .welcome-landing .hero-visual { 
+    order: 2; 
+    margin: 40px 0;
+  }
+  .welcome-landing .hero-ctas {
+    order: 3;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+  .welcome-landing .hero-ctas button {
+    flex: 1;
+    padding: 14px 10px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .welcome-landing .hero-stats { 
+    order: 4;
+    flex-wrap: wrap; 
+    gap: 20px; 
+  }
   .welcome-landing .float-card { display: none; }
-  .welcome-landing .hero-stats { flex-wrap: wrap; gap: 20px; }
 }
 
 /* ============ MARQUEE ============ */
@@ -1611,6 +1641,20 @@
 .welcome-landing .reveal.visible {
   opacity: 1; 
   transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  /* Real people, real streaks responsive fixes */
+  .welcome-landing .stat-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  /* Lamp vertically downwards for phone users */
+  .welcome-landing .lamp-container {
+    right: 50%;
+    transform: translateX(50%) rotate(0deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

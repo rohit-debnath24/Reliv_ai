@@ -5,9 +5,9 @@ import AntigravityBackground from './AntigravityBackground';
 // ═══ ANTIGRAVITY BACKGROUND FLAG ═══
 // Set to true to show the floating dotted glassmorphic background
 // Set to false to hide it (just the gradient background)
-const ENABLE_ANTIGRAVITY = true;
+const ENABLE_ANTIGRAVITY = false;
 
-export default function Layout({ children, title, subtitle, showBack, onBack }) {
+export default function Layout({ children, title, subtitle, titleColor = 'var(--gray-900)', subtitleColor = 'var(--gray-600)', showBack, onBack }) {
   const [scrolled, setScrolled] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
 
@@ -35,16 +35,16 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
           top: 0,
           zIndex: 1000,
           background: scrolled
-            ? 'var(--white)'
-            : 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+            ? 'rgba(255, 255, 255, 0.25)'
+            : 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
           padding: scrolled ? '12px 40px' : '16px 40px',
           boxShadow: scrolled
             ? '0 4px 30px rgba(240, 105, 34, 0.1)'
-            : '0 4px 30px rgba(240, 105, 34, 0.25)',
+            : '0 4px 30px rgba(0, 0, 0, 0.05)',
           transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          borderBottom: scrolled ? '1px solid rgba(240, 105, 34, 0.1)' : 'none',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
         }}
       >
         <div style={{
@@ -228,7 +228,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
               <h2 style={{
                 fontSize: 36,
                 fontWeight: 800,
-                color: 'var(--gray-900)',
+                color: titleColor,
                 marginBottom: 12,
                 letterSpacing: '-1px',
                 lineHeight: 1.2,
@@ -239,7 +239,7 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
             {subtitle && (
               <p style={{
                 fontSize: 17,
-                color: 'var(--gray-600)',
+                color: subtitleColor,
                 lineHeight: 1.6,
                 maxWidth: 500,
                 margin: '0 auto',
@@ -262,8 +262,10 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
 
       {/* Footer */}
       <footer style={{
-        borderTop: '1px solid rgba(240, 105, 34, 0.1)',
-        background: 'var(--cream-100)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+        background: 'rgba(255, 255, 255, 0.25)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
         padding: '24px 40px',
         textAlign: 'center',
       }}>
@@ -273,7 +275,8 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
           justifyContent: 'center',
           gap: 24,
           fontSize: 13,
-          color: 'var(--gray-400)',
+          color: 'var(--gray-800)',
+          fontWeight: 500,
         }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span>🔒</span> Bank-Grade Security
@@ -289,8 +292,9 @@ export default function Layout({ children, title, subtitle, showBack, onBack }) 
         </div>
         <p style={{
           fontSize: 12,
-          color: '#D1D5DB',
+          color: 'var(--gray-600)',
           marginTop: 16,
+          fontWeight: 500,
         }}>
           © 2024 Reliv AI. All rights reserved.
         </p>

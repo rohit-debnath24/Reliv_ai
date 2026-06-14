@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../utils/constants";
+import PillNav from "./PillNav";
 import "./WelcomeScreen.css";
 
 export default function WelcomeScreen() {
@@ -174,19 +175,41 @@ export default function WelcomeScreen() {
         </div>
       )}
 
-      <header className="nav" id="nav">
-        <div className="nav-inner">
-          <div className="brand">
-            <div className="brand-mark">R</div>
-            <div className="brand-name">Re<span style={{color: 'var(--coral)'}}>liv</span></div>
-          </div>
-          <nav className="nav-links">
-            <a href="#day">How it works</a>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#proof">Reviews</a>
-          </nav>
-          <div className="nav-right">
+      <header className="nav" id="nav" style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        padding: '16px 40px',
+        width: '100%',
+        boxSizing: 'border-box'
+      }}>
+        {/* Left Spacer to balance the right menu */}
+        <div style={{ flex: 1 }}></div>
+
+        {/* Center: PillNav */}
+        <div style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}>
+          <PillNav
+            logo={"/relivlogo.jpeg"}
+            logoAlt="Reliv Logo"
+            items={[
+              { label: 'How it works', href: '#day' },
+              { label: 'Features', href: '#features' },
+              { label: 'Pricing', href: '#pricing' },
+              { label: 'Reviews', href: '#proof' }
+            ]}
+            activeHref="#"
+            ease="power2.easeOut"
+            baseColor={isDark ? "#ffffff" : "#000000"}
+            pillColor={isDark ? "#120F17" : "#ffffff"}
+            hoveredPillTextColor={isDark ? "#120F17" : "#ffffff"}
+            pillTextColor={isDark ? "#ffffff" : "#000000"}
+            initialLoadAnimation={true}
+          />
+        </div>
+
+        {/* Right Menu */}
+        <div className="nav-inner" style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', background: 'none', border: 'none', padding: 0 }}>
+          <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
               {isDark ? "☀️" : "🌙"}
             </button>
@@ -217,14 +240,16 @@ export default function WelcomeScreen() {
       {/* ============ HERO ============ */}
       <section className="hero" style={{ paddingTop: '80px' }}>
         <div className="wrap hero-grid">
-          <div>
-            <span className="hero-eyebrow"><span className="dot"></span> AI-Powered Personal Health</span>
-            <h1>Transform your health,<br/>one <span style={{color: 'var(--coral)'}}>WhatsApp</span><br/>message at a time.</h1>
-            <p className="lead">
-              Reliv's AI coach builds your diet plan, your workout routine, and your daily reminders —
-              then sends them straight to the app you already check 40 times a day. All for <strong>less than your daily chai</strong>,
-              at <span className="price">₹9/day</span>.
-            </p>
+          <div className="hero-content">
+            <div className="hero-text">
+              <span className="hero-eyebrow"><span className="dot"></span> AI-Powered Personal Health</span>
+              <h1>Transform your health,<br/>one <span style={{color: 'var(--coral)'}}>WhatsApp</span><br/>message at a time.</h1>
+              <p className="lead">
+                Reliv's AI coach builds your diet plan, your workout routine, and your daily reminders —
+                then sends them straight to the app you already check 40 times a day. All for <strong>less than your daily chai</strong>,
+                at <span className="price">₹9/day</span>.
+              </p>
+            </div>
             <div className="hero-ctas">
               <button onClick={() => navigate('/phone')} className="btn-primary">Start your free trial</button>
               <button onClick={() => navigate('/ProductShowcaseBoard')} className="btn-ghost">Public shoutout board</button>

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { C, api } from '../utils/constants';
+import Silk from './Silk';
 
 export default function OTPScreen() {
   const navigate = useNavigate();
@@ -98,12 +99,24 @@ export default function OTPScreen() {
   const isComplete = otp.every(d => d);
 
   return (
-    <Layout
-      title="Verify Your Number"
-      subtitle={`We've sent a 4-digit code to ${phone || 'your phone'}`}
-      showBack
-      onBack={() => navigate('/phone')}
-    >
+    <>
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
+        <Silk
+          speed={5}
+          scale={1}
+          color="#ff6627"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
+      <Layout
+        title="Verify Your Number"
+        subtitle={`We've sent a 4-digit code to ${phone || 'your phone'}`}
+        titleColor="#ffffff"
+        subtitleColor="rgba(255, 255, 255, 0.9)"
+        showBack
+        onBack={() => navigate('/phone')}
+      >
       <div style={{ maxWidth: 520, margin: '0 auto' }}>
         {/* Main Card */}
         <div style={{
@@ -344,5 +357,6 @@ export default function OTPScreen() {
         }
       `}</style>
     </Layout>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Silk from './Silk';
 
 export default function CodeGeneratedScreen() {
   const navigate = useNavigate();
@@ -57,11 +58,14 @@ export default function CodeGeneratedScreen() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #FFFAF7 0%, #FFF5F0 50%, #FFEEDD 100%)',
+      background: 'transparent',
       fontFamily: "'Inter', 'Outfit', sans-serif",
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 40, position: 'relative', overflow: 'hidden',
     }}>
+      <div style={{ position: 'absolute', inset: 0, zIndex: -1 }}>
+        <Silk speed={5} scale={1} color="#ff6627" noiseIntensity={1.5} rotation={0} />
+      </div>
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} />
 
       {/* Gradient orbs */}

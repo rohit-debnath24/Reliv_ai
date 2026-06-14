@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../components/Layout';
+import Silk from './Silk';
 
 export default function ReturningPayScreen() {
   const navigate = useNavigate();
@@ -18,22 +19,29 @@ export default function ReturningPayScreen() {
   };
 
   return (
-    <Layout
-      title="Welcome Back!"
-      subtitle="Renew your health journey"
-      showBack
-      onBack={() => navigate('/')}
-    >
-      <div style={{ maxWidth: 540, margin: '0 auto' }}>
-        {/* Main Card */}
-        <div style={{
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF9F5 100%)',
-          borderRadius: 28,
-          padding: '44px 40px',
-          boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
-          border: '2px solid rgba(240, 105, 34, 0.15)',
-          marginBottom: 28,
-        }}>
+    <>
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
+        <Silk speed={5} scale={1} color="#ff6627" noiseIntensity={1.5} rotation={0} />
+      </div>
+      <Layout
+        title="Welcome Back!"
+        subtitle="Renew your health journey"
+        titleColor="#ffffff"
+        subtitleColor="rgba(255, 255, 255, 0.9)"
+        showBack
+        onBack={() => navigate('/')}
+      >
+        <div style={{ maxWidth: 540, margin: '0 auto' }}>
+          {/* Main Card */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.85)',
+            backdropFilter: 'blur(30px)',
+            WebkitBackdropFilter: 'blur(30px)',
+            borderRadius: 32,
+            padding: '44px 40px',
+            boxShadow: '0 24px 80px rgba(240, 105, 34, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.6) inset',
+            marginBottom: 28,
+          }}>
           {/* Welcome Icon */}
           <div style={{
             width: 88,
@@ -159,6 +167,7 @@ export default function ReturningPayScreen() {
           to { transform: rotate(360deg); }
         }
       `}</style>
-    </Layout>
+      </Layout>
+    </>
   );
 }
