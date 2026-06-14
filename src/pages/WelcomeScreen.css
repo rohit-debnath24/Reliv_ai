@@ -121,7 +121,12 @@
   left: 0; 
   right: 0;
   z-index: 100;
-  padding: 22px 0;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
   transition: background .4s ease, border-color .4s ease, padding .3s ease;
   border-bottom: 1px solid transparent;
 }
@@ -130,7 +135,77 @@
   background: var(--bg-nav);
   backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid var(--line-main);
-  padding: 14px 0;
+  padding: 10px 40px;
+}
+
+.welcome-landing .nav-left {
+  flex: 1;
+}
+
+.welcome-landing .mobile-only-logo {
+  display: none;
+}
+
+.welcome-landing .nav-center {
+  flex: none;
+  display: flex;
+  justify-content: center;
+}
+
+.welcome-landing .nav-right-menu {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.welcome-landing .nav-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .welcome-landing header.nav {
+    padding: 12px 16px;
+  }
+  .welcome-landing header.nav.scrolled {
+    padding: 10px 16px;
+  }
+  
+  .welcome-landing .nav-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .welcome-landing .mobile-only-logo {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .welcome-landing .nav-center {
+    display: none; /* Hide PillNav on phones */
+  }
+  
+  .welcome-landing header.nav {
+    justify-content: space-between; /* Logo on left, buttons on right */
+  }
+
+  .welcome-landing .nav-right-menu {
+    flex: none;
+  }
+
+  .welcome-landing .nav-right-actions {
+    gap: 12px;
+  }
+  
+  .welcome-landing .nav-cta {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
 }
 
 .welcome-landing .nav-inner {

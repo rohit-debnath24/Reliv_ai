@@ -175,19 +175,14 @@ export default function WelcomeScreen() {
         </div>
       )}
 
-      <header className="nav" id="nav" style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between', 
-        padding: '16px 40px',
-        width: '100%',
-        boxSizing: 'border-box'
-      }}>
-        {/* Left Spacer to balance the right menu */}
-        <div style={{ flex: 1 }}></div>
+      <header className="nav" id="nav">
+        {/* Left Spacer / Mobile Logo */}
+        <div className="nav-left">
+          <img src="/relivlogo.jpeg" alt="Reliv Logo" className="mobile-only-logo" />
+        </div>
 
         {/* Center: PillNav */}
-        <div style={{ flex: 'none', display: 'flex', justifyContent: 'center' }}>
+        <div className="nav-center">
           <PillNav
             logo={"/relivlogo.jpeg"}
             logoAlt="Reliv Logo"
@@ -208,8 +203,8 @@ export default function WelcomeScreen() {
         </div>
 
         {/* Right Menu */}
-        <div className="nav-inner" style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', background: 'none', border: 'none', padding: 0 }}>
-          <div className="nav-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="nav-right-menu">
+          <div className="nav-right-actions">
             <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
               {isDark ? "☀️" : "🌙"}
             </button>
