@@ -117,29 +117,30 @@ export default function OTPScreen() {
         showBack
         onBack={() => navigate('/phone')}
       >
-      <div style={{ maxWidth: 520, margin: '0 auto' }}>
+      <div className="w-full px-4 sm:px-0" style={{ maxWidth: 600, margin: '0 auto' }}>
         {/* Main Card */}
-        <div style={{
-          background: 'var(--white)',
-          borderRadius: 28,
-          padding: '48px 44px',
-          boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
-          border: '1px solid rgba(240, 105, 34, 0.08)',
-          textAlign: 'center',
+        <div 
+          className="px-8 py-10 sm:px-16 sm:py-20"
+          style={{
+            background: 'var(--white)',
+            borderRadius: 32,
+            boxShadow: 'var(--shadow-xl)',
+            border: '1px solid var(--gray-200)',
+            textAlign: 'center',
         }}>
           {/* Icon */}
           <div style={{
             width: 90,
             height: 90,
             background: success
-              ? 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)'
-              : 'linear-gradient(135deg, #FFF5F0 0%, #FFEEDD 100%)',
+              ? 'var(--success)'
+              : 'var(--cream-200)',
             borderRadius: 26,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 28px',
-            border: success ? 'none' : '1px solid rgba(240, 105, 34, 0.15)',
+            border: success ? 'none' : '1px solid var(--cream-400)',
             fontSize: 44,
             transition: 'all 0.5s ease',
             transform: success ? 'scale(1.1)' : 'scale(1)',
@@ -158,24 +159,19 @@ export default function OTPScreen() {
             Check your WhatsApp for the verification code<br />
             <span style={{
               fontSize: 13,
-              color: 'var(--gray-400)',
+              color: 'var(--gray-500)',
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
               marginTop: 8,
             }}>
-              💡 Use <strong style={{ color: '#F06922', fontWeight: 700 }}>1111</strong> for testing
+              💡 Use <strong style={{ color: 'var(--primary)', fontWeight: 700 }}>1111</strong> for testing
             </span>
           </p>
 
           {/* OTP Input Boxes */}
           <div
-            style={{
-              display: 'flex',
-              gap: 16,
-              justifyContent: 'center',
-              marginBottom: 32,
-            }}
+            className="flex justify-center gap-3 sm:gap-4 mb-8"
             onPaste={handlePaste}
           >
             {otp.map((d, i) => (
@@ -187,28 +183,26 @@ export default function OTPScreen() {
                 value={d}
                 onChange={(e) => handleChange(i, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(i, e)}
+                className="w-[3.5rem] h-[4rem] sm:w-[72px] sm:h-[88px] text-[28px] sm:text-[36px]"
                 style={{
-                  width: 72,
-                  height: 88,
-                  background: d ? 'linear-gradient(135deg, #FFFAF7 0%, #FFF5F0 100%)' : 'var(--gray-50)',
-                  border: `3px solid ${d ? '#F06922' : error ? '#EF4444' : 'var(--gray-200)'}`,
+                  background: d ? 'var(--white)' : 'var(--gray-50)',
+                  border: `2px solid ${d ? 'var(--primary)' : error ? 'var(--error)' : 'var(--gray-200)'}`,
                   borderRadius: 20,
-                  fontSize: 36,
                   fontWeight: 800,
                   color: 'var(--gray-900)',
                   textAlign: 'center',
                   outline: 'none',
                   transition: 'all 0.3s ease',
                   boxShadow: d ? '0 8px 30px rgba(240, 105, 34, 0.15)' : 'none',
-                  caretColor: '#F06922',
+                  caretColor: 'var(--primary)',
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = '#F06922';
+                  e.target.style.borderColor = 'var(--primary)';
                   e.target.style.boxShadow = '0 0 0 4px rgba(240, 105, 34, 0.15)';
                   e.target.style.transform = 'scale(1.05)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = d ? '#F06922' : 'var(--gray-200)';
+                  e.target.style.borderColor = d ? 'var(--primary)' : 'var(--gray-200)';
                   e.target.style.boxShadow = d ? '0 8px 30px rgba(240, 105, 34, 0.15)' : 'none';
                   e.target.style.transform = 'scale(1)';
                 }}
@@ -219,8 +213,8 @@ export default function OTPScreen() {
           {/* Error Message */}
           {error && (
             <div style={{
-              background: 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)',
-              border: '1px solid #EF4444',
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.5)',
               borderRadius: 14,
               padding: '16px 20px',
               marginBottom: 24,
@@ -232,7 +226,7 @@ export default function OTPScreen() {
             }}>
               <span style={{ fontSize: 18 }}>⚠️</span>
               <div>
-                <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 600, margin: 0 }}>{error}</p>
+                <p style={{ fontSize: 14, color: '#FCA5A5', fontWeight: 600, margin: 0 }}>{error}</p>
                 <p style={{ fontSize: 12, color: 'var(--gray-400)', margin: '4px 0 0' }}>
                   Attempts remaining: {3 - attempts}
                 </p>
@@ -248,9 +242,9 @@ export default function OTPScreen() {
               width: '100%',
               background: isComplete
                 ? success
-                  ? 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)'
-                  : 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)'
-                : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
+                  ? 'var(--success)'
+                  : 'var(--primary)'
+                : 'var(--gray-200)',
               border: 'none',
               borderRadius: 16,
               padding: '20px',
@@ -258,7 +252,7 @@ export default function OTPScreen() {
               fontWeight: 700,
               color: isComplete ? 'var(--white)' : 'var(--gray-400)',
               cursor: isComplete && !loading ? 'pointer' : 'not-allowed',
-              boxShadow: isComplete ? '0 10px 40px rgba(34, 197, 94, 0.35)' : 'none',
+              boxShadow: isComplete ? 'var(--shadow-glow)' : 'none',
               transition: 'all 0.3s ease',
               display: 'flex',
               alignItems: 'center',
@@ -310,7 +304,7 @@ export default function OTPScreen() {
                   background: 'none',
                   border: 'none',
                   fontSize: 14,
-                  color: '#F06922',
+                  color: 'var(--primary)',
                   fontWeight: 700,
                   cursor: 'pointer',
                   textDecoration: 'underline',
@@ -333,7 +327,7 @@ export default function OTPScreen() {
           <span
             onClick={() => navigate('/phone')}
             style={{
-              color: '#F06922',
+              color: 'var(--primary)',
               fontWeight: 600,
               cursor: 'pointer',
               textDecoration: 'underline',

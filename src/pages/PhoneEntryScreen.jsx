@@ -11,6 +11,8 @@ export default function PhoneEntryScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [focused, setFocused] = useState(null);
+  const [showSetup, setShowSetup] = useState(false);
+  const [hasConfirmedSetup, setHasConfirmedSetup] = useState(false);
 
   const handleSubmit = async () => {
     if (phone.length !== 10) return setError('Enter valid 10-digit number');
@@ -49,29 +51,91 @@ export default function PhoneEntryScreen() {
         showBack 
         onBack={() => navigate('/')}
       >
-        <div style={{ maxWidth: 520, margin: '0 auto' }}>
-          {/* Main Card */}
-          <div style={{
+        <div className="w-full px-4 sm:px-0" style={{ maxWidth: 600, margin: '0 auto' }}>
+        {/* Main Card */}
+        <div 
+          className="px-8 py-10 sm:px-16 sm:py-20"
+          style={{
             background: 'var(--white)',
-            borderRadius: 28,
-            padding: '48px 44px',
-            boxShadow: '0 20px 60px rgba(240, 105, 34, 0.12)',
-            border: '1px solid rgba(240, 105, 34, 0.08)',
-          }}>
+            borderRadius: 32,
+            boxShadow: 'var(--shadow-xl)',
+            border: '1px solid var(--gray-200)',
+        }}>
             {/* Icon Header */}
             <div style={{
               width: 80,
               height: 80,
-              background: 'linear-gradient(135deg, #FFF5F0 0%, #FFEEDD 100%)',
+              background: 'var(--cream-200)',
               borderRadius: 24,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 28px',
-              border: '1px solid rgba(240, 105, 34, 0.15)',
+              border: '1px solid var(--cream-400)',
+              color: 'var(--primary)',
               fontSize: 40,
             }}>
               📱
+            </div>
+
+            {/* WhatsApp Setup Accordion */}
+            <div style={{
+              background: 'var(--white)',
+              border: '1px solid var(--gray-200)',
+              borderRadius: 16,
+              marginBottom: 24,
+              overflow: 'hidden',
+            }}>
+              <div
+                onClick={() => setShowSetup(!showSetup)}
+                style={{
+                  padding: '16px 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                  background: showSetup ? 'var(--gray-50)' : 'transparent',
+                  borderBottom: showSetup ? '1px solid var(--gray-200)' : 'none',
+                }}
+              >
+                <div style={{
+                  width: 36, height: 36, borderRadius: 10,
+                  background: 'var(--cream-200)',
+                  color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 18, border: '1px solid var(--cream-400)'
+                }}>
+                  💬
+                </div>
+                <div style={{ flex: 1 }}>
+                  <span style={{ fontSize: 15, color: 'var(--gray-900)', fontWeight: 700, display: 'block' }}>
+                    First time? Setup WhatsApp first
+                  </span>
+                  <span style={{ fontSize: 13, color: 'var(--gray-500)', display: 'block', marginTop: 2 }}>
+                    Required one-time step to receive OTP
+                  </span>
+                </div>
+                <span style={{
+                  fontSize: 14,
+                  color: 'var(--gray-400)',
+                  transition: 'transform 0.3s ease',
+                  transform: showSetup ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}>▼</span>
+              </div>
+
+              <div style={{
+                maxHeight: showSetup ? 400 : 0,
+                overflow: 'hidden',
+                transition: 'max-height 0.4s ease',
+              }}>
+                <div style={{ padding: '20px' }}>
+                  <p style={{ color: 'var(--gray-700)', fontSize: 14, margin: '0 0 16px', lineHeight: 1.6 }}>
+                    1. Save our official number <strong>+1 (415) 523-8886</strong> to your contacts.<br />
+                    2. Send the message <strong>"join observe-ear"</strong> to activate the sandbox.<br />
+                    3. Once you receive a confirmation reply, you can request an OTP below!
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Phone Input Section */}
@@ -86,52 +150,53 @@ export default function PhoneEntryScreen() {
               }}>
                 Phone Number
               </label>
-              <div style={{
-                display: 'flex',
-                gap: 12,
-                alignItems: 'stretch',
-              }}>
-                {/* Country Code */}
-                <div style={{
-                  background: 'linear-gradient(135deg, #FFF5F0 0%, #FFEEDD 100%)',
-                  border: '2px solid #FFD296',
-                  borderRadius: 14,
-                  padding: '0 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: 17,
-                  fontWeight: 700,
-                  color: '#F06922',
-                  gap: 8,
-                }}>
-                  <span style={{ fontSize: 20 }}>🇮🇳</span>
+              <div 
+                className="flex items-stretch gap-3"
+              >
+                {/* Country Code Block */}
+                <div 
+                  className="px-4 sm:px-5 flex items-center gap-2"
+                  style={{
+                    background: 'var(--cream-200)',
+                    border: '1px solid var(--cream-400)',
+                    borderRadius: 14,
+                    color: 'var(--primary)',
+                    fontWeight: 700,
+                    fontSize: 16,
+                  }}>
                   +91
                 </div>
 
-                {/* Phone Input */}
-                <input
-                  type="tel"
-                  maxLength="10"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                  onFocus={() => setFocused('phone')}
-                  onBlur={() => setFocused(null)}
-                  placeholder="Enter 10-digit number"
-                  style={{
-                    flex: 1,
-                    background: focused === 'phone' ? 'var(--cream-100)' : 'var(--gray-50)',
-                    border: `2px solid ${focused === 'phone' ? '#F06922' : error ? '#EF4444' : 'var(--gray-200)'}`,
-                    borderRadius: 14,
-                    padding: '18px 20px',
-                    fontSize: 18,
-                    fontWeight: 600,
-                    color: 'var(--gray-900)',
-                    outline: 'none',
-                    transition: 'all 0.3s ease',
-                    letterSpacing: '1px',
-                    boxShadow: focused === 'phone' ? '0 0 0 4px rgba(240, 105, 34, 0.1)' : 'none',
-                  }}
-                />
+                {/* Phone Input Box */}
+                <div style={{
+                  flex: 1,
+                  background: focused === 'phone' ? 'var(--white)' : 'var(--gray-50)',
+                  border: `1px solid ${focused === 'phone' ? 'var(--primary)' : error ? 'var(--error)' : 'var(--gray-200)'}`,
+                  borderRadius: 14,
+                  transition: 'all 0.3s ease',
+                  boxShadow: focused === 'phone' ? '0 0 0 1px var(--primary)' : 'none',
+                  display: 'flex',
+                }}>
+                  <input
+                    type="tel"
+                    maxLength="10"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    onFocus={() => setFocused('phone')}
+                    onBlur={() => setFocused(null)}
+                    placeholder="Enter 10-digit number"
+                    className="flex-1 w-full text-[16px] sm:text-[18px]"
+                    style={{
+                      padding: '18px 24px',
+                      background: 'transparent',
+                      border: 'none',
+                      fontWeight: 600,
+                      color: 'var(--gray-900)',
+                      outline: 'none',
+                      letterSpacing: '1px',
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
@@ -146,13 +211,12 @@ export default function PhoneEntryScreen() {
                 marginBottom: 12,
                 fontWeight: 600,
               }}>
-                <span style={{ fontSize: 16 }}>🎁</span>
                 Referral Code
                 <span style={{
-                  background: 'var(--gray-200)',
                   color: 'var(--gray-400)',
                   fontSize: 11,
                   fontWeight: 600,
+                  background: 'var(--gray-100)',
                   padding: '3px 10px',
                   borderRadius: 20,
                 }}>
@@ -169,8 +233,8 @@ export default function PhoneEntryScreen() {
                 placeholder="Enter code for bonus"
                 style={{
                   width: '100%',
-                  background: focused === 'referral' ? 'var(--cream-100)' : 'var(--gray-50)',
-                  border: `2px solid ${focused === 'referral' ? '#F06922' : 'var(--gray-200)'}`,
+                  background: focused === 'referral' ? 'var(--white)' : 'var(--gray-50)',
+                  border: `1px solid ${focused === 'referral' ? 'var(--primary)' : 'var(--gray-200)'}`,
                   borderRadius: 14,
                   padding: '18px 20px',
                   fontSize: 16,
@@ -178,29 +242,72 @@ export default function PhoneEntryScreen() {
                   color: 'var(--gray-900)',
                   outline: 'none',
                   transition: 'all 0.3s ease',
-                  textTransform: 'uppercase',
-                  letterSpacing: '2px',
-                  boxShadow: focused === 'referral' ? '0 0 0 4px rgba(240, 105, 34, 0.1)' : 'none',
+                  letterSpacing: '1px',
+                  boxShadow: focused === 'referral' ? '0 0 0 1px var(--primary)' : 'none',
                 }}
               />
               <p style={{
                 fontSize: 13,
-                color: 'var(--gray-400)',
+                color: 'var(--gray-500)',
                 marginTop: 10,
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
               }}>
                 <span>💡</span>
-                Invite 3 friends → Get FREE fitness plan worth ₹49
+                Invite 3 friends & → Get FREE fitness plan worth ₹49
               </p>
+            </div>
+
+            {/* Confirmation Checkbox */}
+            <div
+              onClick={() => setHasConfirmedSetup(!hasConfirmedSetup)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 14,
+                padding: '16px 20px',
+                marginBottom: 24,
+                background: hasConfirmedSetup ? 'rgba(34, 197, 94, 0.05)' : 'var(--gray-50)',
+                border: hasConfirmedSetup ? '1px solid var(--success)' : '1px solid var(--gray-200)',
+                borderRadius: 14,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                userSelect: 'none',
+              }}
+            >
+              <div style={{
+                width: 24,
+                height: 24,
+                borderRadius: 6,
+                border: hasConfirmedSetup ? 'none' : '1px solid var(--gray-300)',
+                background: hasConfirmedSetup ? 'var(--success)' : 'var(--white)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}>
+                {hasConfirmedSetup && (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                )}
+              </div>
+              <span style={{
+                fontSize: 14,
+                fontWeight: 500,
+                color: hasConfirmedSetup ? 'var(--success-light)' : 'var(--gray-700)',
+                lineHeight: 1.4,
+              }}>
+                I have completed WhatsApp setup
+              </span>
             </div>
 
             {/* Error Message */}
             {error && (
               <div style={{
-                background: 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)',
-                border: '1px solid #EF4444',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.5)',
                 borderRadius: 14,
                 padding: '16px 20px',
                 marginBottom: 24,
@@ -210,27 +317,24 @@ export default function PhoneEntryScreen() {
                 animation: 'shake 0.5s ease',
               }}>
                 <span style={{ fontSize: 20 }}>⚠️</span>
-                <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 600, margin: 0 }}>{error}</p>
+                <p style={{ fontSize: 14, color: '#FCA5A5', fontWeight: 600, margin: 0 }}>{error}</p>
               </div>
             )}
 
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              disabled={loading || phone.length !== 10}
+              disabled={loading || phone.length !== 10 || !hasConfirmedSetup}
               style={{
                 width: '100%',
-                background: phone.length === 10
-                  ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)'
-                  : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
+                background: (phone.length === 10 && hasConfirmedSetup) ? 'var(--primary)' : 'var(--gray-200)',
                 border: 'none',
                 borderRadius: 16,
-                padding: '20px',
+                padding: '18px 20px',
                 fontSize: 18,
                 fontWeight: 700,
-                color: phone.length === 10 ? 'var(--white)' : 'var(--gray-400)',
-                cursor: phone.length === 10 && !loading ? 'pointer' : 'not-allowed',
-                boxShadow: phone.length === 10 ? '0 10px 40px rgba(240, 105, 34, 0.35)' : 'none',
+                color: (phone.length === 10 && hasConfirmedSetup) ? 'var(--white)' : 'var(--gray-400)',
+                cursor: (phone.length === 10 && hasConfirmedSetup && !loading) ? 'pointer' : 'not-allowed',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
@@ -253,19 +357,18 @@ export default function PhoneEntryScreen() {
                 </>
               ) : (
                 <>
-                  Send OTP
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  Send OTP via WhatsApp →
                 </>
               )}
             </button>
           </div>
-
-          {/* Security Note */}
-          <div style={{
+          
+          {/* Bottom Security Text */}
+          <p style={{
             textAlign: 'center',
-            marginTop: 28,
+            color: 'rgba(255, 255, 255, 0.5)',
+            fontSize: 13,
+            marginTop: 20,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -275,7 +378,7 @@ export default function PhoneEntryScreen() {
           }}>
             <span style={{ fontSize: 16 }}>🔒</span>
             <span>Your data is encrypted and never shared</span>
-          </div>
+          </p>
         </div>
 
         {/* Animation Keyframes */}
