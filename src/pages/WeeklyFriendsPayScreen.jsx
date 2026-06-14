@@ -46,13 +46,11 @@ export default function WeeklyFriendsPayScreen() {
         onBack={() => navigate('/friend-questions')}
       >
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
-        {/* Pricing Card */}
-        <div style={{
+        <div className="main-card-padding" style={{
           background: 'rgba(0, 0, 0, 0.4)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           borderRadius: 28,
-          padding: '40px 36px',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           marginBottom: 28,
@@ -62,7 +60,7 @@ export default function WeeklyFriendsPayScreen() {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 20,
+            gap: 'clamp(12px, 3vw, 20px)',
             marginBottom: 32,
             paddingBottom: 28,
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
@@ -82,16 +80,16 @@ export default function WeeklyFriendsPayScreen() {
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: 24, fontWeight: 800, color: '#FFF', marginBottom: 4 }}>
+              <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800, color: '#FFF', marginBottom: 4 }}>
                 Squad of {friendCount}
               </h2>
-              <p style={{ fontSize: 14, color: 'rgba(255, 255, 255, 0.7)' }}>
+              <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: 'rgba(255, 255, 255, 0.7)' }}>
                 All members covered • Valid 7 days
               </p>
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{
-                fontSize: 36,
+                fontSize: 'clamp(28px, 6vw, 36px)',
                 fontWeight: 800,
                 color: '#FFF',
                 lineHeight: 1,
@@ -173,7 +171,7 @@ export default function WeeklyFriendsPayScreen() {
           </div>
 
           {/* Value */}
-          <div style={{
+          <div className="flex-col sm:flex-row text-center sm:text-left" style={{
             background: 'rgba(16, 185, 129, 0.1)',
             backdropFilter: 'blur(10px)',
             borderRadius: 16,
