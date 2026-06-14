@@ -258,6 +258,8 @@ export default function OTPScreen() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: 12,
+              marginTop: 20,
+              // paddingTop: '4px',
             }}
           >
             {loading ? (
