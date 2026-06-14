@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { C, api } from '../utils/constants';
-import Silk from './Silk';
 
 export default function PhoneEntryScreen() {
   const navigate = useNavigate();
@@ -34,14 +33,34 @@ export default function PhoneEntryScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
-        <Silk
-          speed={5}
-          scale={1}
-          color="#ff6627"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1, overflow: 'hidden', background: '#11140F' }}>
+        {/* Left Spotlight */}
+        <div className="spotlight-lamp left">
+          <div className="lamp-wire"></div>
+          <div className="lamp-head"></div>
+          <div className="lamp-cone">
+            <div className="lamp-beam"></div>
+            <div className="lamp-dust-wrapper">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <div key={i} className={`dust d${i}`}></div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Spotlight */}
+        <div className="spotlight-lamp right">
+          <div className="lamp-wire"></div>
+          <div className="lamp-head"></div>
+          <div className="lamp-cone">
+            <div className="lamp-beam"></div>
+            <div className="lamp-dust-wrapper">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <div key={i} className={`dust d${i}`}></div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
       <Layout 
         title="Let's Get Started" 
@@ -383,6 +402,122 @@ export default function PhoneEntryScreen() {
 
         {/* Animation Keyframes */}
         <style>{`
+        .spotlight-lamp {
+          position: absolute;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          z-index: 0;
+          pointer-events: none;
+          transform-origin: top center;
+        }
+
+        /* Mobile: Centered, pointing straight down */
+        .spotlight-lamp.left {
+          left: 50%;
+          top: -10%;
+          transform: translateX(-50%) rotate(0deg);
+        }
+
+        /* Mobile: Hide second lamp */
+        .spotlight-lamp.right {
+          display: none;
+        }
+
+        /* Desktop: Dual angled lamps */
+        @media (min-width: 640px) {
+          .spotlight-lamp.left {
+            left: 5%;
+            top: -20px;
+            transform: rotate(-25deg); /* Overrides mobile transform */
+          }
+          .spotlight-lamp.right {
+            display: flex;
+            right: 5%;
+            top: -20px;
+            transform: rotate(25deg);
+          }
+        }
+
+        .lamp-wire {
+          width: 2px;
+          height: 80px;
+          background: rgba(255,255,255,0.12);
+        }
+
+        .lamp-head {
+          width: 32px;
+          height: 16px;
+          background: #F06922;
+          border-top-left-radius: 16px;
+          border-top-right-radius: 16px;
+          position: relative;
+          box-shadow: 0 -2px 10px rgba(240,105,34,0.5);
+          z-index: 2;
+        }
+
+        .lamp-cone {
+          position: relative;
+          width: 450px;
+          height: 650px;
+          margin-top: -2px;
+        }
+
+        .lamp-beam, 
+        .lamp-dust-wrapper {
+          position: absolute;
+          inset: 0;
+          clip-path: polygon(45% 0, 55% 0, 100% 100%, 0% 100%);
+        }
+
+        .lamp-beam {
+          background: linear-gradient(to bottom, rgba(240, 105, 34, 0.22) 0%, rgba(240, 105, 34, 0) 100%);
+          filter: blur(14px);
+          animation: lamp-flicker 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes lamp-flicker {
+          0% { opacity: 0.5; filter: blur(10px); }
+          100% { opacity: 1; filter: blur(16px); }
+        }
+
+        .dust {
+          position: absolute;
+          width: 3px;
+          height: 3px;
+          background: rgba(255, 230, 200, 0.9);
+          border-radius: 50%;
+          box-shadow: 0 0 6px rgba(240, 105, 34, 0.8);
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .dust:nth-child(odd) { animation: float-dust-1 8s linear infinite; }
+        .dust:nth-child(even) { animation: float-dust-2 9s linear infinite; }
+
+        .dust.d1 { left: 30%; bottom: 0; animation-delay: 0s; animation-duration: 8s; }
+        .dust.d2 { left: 50%; bottom: 0; animation-delay: 2s; animation-duration: 11s; }
+        .dust.d3 { left: 70%; bottom: 0; animation-delay: 4s; animation-duration: 9s; }
+        .dust.d4 { left: 40%; bottom: 0; animation-delay: 1s; animation-duration: 10s; }
+        .dust.d5 { left: 60%; bottom: 0; animation-delay: 3s; animation-duration: 7s; }
+        .dust.d6 { left: 20%; bottom: 0; animation-delay: 5s; animation-duration: 12s; }
+        .dust.d7 { left: 80%; bottom: 0; animation-delay: 1.5s; animation-duration: 8.5s; }
+        .dust.d8 { left: 45%; bottom: 0; animation-delay: 3.5s; animation-duration: 9.5s; }
+
+        @keyframes float-dust-1 {
+          0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+          15% { opacity: 0.8; }
+          85% { opacity: 0.8; }
+          100% { transform: translate(25px, -650px) scale(1.2); opacity: 0; }
+        }
+
+        @keyframes float-dust-2 {
+          0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+          15% { opacity: 0.7; }
+          85% { opacity: 0.7; }
+          100% { transform: translate(-25px, -650px) scale(1.5); opacity: 0; }
+        }
+
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
