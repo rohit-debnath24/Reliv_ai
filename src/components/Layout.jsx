@@ -28,23 +28,20 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
     }}>
       {/* Antigravity Dotted Background (toggle via ENABLE_ANTIGRAVITY flag) */}
       <AntigravityBackground enabled={ENABLE_ANTIGRAVITY} />
-      {/* Premium Desktop Header */}
+      {/* Premium Responsive Header */}
       <header
+        className="px-4 sm:px-8 md:px-10"
         style={{
           position: 'sticky',
           top: 0,
           zIndex: 1000,
-          background: scrolled
-            ? 'rgba(255, 255, 255, 0.25)'
-            : 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          padding: scrolled ? '12px 40px' : '16px 40px',
-          boxShadow: scrolled
-            ? '0 4px 30px rgba(240, 105, 34, 0.1)'
-            : '0 4px 30px rgba(0, 0, 0, 0.05)',
+          background: scrolled ? 'rgba(0, 0, 0, 0.4)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(24px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
+          paddingTop: scrolled ? '12px' : '20px',
+          paddingBottom: scrolled ? '12px' : '20px',
           transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+          borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
         }}
       >
         <div style={{
@@ -52,155 +49,116 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
           margin: '0 auto',
           display: 'flex',
           alignItems: 'center',
-          gap: 20,
+          justifyContent: 'space-between',
         }}>
-          {/* Back Button */}
-          {showBack && (
-            <button
-              onClick={onBack}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                background: scrolled ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)' : 'rgba(255, 255, 255, 0.2)',
-                border: 'none',
-                borderRadius: 12,
-                padding: '12px 20px',
-                fontSize: 14,
-                fontWeight: 600,
-                color: scrolled ? 'var(--white)' : 'var(--white)',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: scrolled ? '0 4px 15px rgba(240, 105, 34, 0.3)' : 'none',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateX(-4px)';
-                e.target.style.boxShadow = '0 6px 20px rgba(240, 105, 34, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateX(0)';
-                e.target.style.boxShadow = scrolled ? '0 4px 15px rgba(240, 105, 34, 0.3)' : 'none';
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
-              Back
-            </button>
-          )}
-
-          {/* Logo & Brand */}
-          <div style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: showBack ? 'center' : 'flex-start',
-            gap: 16,
-          }}>
-            <div style={{
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-            }}>
-              {/* Logo with glow */}
-              <div style={{
-                position: 'relative',
-              }}>
-                <div style={{
-                  position: 'absolute',
-                  inset: -4,
-                  background: scrolled ? 'transparent' : 'rgba(255, 255, 255, 0.3)',
-                  borderRadius: 16,
-                  filter: 'blur(8px)',
-                  transition: 'all 0.3s ease',
-                }} />
-                <img
-                  src="/relivlogo.jpeg"
-                  alt="Reliv AI"
-                  style={{
-                    width: scrolled ? 44 : 50,
-                    height: scrolled ? 44 : 50,
-                    borderRadius: 14,
-                    border: scrolled ? '2px solid rgba(240, 105, 34, 0.2)' : '3px solid rgba(255, 255, 255, 0.4)',
-                    objectFit: 'cover',
-                    position: 'relative',
-                    zIndex: 1,
-                    transition: 'all 0.3s ease',
-                    boxShadow: scrolled ? '0 4px 20px rgba(240, 105, 34, 0.15)' : '0 4px 20px rgba(0, 0, 0, 0.15)',
-                  }}
-                />
-              </div>
-
-              {/* Brand Name */}
-              <div>
-                <h1 style={{
-                  fontSize: scrolled ? 22 : 26,
-                  fontWeight: 800,
-                  color: scrolled ? '#F06922' : 'var(--white)',
-                  letterSpacing: '-0.5px',
-                  margin: 0,
-                  transition: 'all 0.3s ease',
+          {/* LEFT: Back Button */}
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+            {showBack && (
+              <button
+                onClick={onBack}
+                style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 8,
-                }}>
-                  Reliv AI
-                  <span style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    background: scrolled ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)' : 'rgba(255, 255, 255, 0.25)',
-                    color: 'var(--white)',
-                    padding: '4px 10px',
-                    borderRadius: 20,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                  }}>
-                    Beta
-                  </span>
-                </h1>
-                <p style={{
-                  fontSize: 12,
-                  color: scrolled ? 'var(--gray-600)' : 'rgba(255, 255, 255, 0.85)',
-                  margin: '2px 0 0',
-                  fontWeight: 500,
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: 12,
+                  padding: '10px 14px',
+                  color: '#FFF',
+                  cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                }}>
-                  Your Personal AI Health Coach
-                </p>
-              </div>
-            </div>
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.transform = 'translateX(-4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span className="hidden sm:inline" style={{ fontSize: 14, fontWeight: 600 }}>Back</span>
+              </button>
+            )}
           </div>
 
-          {/* Desktop Nav Actions */}
+          {/* CENTER: Logo & Brand */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
             gap: 12,
+            justifyContent: 'center',
           }}>
+            <img
+              src="/relivlogo.jpeg"
+              alt="Reliv AI"
+              style={{
+                width: scrolled ? 40 : 48,
+                height: scrolled ? 40 : 48,
+                borderRadius: 14,
+                border: '2px solid rgba(255, 255, 255, 0.2)',
+                objectFit: 'cover',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                transition: 'all 0.3s ease',
+              }}
+            />
+            <div className="hidden sm:block">
+              <h1 style={{
+                fontSize: 20,
+                fontWeight: 800,
+                color: '#FFF',
+                letterSpacing: '-0.5px',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+              }}>
+                Reliv AI
+                <span style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  background: 'rgba(255,255,255,0.15)',
+                  padding: '4px 8px',
+                  borderRadius: 20,
+                  letterSpacing: '0.5px',
+                }}>BETA</span>
+              </h1>
+            </div>
+          </div>
+
+          {/* RIGHT: Help Action */}
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <button
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                background: scrolled ? 'var(--cream-200)' : 'rgba(255, 255, 255, 0.15)',
-                border: scrolled ? '1px solid #FFD296' : '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: 10,
-                padding: '10px 16px',
-                fontSize: 13,
-                fontWeight: 600,
-                color: scrolled ? '#F06922' : 'var(--white)',
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: 12,
+                padding: '10px 14px',
+                color: '#FFF',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
               }}
-              onMouseEnter={(e) => {
-                e.target.style.background = scrolled ? 'var(--cream-300)' : 'rgba(255, 255, 255, 0.25)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = scrolled ? 'var(--cream-200)' : 'rgba(255, 255, 255, 0.15)';
-              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
             >
-              <span>💬</span> Help
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <span className="hidden sm:inline" style={{ fontSize: 14, fontWeight: 600 }}>Help</span>
             </button>
           </div>
         </div>
@@ -262,38 +220,41 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
 
       {/* Footer */}
       <footer style={{
-        borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-        background: 'rgba(255, 255, 255, 0.25)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+        background: 'rgba(0, 0, 0, 0.4)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         padding: '24px 40px',
         textAlign: 'center',
       }}>
-        <div style={{
+        <div className="flex-col sm:flex-row" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 24,
+          gap: 16,
           fontSize: 13,
-          color: 'var(--gray-800)',
+          color: 'rgba(255,255,255,0.7)',
           fontWeight: 500,
         }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>🔒</span> Bank-Grade Security
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Bank-Grade Security
           </span>
-          <span>•</span>
+          <span className="hidden sm:inline">•</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>✅</span> 50,000+ Happy Users
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            50,000+ Happy Users
           </span>
-          <span>•</span>
+          <span className="hidden sm:inline">•</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>💳</span> Secure Payments
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            Secure Payments
           </span>
         </div>
         <p style={{
           fontSize: 12,
-          color: 'var(--gray-600)',
-          marginTop: 16,
+          color: 'rgba(255,255,255,0.4)',
+          marginTop: 20,
           fontWeight: 500,
         }}>
           © 2024 Reliv AI. All rights reserved.

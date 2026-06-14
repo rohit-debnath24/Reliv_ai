@@ -45,24 +45,76 @@ export default function FriendSizeScreen() {
         onBack={() => navigate('/group-type')}
       >
         <div style={{ maxWidth: 550, margin: '0 auto' }}>
-          {/* Squad Icon */}
+          {/* Animated Squad Icon */}
           <div style={{
-            textAlign: 'center',
-            marginBottom: 36,
+            position: 'relative',
+            width: 140,
+            height: 120,
+            margin: '0 auto 36px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
+            {/* Glowing background orb */}
             <div style={{
-              width: 100,
-              height: 100,
-              background: 'linear-gradient(135deg, #F06922 0%, #D95319 100%)',
-              borderRadius: 28,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto',
-              fontSize: 48,
-              boxShadow: '0 12px 40px rgba(240, 105, 34, 0.3)',
+              position: 'absolute',
+              width: 90, height: 90,
+              background: 'rgba(255, 255, 255, 0.35)',
+              borderRadius: '50%',
+              filter: 'blur(24px)',
+              animation: 'pulseGlow 3s ease-in-out infinite'
+            }} />
+            
+            {/* Left Friend */}
+            <div style={{
+              position: 'absolute',
+              left: 10, top: 35,
+              width: 48, height: 48,
+              background: 'rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255,255,255,0.4)',
+              borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#FFF',
+              animation: 'floatLeft 4s ease-in-out infinite',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
             }}>
-              👥
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+
+            {/* Right Friend */}
+            <div style={{
+              position: 'absolute',
+              right: 10, top: 35,
+              width: 48, height: 48,
+              background: 'rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255,255,255,0.4)',
+              borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#FFF',
+              animation: 'floatRight 4.5s ease-in-out infinite',
+              animationDelay: '0.5s',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
+            }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+
+            {/* Center Main User */}
+            <div style={{
+              position: 'absolute',
+              zIndex: 2,
+              width: 68, height: 68,
+              background: '#FFFFFF',
+              borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#F06922',
+              boxShadow: '0 16px 50px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,255,255,0.2)',
+              animation: 'floatCenter 3s ease-in-out infinite'
+            }}>
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
           </div>
 
@@ -79,8 +131,8 @@ export default function FriendSizeScreen() {
                 onClick={() => setSelected(opt.value)}
                 style={{
                   background: selected === opt.value
-                    ? 'rgba(255, 255, 255, 0.15)'
-                    : 'rgba(255, 255, 255, 0.05)',
+                    ? 'rgba(0, 0, 0, 0.7)'
+                    : 'rgba(0, 0, 0, 0.4)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
                   borderRadius: 18,
@@ -90,11 +142,11 @@ export default function FriendSizeScreen() {
                   gap: 20,
                   cursor: 'pointer',
                   border: selected === opt.value
-                    ? '3px solid #F06922'
-                    : '2px solid rgba(255, 255, 255, 0.1)',
+                    ? '2px solid var(--primary)'
+                    : '1px solid rgba(255, 255, 255, 0.1)',
                   boxShadow: selected === opt.value
-                    ? '0 12px 40px rgba(240, 105, 34, 0.15)'
-                    : '0 4px 15px rgba(0,0,0,0.04)',
+                    ? 'var(--shadow-glow)'
+                    : '0 4px 15px rgba(0,0,0,0.2)',
                   transform: showOptions
                     ? selected === opt.value ? 'scale(1.02)' : 'scale(1)'
                     : 'translateX(-20px)',
@@ -168,6 +220,24 @@ export default function FriendSizeScreen() {
           </button>
         </div>
       </Layout>
+      <style>{`
+        @keyframes pulseGlow {
+          0%, 100% { transform: scale(1); opacity: 0.5; }
+          50% { transform: scale(1.3); opacity: 0.8; }
+        }
+        @keyframes floatCenter {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes floatLeft {
+          0%, 100% { transform: translate(0, 0) rotate(-5deg); }
+          50% { transform: translate(-4px, -6px) rotate(-10deg); }
+        }
+        @keyframes floatRight {
+          0%, 100% { transform: translate(0, 0) rotate(5deg); }
+          50% { transform: translate(4px, -6px) rotate(10deg); }
+        }
+      `}</style>
     </>
   );
 }

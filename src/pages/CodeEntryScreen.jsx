@@ -74,7 +74,7 @@ export default function CodeEntryScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, opacity: 0.8, pointerEvents: 'none' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none' }}>
         <Silk
           speed={5}
           scale={1}

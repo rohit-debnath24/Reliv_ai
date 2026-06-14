@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 
+import Silk from './Silk';
+
 export default function GroupTypeScreen() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
@@ -18,8 +20,12 @@ export default function GroupTypeScreen() {
       period: "/ week",
       dailyPrice: "₹4.14/day",
       tag: null,
-      icon: "👤",
-      color: "#3B82F6",
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      ),
       features: ["Personal meal plans", "Daily reminders", "Progress tracking"],
       path: "/weekly-solo-pay",
     },
@@ -31,9 +37,14 @@ export default function GroupTypeScreen() {
       period: "/ week",
       dailyPrice: "₹3.86/day each",
       tag: "Most Popular",
-      tagColor: "#22C55E",
-      icon: "💑",
-      color: "#EC4899",
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      ),
       features: ["Both partners covered", "Individual reminders", "Couple challenges"],
       path: "/couple-phone",
     },
@@ -45,9 +56,15 @@ export default function GroupTypeScreen() {
       period: "/ week",
       dailyPrice: "₹2.26/day each (5 friends)",
       tag: "Best Value",
-      tagColor: "#8B5CF6",
-      icon: "👥",
-      color: "#8B5CF6",
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 20v-2a4 4 0 0 0-4-4H4a4 4 0 0 0-4 4v2"></path>
+          <circle cx="8" cy="9" r="4"></circle>
+          <path d="M24 20v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 5.13a4 4 0 0 1 0 7.75"></path>
+          <path d="M20 12v-2a4 4 0 0 0-4-4h-2"></path>
+        </svg>
+      ),
       features: ["2-5 friends", "Group leaderboard", "Squad competitions"],
       path: "/friend-size",
     },
@@ -59,9 +76,11 @@ export default function GroupTypeScreen() {
       period: "/ day",
       dailyPrice: "One-time only",
       tag: "Try First",
-      tagColor: "#F06922",
-      icon: "⚡",
-      color: "#F06922",
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      ),
       features: ["Pick your idol", "Full day plan", "Zero commitment"],
       path: "/fan-quiz-type",
     },
@@ -82,19 +101,31 @@ export default function GroupTypeScreen() {
   };
 
   return (
-    <Layout
-      title="Choose Your Plan"
-      subtitle="Select how you want to start your health journey"
-      showBack
-      onBack={() => navigate("/")}
-    >
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+    <>
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none' }}>
+        <Silk
+          speed={5}
+          scale={1}
+          color="#ff6627"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
+      <Layout
+        title="Choose Your Plan"
+        subtitle="Select how you want to start your health journey"
+        titleColor="#ffffff"
+        subtitleColor="rgba(255, 255, 255, 0.9)"
+        showBack
+        onBack={() => navigate("/")}
+      >
+      <div style={{ maxWidth: 860, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Plan Cards Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 20,
-          marginBottom: 40,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: 24,
+          marginBottom: 48,
         }}>
           {plans.map((p, index) => (
             <div
@@ -103,29 +134,27 @@ export default function GroupTypeScreen() {
               onMouseEnter={() => setHovered(p.id)}
               onMouseLeave={() => setHovered(null)}
               style={{
-                background: selected === p.id
-                  ? `linear-gradient(135deg, ${p.color}08 0%, ${p.color}15 100%)`
-                  : 'var(--white)',
-                borderRadius: 24,
-                padding: '32px 28px',
+                background: selected === p.id ? 'var(--white)' : 'var(--gray-50)',
+                borderRadius: 28,
+                padding: '36px 32px',
                 cursor: loading ? 'wait' : 'pointer',
                 border: selected === p.id
-                  ? `3px solid ${p.color}`
-                  : '2px solid #E5E7EB',
+                  ? '2px solid var(--primary)'
+                  : '1px solid var(--gray-200)',
                 boxShadow: selected === p.id
-                  ? `0 20px 60px ${p.color}25`
+                  ? 'var(--shadow-glow)'
                   : hovered === p.id
-                    ? '0 16px 50px rgba(0,0,0,0.1)'
-                    : '0 4px 20px rgba(0,0,0,0.04)',
+                    ? 'var(--shadow-lg)'
+                    : 'var(--shadow-md)',
                 transform: showCards
                   ? selected === p.id
-                    ? 'scale(1.02)'
+                    ? 'translateY(-4px)'
                     : hovered === p.id
-                      ? 'translateY(-8px)'
+                      ? 'translateY(-6px)'
                       : 'translateY(0)'
                   : 'translateY(30px)',
                 opacity: showCards ? 1 : 0,
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                 transitionDelay: `${index * 0.08}s`,
                 position: 'relative',
               }}
@@ -134,17 +163,17 @@ export default function GroupTypeScreen() {
               {p.tag && (
                 <div style={{
                   position: 'absolute',
-                  top: -12,
-                  right: 20,
-                  background: p.tagColor,
-                  color: 'var(--white)',
+                  top: -14,
+                  right: 24,
+                  background: 'var(--primary)',
+                  color: '#fff',
                   fontSize: 11,
                   fontWeight: 700,
                   padding: '6px 14px',
                   borderRadius: 20,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  boxShadow: `0 4px 15px ${p.tagColor}40`,
+                  letterSpacing: '0.8px',
+                  boxShadow: 'var(--shadow-sm)',
                 }}>
                   {p.tag}
                 </div>
@@ -154,16 +183,16 @@ export default function GroupTypeScreen() {
               {selected === p.id && (
                 <div style={{
                   position: 'absolute',
-                  top: 20,
-                  right: 20,
+                  top: 24,
+                  right: 24,
                   width: 28,
                   height: 28,
-                  background: p.color,
+                  background: 'var(--primary)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: `0 4px 15px ${p.color}40`,
+                  boxShadow: 'var(--shadow-sm)',
                 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="3">
                     <path d="M20 6L9 17l-5-5" />
@@ -173,15 +202,17 @@ export default function GroupTypeScreen() {
 
               {/* Icon */}
               <div style={{
-                width: 64,
-                height: 64,
-                background: `linear-gradient(135deg, ${p.color}15 0%, ${p.color}25 100%)`,
-                borderRadius: 18,
+                width: 56,
+                height: 56,
+                background: selected === p.id ? 'var(--primary)' : 'var(--cream-200)',
+                color: selected === p.id ? '#FFF' : 'var(--primary)',
+                borderRadius: 16,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 32,
-                marginBottom: 20,
+                marginBottom: 24,
+                border: selected === p.id ? 'none' : '1px solid var(--cream-400)',
+                transition: 'all 0.3s ease',
               }}>
                 {p.icon}
               </div>
@@ -190,16 +221,16 @@ export default function GroupTypeScreen() {
               <h3 style={{
                 fontSize: 22,
                 fontWeight: 800,
-                color: selected === p.id ? p.color : '#111',
-                marginBottom: 8,
+                color: 'var(--gray-900)',
+                marginBottom: 10,
               }}>
                 {p.title}
               </h3>
               <p style={{
                 fontSize: 14,
-                color: '#666',
-                marginBottom: 20,
-                lineHeight: 1.5,
+                color: 'var(--gray-500)',
+                marginBottom: 24,
+                lineHeight: 1.6,
               }}>
                 {p.desc}
               </p>
@@ -209,19 +240,19 @@ export default function GroupTypeScreen() {
                 display: 'flex',
                 alignItems: 'baseline',
                 gap: 6,
-                marginBottom: 8,
+                marginBottom: 12,
               }}>
                 <span style={{
                   fontSize: 32,
                   fontWeight: 800,
-                  color: p.color,
+                  color: 'var(--gray-900)',
                 }}>
                   {p.price}
                 </span>
                 <span style={{
                   fontSize: 14,
                   color: 'var(--gray-400)',
-                  fontWeight: 500,
+                  fontWeight: 600,
                 }}>
                   {p.period}
                 </span>
@@ -229,37 +260,47 @@ export default function GroupTypeScreen() {
 
               {/* Daily Price Breakdown */}
               <div style={{
-                background: `${p.color}10`,
-                borderRadius: 10,
-                padding: '8px 14px',
+                background: 'var(--gray-100)',
+                border: '1px solid var(--gray-200)',
+                borderRadius: 8,
+                padding: '6px 12px',
                 display: 'inline-block',
-                marginBottom: 20,
+                marginBottom: 24,
               }}>
                 <span style={{
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: 600,
-                  color: p.color,
+                  color: 'var(--gray-600)',
                 }}>
-                  💰 {p.dailyPrice}
+                  {p.dailyPrice}
                 </span>
               </div>
 
               {/* Features */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {p.features.map((f, i) => (
                   <div
                     key={i}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 10,
-                      fontSize: 13,
-                      color: '#555',
+                      gap: 12,
+                      fontSize: 14,
+                      color: 'var(--gray-600)',
+                      fontWeight: 500,
                     }}
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill={p.color}>
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                    </svg>
+                    <div style={{
+                      width: 20, height: 20,
+                      borderRadius: '50%',
+                      background: 'var(--cream-200)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: 'var(--primary)',
+                    }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
                     {f}
                   </div>
                 ))}
@@ -275,16 +316,16 @@ export default function GroupTypeScreen() {
           style={{
             width: '100%',
             background: selected
-              ? 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)'
-              : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
+              ? 'var(--primary)'
+              : 'var(--gray-200)',
             border: 'none',
             borderRadius: 18,
             padding: '22px',
             fontSize: 18,
             fontWeight: 700,
-            color: selected ? 'var(--white)' : 'var(--gray-400)',
+            color: selected ? '#FFF' : 'var(--gray-400)',
             cursor: selected && !loading ? 'pointer' : 'not-allowed',
-            boxShadow: selected ? '0 12px 45px rgba(240, 105, 34, 0.35)' : 'none',
+            boxShadow: selected ? 'var(--shadow-glow)' : 'none',
             transition: 'all 0.3s ease',
             display: 'flex',
             alignItems: 'center',
@@ -319,9 +360,18 @@ export default function GroupTypeScreen() {
           padding: '20px',
         }}>
           {[
-            { icon: '🔒', text: 'Secure Payment' },
-            { icon: '🚫', text: 'No Auto-Renewal' },
-            { icon: '💬', text: 'WhatsApp Support' },
+            { 
+              icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>, 
+              text: 'Secure Payment' 
+            },
+            { 
+              icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>, 
+              text: 'No Auto-Renewal' 
+            },
+            { 
+              icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>, 
+              text: 'WhatsApp Support' 
+            },
           ].map((item, i) => (
             <div
               key={i}
@@ -330,11 +380,11 @@ export default function GroupTypeScreen() {
                 alignItems: 'center',
                 gap: 8,
                 fontSize: 13,
-                color: '#666',
+                color: 'var(--gray-500)',
                 fontWeight: 500,
               }}
             >
-              <span>{item.icon}</span>
+              <span style={{ color: 'var(--gray-400)', display: 'flex' }}>{item.icon}</span>
               {item.text}
             </div>
           ))}
@@ -348,5 +398,6 @@ export default function GroupTypeScreen() {
         }
       `}</style>
     </Layout>
+    </>
   );
 }
