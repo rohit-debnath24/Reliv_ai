@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SparkleBackground from '../components/SparkleBackground';
 
 export default function ReturnActiveScreen() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [animate, setAnimate] = useState(false);
-  const canvasRef = useRef(null);
 
   const accessCode = localStorage.getItem('accessCode') || '6241';
   const daysLeft = 5;
@@ -23,33 +23,7 @@ export default function ReturnActiveScreen() {
 
   useEffect(() => { setTimeout(() => setShow(true), 120); setTimeout(() => setAnimate(true), 500); }, []);
 
-  // Particles
-  useEffect(() => {
-    const canvas = canvasRef.current; if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth * 2; canvas.height = canvas.offsetHeight * 2;
-    ctx.scale(2, 2);
-    const W = canvas.offsetWidth, H = canvas.offsetHeight;
-    const dots = Array.from({ length: 22 }, () => ({
-      x: Math.random() * W, y: Math.random() * H, r: 2 + Math.random() * 3,
-      dx: (Math.random() - 0.5) * 0.3, dy: (Math.random() - 0.5) * 0.3,
-      opacity: 0.05 + Math.random() * 0.07,
-      color: ['#22C55E', '#3B82F6', '#F06922'][Math.floor(Math.random() * 3)],
-    }));
-    let id;
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H);
-      dots.forEach(p => {
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.color; ctx.globalAlpha = p.opacity; ctx.fill();
-        p.x += p.dx; p.y += p.dy;
-        if (p.x < 0 || p.x > W) p.dx *= -1;
-        if (p.y < 0 || p.y > H) p.dy *= -1;
-      });
-      ctx.globalAlpha = 1; id = requestAnimationFrame(draw);
-    };
-    draw(); return () => cancelAnimationFrame(id);
-  }, []);
+  // Removed Canvas Particles
 
   const handleContinue = () => {
     if (avgCompliance >= 80) navigate('/todays-plan');
@@ -78,12 +52,12 @@ export default function ReturnActiveScreen() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(180deg, #FFFAF7 0%, #FFF5F0 50%, #FFEEDD 100%)',
+      background: 'transparent',
       fontFamily: "'Inter', 'Outfit', sans-serif",
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 40, position: 'relative', overflow: 'hidden',
     }}>
-      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} />
+      <SparkleBackground />
 
       <div style={{ position: 'absolute', top: -100, right: -80, width: 280, height: 280, borderRadius: '50%', background: 'radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)', animation: 'floatOrb1 8s ease-in-out infinite', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: -80, left: -60, width: 220, height: 220, borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)', animation: 'floatOrb2 10s ease-in-out infinite', pointerEvents: 'none' }} />

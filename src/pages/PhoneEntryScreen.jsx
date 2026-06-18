@@ -407,8 +407,6 @@ export default function PhoneEntryScreen() {
           {/* Bottom Security Text */}
           <p style={{
             textAlign: 'center',
-            color: 'rgba(255, 255, 255, 0.5)',
-            fontSize: 13,
             marginTop: 20,
             display: 'flex',
             alignItems: 'center',

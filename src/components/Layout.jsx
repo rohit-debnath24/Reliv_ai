@@ -7,9 +7,23 @@ import AntigravityBackground from './AntigravityBackground';
 // Set to false to hide it (just the gradient background)
 const ENABLE_ANTIGRAVITY = false;
 
-export default function Layout({ children, title, subtitle, titleColor = 'var(--gray-900)', subtitleColor = 'var(--gray-600)', showBack, onBack }) {
+export default function Layout({ children, title, subtitle, titleColor, subtitleColor, showBack, onBack }) {
   const [scrolled, setScrolled] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
+
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true;
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   useEffect(() => {
     setPageLoaded(true);
@@ -35,13 +49,13 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
           position: 'sticky',
           top: 0,
           zIndex: 1000,
-          background: scrolled ? 'rgba(0, 0, 0, 0.4)' : 'transparent',
+          background: scrolled ? (isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.8)') : 'transparent',
           backdropFilter: scrolled ? 'blur(24px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
           paddingTop: scrolled ? '12px' : '20px',
           paddingBottom: scrolled ? '12px' : '20px',
           transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
+          borderBottom: scrolled ? (isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)') : '1px solid transparent',
         }}
       >
         <div style={{
@@ -60,23 +74,23 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
                   display: 'flex',
                   alignItems: 'center',
                   gap: 8,
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)',
                   borderRadius: 12,
                   padding: '10px 14px',
-                  color: '#FFF',
+                  color: isDark ? '#FFF' : '#11140F',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
                   boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
                   e.currentTarget.style.transform = 'translateX(-4px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
                   e.currentTarget.style.transform = 'translateX(0)';
                 }}
               >
@@ -102,7 +116,7 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
                 width: scrolled ? 40 : 48,
                 height: scrolled ? 40 : 48,
                 borderRadius: 14,
-                border: '2px solid rgba(255, 255, 255, 0.2)',
+                border: isDark ? '2px solid rgba(255, 255, 255, 0.2)' : '2px solid rgba(0, 0, 0, 0.1)',
                 objectFit: 'cover',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
                 transition: 'all 0.3s ease',
@@ -112,7 +126,7 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
               <h1 style={{
                 fontSize: 20,
                 fontWeight: 800,
-                color: '#FFF',
+                color: isDark ? '#FFF' : '#11140F',
                 letterSpacing: '-0.5px',
                 margin: 0,
                 display: 'flex',
@@ -123,7 +137,8 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
                 <span style={{
                   fontSize: 10,
                   fontWeight: 700,
-                  background: 'rgba(255,255,255,0.15)',
+                  background: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
+                  color: isDark ? '#FFF' : '#11140F',
                   padding: '4px 8px',
                   borderRadius: 20,
                   letterSpacing: '0.5px',
@@ -139,19 +154,19 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                background: 'rgba(255, 255, 255, 0.1)',
+                background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)',
                 borderRadius: 12,
                 padding: '10px 14px',
-                color: '#FFF',
+                color: isDark ? '#FFF' : '#11140F',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
               }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+              onMouseEnter={(e) => e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
@@ -186,7 +201,7 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
               <h2 style={{
                 fontSize: 36,
                 fontWeight: 800,
-                color: titleColor,
+                color: titleColor || (isDark ? '#FFF' : '#11140F'),
                 marginBottom: 12,
                 letterSpacing: '-1px',
                 lineHeight: 1.2,
@@ -197,7 +212,7 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
             {subtitle && (
               <p style={{
                 fontSize: 17,
-                color: subtitleColor,
+                color: subtitleColor || (isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(17, 20, 15, 0.7)'),
                 lineHeight: 1.6,
                 maxWidth: 500,
                 margin: '0 auto',
@@ -220,8 +235,8 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
 
       {/* Footer */}
       <footer style={{
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        background: 'rgba(0, 0, 0, 0.4)',
+        borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+        background: isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.5)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         padding: '24px 40px',
@@ -233,7 +248,7 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
           justifyContent: 'center',
           gap: 16,
           fontSize: 13,
-          color: 'rgba(255,255,255,0.7)',
+          color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
           fontWeight: 500,
         }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -253,7 +268,7 @@ export default function Layout({ children, title, subtitle, titleColor = 'var(--
         </div>
         <p style={{
           fontSize: 12,
-          color: 'rgba(255,255,255,0.4)',
+          color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.5)',
           marginTop: 20,
           fontWeight: 500,
         }}>

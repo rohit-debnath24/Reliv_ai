@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Silk from './Silk';
+import SparkleBackground from '../components/SparkleBackground';
 import { C } from '../utils/constants';
 
 export default function CodeEntryScreen() {
@@ -10,6 +10,21 @@ export default function CodeEntryScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const inputRefs = useRef([]);
+
+  // Theme State
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true; // default to dark
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
@@ -74,22 +89,14 @@ export default function CodeEntryScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none' }}>
-        <Silk
-          speed={5}
-          scale={1}
-          color="#ff6627"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
-      </div>
+      <SparkleBackground />
       <Layout
         title="Welcome Back! 👋"
         subtitle="Enter your 4-digit access code to continue"
         showBack
         onBack={() => navigate('/')}
       >
-      <div style={{ maxWidth: 600, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <div className="w-full px-4 sm:px-0" style={{ maxWidth: 600, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Main Card */}
         <div 
           className="main-card-padding"
@@ -119,12 +126,7 @@ export default function CodeEntryScreen() {
 
           {/* Code Input Boxes */}
           <div
-            style={{
-              display: 'flex',
-              gap: 16,
-              justifyContent: 'center',
-              marginBottom: 28,
-            }}
+            className="flex justify-center gap-3 sm:gap-4 mb-8"
             onPaste={handlePaste}
           >
             {code.map((d, i) => (
@@ -136,13 +138,11 @@ export default function CodeEntryScreen() {
                 value={d}
                 onChange={(e) => handleChange(i, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(i, e)}
+                className="w-[3.5rem] h-[4rem] sm:w-[72px] sm:h-[88px] text-[28px] sm:text-[36px]"
                 style={{
-                  width: 72,
-                  height: 88,
                   background: d ? 'var(--white)' : 'var(--gray-50)',
                   border: `2px solid ${d ? 'var(--primary)' : error ? 'var(--error)' : 'var(--gray-200)'}`,
                   borderRadius: 20,
-                  fontSize: 36,
                   fontWeight: 800,
                   color: 'var(--gray-900)',
                   textAlign: 'center',

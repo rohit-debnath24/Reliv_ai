@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../components/Layout';
+import SparkleBackground from '../components/SparkleBackground';
 import { C, api } from '../utils/constants';
-import Silk from './Silk';
 
 export default function OTPScreen() {
   const navigate = useNavigate();
@@ -15,6 +15,21 @@ export default function OTPScreen() {
   const [resendTimer, setResendTimer] = useState(30);
   const [success, setSuccess] = useState(false);
   const inputRefs = useRef([]);
+
+  // Theme State
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true; // default to dark
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   useEffect(() => {
     if (!phone && !sessionId) navigate('/phone');
@@ -100,20 +115,10 @@ export default function OTPScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
-        <Silk
-          speed={5}
-          scale={1}
-          color="#ff6627"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
-      </div>
+      <SparkleBackground />
       <Layout
         title="Verify Your Number"
         subtitle={`We've sent a 4-digit code to ${phone || 'your phone'}`}
-        titleColor="#ffffff"
-        subtitleColor="rgba(255, 255, 255, 0.9)"
         showBack
         onBack={() => navigate('/phone')}
       >

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Silk from './Silk';
+import SparkleBackground from '../components/SparkleBackground';
 
 export default function WeeklySoloPayScreen() {
   const navigate = useNavigate();
@@ -27,14 +27,10 @@ export default function WeeklySoloPayScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
-        <Silk speed={5} scale={1} color="#ff6627" noiseIntensity={1.5} rotation={0} />
-      </div>
+      <SparkleBackground />
       <Layout
         title="Solo Weekly Plan"
         subtitle="7 days of personalized health coaching"
-        titleColor="#ffffff"
-        subtitleColor="rgba(255, 255, 255, 0.9)"
         showBack
         onBack={() => navigate('/group-type')}
       >

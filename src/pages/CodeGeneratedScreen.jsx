@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Silk from './Silk';
+import SparkleBackground from '../components/SparkleBackground';
 
 export default function CodeGeneratedScreen() {
   const navigate = useNavigate();
@@ -63,9 +63,7 @@ export default function CodeGeneratedScreen() {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       padding: 40, position: 'relative', overflow: 'hidden',
     }}>
-      <div style={{ position: 'absolute', inset: 0, zIndex: -1 }}>
-        <Silk speed={5} scale={1} color="#ff6627" noiseIntensity={1.5} rotation={0} />
-      </div>
+      <SparkleBackground />
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} />
 
       {/* Gradient orbs */}
