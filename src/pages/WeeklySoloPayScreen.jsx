@@ -35,13 +35,8 @@ export default function WeeklySoloPayScreen() {
         onBack={() => navigate('/group-type')}
       >
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
-        <div className="main-card-padding" style={{
-          background: 'rgba(0, 0, 0, 0.4)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderRadius: 28,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+        <div className="main-card-padding card-premium" style={{
+          padding: '32px',
           marginBottom: 28,
           animation: 'slideUpFade 0.6s ease-out forwards',
         }}>
@@ -52,27 +47,27 @@ export default function WeeklySoloPayScreen() {
             gap: 'clamp(12px, 3vw, 20px)',
             marginBottom: 32,
             paddingBottom: 28,
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            borderBottom: '1px solid var(--gray-200)',
           }}>
             <div style={{
               width: 72,
               height: 72,
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: 'var(--cream-100)',
               borderRadius: 20,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#FFF',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              color: 'var(--primary)',
+              border: '1px solid var(--cream-300)',
               animation: 'pulseGlow 3s ease-in-out infinite',
             }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
             <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800, color: '#FFF', marginBottom: 4 }}>
+              <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800, color: 'var(--gray-900)', marginBottom: 4 }}>
                 Solo Plan
               </h2>
-              <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: 'rgba(255, 255, 255, 0.7)' }}>
+              <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: 'var(--gray-500)' }}>
                 Just for you • Valid 7 days
               </p>
             </div>
@@ -80,12 +75,12 @@ export default function WeeklySoloPayScreen() {
               <div style={{
                 fontSize: 'clamp(28px, 6vw, 36px)',
                 fontWeight: 800,
-                color: '#FFF',
+                color: 'var(--gray-900)',
                 lineHeight: 1,
               }}>
                 ₹29
               </div>
-              <div style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.5)', fontWeight: 600 }}>
+              <div style={{ fontSize: 13, color: 'var(--gray-500)', fontWeight: 600 }}>
                 per week
               </div>
             </div>
@@ -96,7 +91,7 @@ export default function WeeklySoloPayScreen() {
             <h3 style={{
               fontSize: 13,
               fontWeight: 700,
-              color: 'rgba(255, 255, 255, 0.5)',
+              color: 'var(--gray-500)',
               textTransform: 'uppercase',
               letterSpacing: '1px',
               marginBottom: 20,
@@ -113,16 +108,19 @@ export default function WeeklySoloPayScreen() {
                     alignItems: 'flex-start',
                     gap: 12,
                     padding: '20px',
-                    background: 'rgba(0, 0, 0, 0.4)',
+                    background: 'var(--gray-50)',
                     borderRadius: 16,
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    border: '1px solid var(--gray-200)',
                     opacity: 0,
                     animation: 'slideUpFade 0.5s ease-out forwards',
                     animationDelay: `${0.3 + (i * 0.1)}s`,
+                    transition: 'transform 0.2s',
                   }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  <span style={{ color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{f.icon}</span>
-                  <span style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.9)', fontWeight: 600, lineHeight: 1.4 }}>{f.text}</span>
+                  <span style={{ color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{f.icon}</span>
+                  <span style={{ fontSize: 13, color: 'var(--gray-800)', fontWeight: 600, lineHeight: 1.4 }}>{f.text}</span>
                 </div>
               ))}
             </div>
@@ -130,27 +128,26 @@ export default function WeeklySoloPayScreen() {
 
           {/* Value Proposition */}
           <div className="flex-col sm:flex-row text-center sm:text-left" style={{
-            background: 'rgba(16, 185, 129, 0.1)',
-            backdropFilter: 'blur(10px)',
+            background: 'var(--cream-200)',
             borderRadius: 16,
             padding: '18px 24px',
             display: 'flex',
             alignItems: 'center',
             gap: 16,
             marginBottom: 32,
-            border: '1px solid rgba(16, 185, 129, 0.2)',
+            border: '1px solid var(--cream-400)',
             animation: 'slideUpFade 0.5s ease-out forwards',
             animationDelay: '0.8s',
             opacity: 0,
           }}>
-            <span style={{ color: '#10B981', display: 'flex' }}>
+            <span style={{ color: 'var(--primary)', display: 'flex' }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             </span>
             <div>
-              <p style={{ fontSize: 15, fontWeight: 800, color: '#34D399', margin: '0 0 4px 0' }}>
+              <p style={{ fontSize: 15, fontWeight: 800, color: 'var(--primary-dark)', margin: '0 0 4px 0' }}>
                 Only ₹4.14 per day
               </p>
-              <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.7)', margin: 0, fontWeight: 500 }}>
+              <p style={{ fontSize: 13, color: 'var(--gray-700)', margin: 0, fontWeight: 500 }}>
                 Less than a cup of chai!
               </p>
             </div>
@@ -160,22 +157,12 @@ export default function WeeklySoloPayScreen() {
           <button
             onClick={handlePay}
             disabled={loading}
+            className="btn btn-primary"
             style={{
               width: '100%',
-              background: 'var(--white)',
-              border: 'none',
-              borderRadius: 16,
-              padding: '22px',
+              padding: '20px',
               fontSize: 18,
-              fontWeight: 800,
-              color: 'var(--primary)',
               cursor: loading ? 'wait' : 'pointer',
-              boxShadow: '0 12px 40px rgba(255, 255, 255, 0.2)',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 12,
             }}
           >
             {loading ? (
@@ -183,8 +170,8 @@ export default function WeeklySoloPayScreen() {
                 <span style={{
                   width: 24,
                   height: 24,
-                  border: '3px solid rgba(240,105,34,0.3)',
-                  borderTopColor: 'var(--primary)',
+                  border: '3px solid rgba(255,255,255,0.3)',
+                  borderTopColor: '#fff',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
@@ -200,16 +187,13 @@ export default function WeeklySoloPayScreen() {
         </div>
 
         {/* Trust Section */}
-        <div className="flex-col sm:flex-row" style={{
+        <div className="flex-col sm:flex-row card-premium" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: 24,
           padding: '20px',
-          background: 'rgba(0, 0, 0, 0.2)',
-          backdropFilter: 'blur(10px)',
           borderRadius: 16,
-          border: '1px solid rgba(255,255,255,0.05)',
         }}>
           {[
             { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>, text: 'Secure Payment' },
@@ -223,11 +207,11 @@ export default function WeeklySoloPayScreen() {
                 alignItems: 'center',
                 gap: 8,
                 fontSize: 13,
-                color: 'rgba(255,255,255,0.7)',
+                color: 'var(--gray-600)',
                 fontWeight: 500,
               }}
             >
-              <span style={{ color: '#FFFFFF', display: 'flex' }}>{item.icon}</span>
+              <span style={{ color: 'var(--primary)', display: 'flex' }}>{item.icon}</span>
               {item.text}
             </div>
           ))}

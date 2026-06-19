@@ -1,7 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { api } from '../utils/constants';
+
+const HeartBackground = ({ isDark }) => {
+  const [hearts, setHearts] = useState([]);
+  
+  useEffect(() => {
+    setHearts([...Array(20)].map((_, i) => ({
+      left: `${Math.random() * 100}%`,
+      duration: `${10 + Math.random() * 15}s`,
+      delay: `${-Math.random() * 15}s`,
+      scale: 0.5 + Math.random() * 1.5,
+      opacity: 0.3 + Math.random() * 0.5,
+    })));
+  }, []);
+
+  return (
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      background: isDark ? 'linear-gradient(135deg, #1A0B13 0%, #2D0F1C 50%, #13060E 100%)' : 'linear-gradient(135deg, #FFF0F5 0%, #FFC0CB 50%, #FFB6C1 100%)',
+      zIndex: -1,
+      overflow: 'hidden'
+    }}>
+      {hearts.map((h, i) => (
+        <div key={i} className="floating-heart" style={{
+          left: h.left,
+          animationDuration: h.duration,
+          animationDelay: h.delay,
+          '--scale': h.scale,
+          '--max-opacity': h.opacity,
+        }}>
+          {i % 3 === 0 ? '💕' : i % 2 === 0 ? '💖' : '🌸'}
+        </div>
+      ))}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: isDark ? 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.6) 100%)' : 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(255,182,193,0.3) 100%)',
+        pointerEvents: 'none'
+      }} />
+    </div>
+  );
+};
 
 export default function CouplePhoneScreen() {
   const navigate = useNavigate();
@@ -10,6 +52,20 @@ export default function CouplePhoneScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [focused, setFocused] = useState(null);
+
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true;
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   const handleSubmit = async () => {
     if (phone.length !== 10) return setError('Enter valid 10-digit number');
@@ -27,35 +83,72 @@ export default function CouplePhoneScreen() {
   };
 
   return (
-    <Layout
-      title="Add Your Partner"
-      subtitle="Enter your partner's details"
-      showBack
-      onBack={() => navigate('/group-type')}
-    >
+    <>
+      <HeartBackground isDark={isDark} />
+      <Layout
+        showBack
+        onBack={() => navigate('/group-type')}
+      >
       <div style={{ maxWidth: 520, margin: '0 auto' }}>
         {/* Main Card */}
-        <div style={{
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF0F7 100%)',
-          borderRadius: 28,
-          padding: '44px 40px',
-          boxShadow: '0 20px 60px rgba(236, 72, 153, 0.12)',
-          border: '1px solid rgba(236, 72, 153, 0.15)',
+        <div className="couple-phone-card" style={{
+          background: isDark ? 'rgba(20, 10, 15, 0.7)' : 'rgba(255, 255, 255, 0.7)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          boxShadow: isDark ? '0 24px 80px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1)' : '0 24px 80px rgba(236, 72, 153, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.8)',
+          border: isDark ? '1px solid rgba(255, 182, 193, 0.1)' : '1px solid rgba(255, 182, 193, 0.5)',
+          position: 'relative',
+          overflow: 'hidden',
         }}>
+          {/* Subtle glow behind the card */}
+          <div style={{
+            position: 'absolute',
+            top: '-20%',
+            left: '-10%',
+            width: '60%',
+            height: '60%',
+            background: 'radial-gradient(circle, rgba(255,105,180,0.15) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
           {/* Icon */}
           <div style={{
-            width: 88,
-            height: 88,
-            background: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)',
-            borderRadius: 24,
+            width: 96,
+            height: 96,
+            background: 'linear-gradient(135deg, #FF69B4 0%, #FF1493 100%)',
+            borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 32px',
-            fontSize: 44,
-            boxShadow: '0 12px 40px rgba(236, 72, 153, 0.3)',
+            margin: '0 auto 36px',
+            fontSize: 48,
+            boxShadow: '0 16px 40px rgba(255, 20, 147, 0.4), inset 0 4px 12px rgba(255, 255, 255, 0.4)',
+            border: '4px solid #FFF',
+            position: 'relative',
+            animation: 'pulseHeart 2s infinite',
           }}>
             💑
+          </div>
+
+          {/* Title and Subtitle */}
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <h2 style={{
+              fontSize: 32,
+              fontWeight: 800,
+              color: isDark ? '#FF80AB' : '#C2185B',
+              marginBottom: 12,
+              letterSpacing: '-0.5px',
+            }}>
+              Link Your Hearts 💖
+            </h2>
+            <p style={{
+              fontSize: 16,
+              color: isDark ? '#FFB6C1' : '#D81B60',
+              lineHeight: 1.5,
+              fontWeight: 500,
+            }}>
+              Invite your partner to share this beautiful journey
+            </p>
           </div>
 
           {/* Name Input */}
@@ -105,15 +198,15 @@ export default function CouplePhoneScreen() {
             </label>
             <div style={{ display: 'flex', gap: 12 }}>
               <div style={{
-                background: 'linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%)',
-                border: '2px solid #FBCFE8',
+                background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%)',
+                border: isDark ? '2px solid rgba(255, 255, 255, 0.1)' : '2px solid #FBCFE8',
                 borderRadius: 14,
                 padding: '0 18px',
                 display: 'flex',
                 alignItems: 'center',
                 fontSize: 16,
                 fontWeight: 700,
-                color: '#EC4899',
+                color: isDark ? '#FFB6C1' : '#EC4899',
                 gap: 8,
               }}>
                 🇮🇳 +91
@@ -195,10 +288,10 @@ export default function CouplePhoneScreen() {
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }} />
-                Adding Partner...
+                Sending Love... 💕
               </>
             ) : (
-              'Continue'
+              'Send Love Invite 💌'
             )}
           </button>
         </div>
@@ -224,7 +317,35 @@ export default function CouplePhoneScreen() {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
+        @keyframes floatUp {
+          0% { transform: translateY(100vh) rotate(0deg) scale(var(--scale, 1)); opacity: 0; }
+          10% { opacity: var(--max-opacity, 0.6); }
+          90% { opacity: var(--max-opacity, 0.6); }
+          100% { transform: translateY(-20vh) rotate(360deg) scale(var(--scale, 1)); opacity: 0; }
+        }
+        @keyframes pulseHeart {
+          0%, 100% { transform: scale(1); box-shadow: 0 16px 40px rgba(255, 20, 147, 0.4), inset 0 4px 12px rgba(255, 255, 255, 0.4); }
+          50% { transform: scale(1.05); box-shadow: 0 20px 50px rgba(255, 20, 147, 0.6), inset 0 4px 12px rgba(255, 255, 255, 0.4); }
+        }
+        .floating-heart {
+          position: absolute;
+          bottom: -50px;
+          font-size: 32px;
+          animation: floatUp linear infinite;
+          filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
+        }
+        .couple-phone-card {
+          border-radius: 32px;
+          padding: 48px 40px;
+        }
+        @media (max-width: 640px) {
+          .couple-phone-card {
+            border-radius: 24px;
+            padding: 32px 24px;
+          }
+        }
       `}</style>
     </Layout>
+    </>
   );
 }

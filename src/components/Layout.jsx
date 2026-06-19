@@ -22,8 +22,23 @@ export default function Layout({ children, title, subtitle, titleColor, subtitle
       setIsDark(saved ? saved === "dark" : true);
     };
     window.addEventListener('themeChange', handleThemeChange);
+    // Initialize body class correctly on mount
+    if (isDark) document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
+    
     return () => window.removeEventListener('themeChange', handleThemeChange);
   }, []);
+
+  const toggleTheme = () => {
+    const newTheme = isDark ? "light" : "dark";
+    localStorage.setItem("theme", newTheme);
+    window.dispatchEvent(new Event('themeChange'));
+    if (newTheme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  };
 
   useEffect(() => {
     setPageLoaded(true);
@@ -55,7 +70,10 @@ export default function Layout({ children, title, subtitle, titleColor, subtitle
           paddingTop: scrolled ? '12px' : '20px',
           paddingBottom: scrolled ? '12px' : '20px',
           transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          borderBottom: scrolled ? (isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)') : '1px solid transparent',
+          borderBottom: scrolled ? (isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)') : '1px solid transparent',
+          boxShadow: scrolled 
+            ? (isDark ? '0 10px 40px rgba(255, 255, 255, 0.05), inset 0 -1px 0 rgba(255, 255, 255, 0.1)' : '0 10px 40px rgba(255, 20, 147, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.8)')
+            : (isDark ? '0 10px 40px rgba(255, 255, 255, 0.02)' : '0 10px 40px rgba(255, 20, 147, 0.05)'),
         }}
       >
         <div style={{
@@ -147,8 +165,55 @@ export default function Layout({ children, title, subtitle, titleColor, subtitle
             </div>
           </div>
 
-          {/* RIGHT: Help Action */}
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          {/* RIGHT: Theme Toggle & Help Action */}
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+            <button
+              onClick={toggleTheme}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 44,
+                height: 44,
+                background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)',
+                borderRadius: '50%',
+                color: isDark ? '#FFF' : '#11140F',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: isDark ? '0 4px 15px rgba(255, 255, 255, 0.05)' : '0 4px 15px rgba(0,0,0,0.1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+                e.currentTarget.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+              aria-label="Toggle Theme"
+            >
+              {isDark ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+              )}
+            </button>
+            
             <button
               style={{
                 display: 'flex',
@@ -180,10 +245,9 @@ export default function Layout({ children, title, subtitle, titleColor, subtitle
       </header>
 
       {/* Main Content Area */}
-      <main style={{
+      <main className="layout-main" style={{
         maxWidth: 900,
         margin: '0 auto',
-        padding: '48px 40px 100px',
         opacity: pageLoaded ? 1 : 0,
         transform: pageLoaded ? 'translateY(0)' : 'translateY(20px)',
         transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -275,6 +339,17 @@ export default function Layout({ children, title, subtitle, titleColor, subtitle
           © 2024 Reliv AI. All rights reserved.
         </p>
       </footer>
+
+      <style>{`
+        .layout-main {
+          padding: 48px 40px 100px;
+        }
+        @media (max-width: 640px) {
+          .layout-main {
+            padding: 24px 16px 80px;
+          }
+        }
+      `}</style>
     </div>
   );
 }
