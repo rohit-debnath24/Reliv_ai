@@ -1,12 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import SparkleBackground from '../components/SparkleBackground';
 
 export default function CategoryScreen() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const [hovered, setHovered] = useState(null);
   const [showCards, setShowCards] = useState(false);
+
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true;
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   // Check if hero training was selected
   const heroTraining = localStorage.getItem('heroTraining') === 'true';
@@ -105,13 +120,15 @@ export default function CategoryScreen() {
   };
 
   return (
-    <Layout
-      title="What are you here for?"
-      subtitle="Select your health goal"
-      showBack
-      onBack={() => navigate(-1)}
-    >
-      <div style={{ maxWidth: 700, margin: '0 auto' }}>
+    <>
+      <SparkleBackground />
+      <Layout
+        title="What are you here for?"
+        subtitle="Select your health goal"
+        showBack
+        onBack={() => navigate(-1)}
+      >
+        <div style={{ maxWidth: 700, margin: '0 auto' }}>
         {/* Categories Grid */}
         <div style={{
           display: 'grid',
@@ -126,11 +143,15 @@ export default function CategoryScreen() {
               onMouseEnter={() => setHovered(c.id)}
               onMouseLeave={() => setHovered(null)}
               style={{
-                background: selected === c.id
-                  ? c.isHeroTraining
-                    ? `linear-gradient(135deg, ${c.color}15 0%, ${c.color}25 100%)`
-                    : 'linear-gradient(135deg, #FFFFFF 0%, #FFF9F5 100%)'
-                  : 'var(--white)',
+                background: isDark 
+                  ? (selected === c.id 
+                      ? (c.isHeroTraining ? `rgba(20, 10, 15, 0.9)` : 'rgba(20, 10, 15, 0.9)')
+                      : 'rgba(0, 0, 0, 0.6)')
+                  : (selected === c.id 
+                      ? (c.isHeroTraining ? `linear-gradient(135deg, ${c.color}15 0%, ${c.color}25 100%)` : 'rgba(255, 255, 255, 0.95)')
+                      : 'rgba(255, 255, 255, 0.6)'),
+                backdropFilter: 'blur(30px)',
+                WebkitBackdropFilter: 'blur(30px)',
                 borderRadius: 20,
                 padding: c.isHeroTraining ? '32px 24px' : '28px 24px',
                 cursor: 'pointer',
@@ -139,14 +160,14 @@ export default function CategoryScreen() {
                   ? `3px solid ${c.color}`
                   : c.isHeroTraining
                     ? `2px solid ${c.color}50`
-                    : '2px solid #E5E7EB',
+                    : (isDark ? '2px solid rgba(255, 255, 255, 0.1)' : '2px solid rgba(240, 105, 34, 0.1)'),
                 boxShadow: selected === c.id
-                  ? `0 16px 50px ${c.color}25`
+                  ? (isDark ? `0 0 40px ${c.color}40, inset 0 0 0 1px ${c.color}50` : `0 0 40px ${c.color}30, inset 0 0 0 1px ${c.color}`)
                   : hovered === c.id
-                    ? '0 12px 40px rgba(0,0,0,0.1)'
+                    ? (isDark ? '0 12px 40px rgba(0,0,0,0.6)' : '0 12px 40px rgba(240, 105, 34, 0.15)')
                     : c.isHeroTraining
                       ? `0 8px 30px ${c.color}15`
-                      : '0 4px 20px rgba(0,0,0,0.04)',
+                      : (isDark ? '0 4px 20px rgba(0,0,0,0.4)' : '0 4px 20px rgba(240, 105, 34, 0.05)'),
                 transform: showCards
                   ? selected === c.id
                     ? 'scale(1.03)'
@@ -222,7 +243,7 @@ export default function CategoryScreen() {
               <h3 style={{
                 fontSize: c.isHeroTraining ? 20 : 17,
                 fontWeight: 700,
-                color: selected === c.id ? c.color : '#111',
+                color: selected === c.id ? c.color : (isDark ? '#FFF' : '#111'),
                 marginBottom: 6,
               }}>
                 {c.title}
@@ -231,7 +252,7 @@ export default function CategoryScreen() {
               {/* Description */}
               <p style={{
                 fontSize: 13,
-                color: '#666',
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
                 lineHeight: 1.4,
               }}>
                 {c.desc}
@@ -264,19 +285,21 @@ export default function CategoryScreen() {
             background: selected
               ? selected === 'hero-training' && currentHero
                 ? `linear-gradient(135deg, ${currentHero.color} 0%, ${currentHero.color}dd 100%)`
-                : 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)'
-              : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
+                : (isDark ? 'var(--white)' : 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)')
+              : (isDark ? 'rgba(0, 0, 0, 0.6)' : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)'),
             border: 'none',
             borderRadius: 16,
             padding: '20px',
             fontSize: 18,
-            fontWeight: 700,
-            color: selected ? 'var(--white)' : 'var(--gray-400)',
+            fontWeight: 800,
+            color: selected 
+              ? (isDark && selected !== 'hero-training' ? 'var(--primary)' : 'var(--white)') 
+              : (isDark ? 'rgba(255,255,255,0.4)' : 'var(--gray-400)'),
             cursor: selected ? 'pointer' : 'not-allowed',
             boxShadow: selected
               ? selected === 'hero-training' && currentHero
                 ? `0 10px 40px ${currentHero.color}40`
-                : '0 10px 40px rgba(240, 105, 34, 0.35)'
+                : (isDark ? '0 12px 40px rgba(255,255,255,0.2)' : '0 10px 40px rgba(240, 105, 34, 0.35)')
               : 'none',
             transition: 'all 0.3s ease',
           }}
@@ -285,5 +308,6 @@ export default function CategoryScreen() {
         </button>
       </div>
     </Layout>
+    </>
   );
 }
