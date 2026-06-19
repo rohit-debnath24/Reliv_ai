@@ -3,6 +3,83 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import SparkleBackground from '../components/SparkleBackground';
 
+const SVGIcons = {
+  muscle: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.4 14.4l5.6-5.6A2.83 2.83 0 0016 4.8l-5.6 5.6M8.5 8.5L3.5 13.5M15.5 15.5l5 5M4.8 16a2.83 2.83 0 004 4l5.6-5.6-9.6-9.6z" />
+    </svg>
+  ),
+  weight: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0017 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 00-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06z" />
+      <path d="M10 2c1 .5 2 2 2 5" />
+    </svg>
+  ),
+  skin: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9.937 15.5A2 2 0 008.5 14.063l-6.135-1.582a.5.5 0 010-.962L8.5 9.936A2 2 0 009.936 8.5l1.582-6.135a.5.5 0 01.963 0L14.063 8.5A2 2 0 0015.5 9.937l6.135 1.581a.5.5 0 010 .964L15.5 14.063a2 2 0 00-1.437 1.437l-1.582 6.135a.5.5 0 01-.963 0z" />
+    </svg>
+  ),
+  firstaid: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+      <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+      <path d="M12 10v6M9 13h6" />
+    </svg>
+  ),
+  general: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.42 4.58a5.4 5.4 0 00-7.65 0l-.77.78-.77-.78a5.4 5.4 0 00-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z" />
+      <path d="M3.6 9h3.39L9 12l2-6 2 3h4" />
+    </svg>
+  ),
+  soccer: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 12l3-2 1.5 4.5h-5z" />
+      <path d="M12 12L9 8h6z" />
+      <path d="M12 12l-4.5 1 2 4z" />
+    </svg>
+  ),
+  trophy: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9H4.5a2.5 2.5 0 010-5H6" />
+      <path d="M18 9h1.5a2.5 2.5 0 000-5H18" />
+      <path d="M4 22h16" />
+      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+      <path d="M18 2H6v7a6 6 0 0012 0V2z" />
+    </svg>
+  ),
+  star: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  ),
+  shield: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  ),
+  target: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="12" r="6" />
+      <circle cx="12" cy="12" r="2" />
+    </svg>
+  ),
+  crown: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" />
+    </svg>
+  ),
+  zap: (
+    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  )
+};
+
 export default function CategoryScreen() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
@@ -30,15 +107,15 @@ export default function CategoryScreen() {
 
   // Get hero-specific data
   const heroData = {
-    'ronaldo': { icon: '⚽', color: '#16A34A', desc: 'CR7 Performance Routine - Speed & Stamina' },
-    'messi': { icon: '🐐', color: '#3B82F6', desc: 'The Magician\'s Routine - Agility & Mind' },
-    'neymar': { icon: '🌟', color: '#8B5CF6', desc: 'Skill Master Routine - Flexibility' },
-    'dhoni': { icon: '🏏', color: '#1E40AF', desc: 'Captain Cool Routine - Leadership & Focus' },
-    'kohli': { icon: '💪', color: '#DC2626', desc: 'King Kohli Routine - Fitness & Intensity' },
-    'rohit': { icon: '🎯', color: '#0891B2', desc: 'Hitman Routine - Balance & Power' },
-    'srk': { icon: '👑', color: '#F59E0B', desc: 'King Khan Transformation - Discipline' },
-    'salman': { icon: '💪', color: '#EF4444', desc: 'Bhai Workout - Muscle Building' },
-    'akshay': { icon: '🥋', color: '#F97316', desc: 'Khiladi Routine - Martial Arts' },
+    'ronaldo': { icon: SVGIcons.soccer, color: '#16A34A', desc: 'CR7 Performance Routine - Speed & Stamina' },
+    'messi': { icon: SVGIcons.trophy, color: '#3B82F6', desc: 'The Magician\'s Routine - Agility & Mind' },
+    'neymar': { icon: SVGIcons.star, color: '#8B5CF6', desc: 'Skill Master Routine - Flexibility' },
+    'dhoni': { icon: SVGIcons.shield, color: '#1E40AF', desc: 'Captain Cool Routine - Leadership & Focus' },
+    'kohli': { icon: SVGIcons.muscle, color: '#DC2626', desc: 'King Kohli Routine - Fitness & Intensity' },
+    'rohit': { icon: SVGIcons.target, color: '#0891B2', desc: 'Hitman Routine - Balance & Power' },
+    'srk': { icon: SVGIcons.crown, color: '#F59E0B', desc: 'King Khan Transformation - Discipline' },
+    'salman': { icon: SVGIcons.muscle, color: '#EF4444', desc: 'Bhai Workout - Muscle Building' },
+    'akshay': { icon: SVGIcons.zap, color: '#F97316', desc: 'Khiladi Routine - Martial Arts' },
   };
 
   const currentHero = heroData[selectedCelebrity] || null;
@@ -49,35 +126,35 @@ export default function CategoryScreen() {
       id: 'muscle',
       title: 'Build Muscle / Abs',
       desc: 'Get stronger and build your dream body',
-      icon: '💪',
+      icon: SVGIcons.muscle,
       color: '#3B82F6',
     },
     {
       id: 'weight-loss',
       title: 'Lose Weight / Diet',
       desc: 'Burn fat and get lean',
-      icon: '🥗',
+      icon: SVGIcons.weight,
       color: '#22C55E',
     },
     {
       id: 'acne',
       title: 'Clear Acne / Skin',
       desc: 'Get clear, glowing skin',
-      icon: '🧴',
+      icon: SVGIcons.skin,
       color: '#EC4899',
     },
     {
       id: 'first-aid',
       title: 'First Aid / Quick Help',
       desc: 'Burns, cuts, headaches - instant remedies',
-      icon: '🩹',
+      icon: SVGIcons.firstaid,
       color: '#EF4444',
     },
     {
       id: 'general',
       title: 'General Health',
       desc: 'Overall wellness and daily health tips',
-      icon: '💊',
+      icon: SVGIcons.general,
       color: '#8B5CF6',
     },
   ];
@@ -228,15 +305,19 @@ export default function CategoryScreen() {
               <div style={{
                 width: c.isHeroTraining ? 80 : 70,
                 height: c.isHeroTraining ? 80 : 70,
-                background: `linear-gradient(135deg, ${c.color}15 0%, ${c.color}25 100%)`,
+                background: isDark ? `rgba(255, 255, 255, 0.05)` : `linear-gradient(135deg, ${c.color}15 0%, ${c.color}25 100%)`,
                 borderRadius: 20,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 16px',
-                fontSize: c.isHeroTraining ? 40 : 34,
+                color: c.color,
+                boxShadow: isDark ? `0 4px 15px ${c.color}30` : 'none',
+                border: isDark ? `1px solid ${c.color}40` : 'none',
               }}>
-                {c.icon}
+                <div style={{ transform: c.isHeroTraining ? 'scale(1.2)' : 'scale(1.1)' }}>
+                  {c.icon}
+                </div>
               </div>
 
               {/* Title */}

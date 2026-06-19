@@ -3,19 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { api } from '../utils/constants';
 
-const HeartBackground = ({ isDark }) => {
-  const [hearts, setHearts] = useState([]);
-  
-  useEffect(() => {
-    setHearts([...Array(20)].map((_, i) => ({
-      left: `${Math.random() * 100}%`,
-      duration: `${10 + Math.random() * 15}s`,
-      delay: `${-Math.random() * 15}s`,
-      scale: 0.5 + Math.random() * 1.5,
-      opacity: 0.3 + Math.random() * 0.5,
-    })));
-  }, []);
+const HeartSVG = ({ width = 100, style = {} }) => (
+  <svg viewBox="0 0 32 29.6" width={width} style={{ filter: 'drop-shadow(0 15px 15px rgba(213, 0, 50, 0.3))', ...style }}>
+    <defs>
+      <radialGradient id="heartGrad" cx="30%" cy="30%" r="70%">
+        <stop offset="0%" stopColor="#ff4b72" />
+        <stop offset="60%" stopColor="#d50032" />
+        <stop offset="100%" stopColor="#8a0020" />
+      </radialGradient>
+    </defs>
+    <path fill="url(#heartGrad)" d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2 c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+  </svg>
+);
 
+const HangingHeartsBackground = ({ isDark }) => {
   return (
     <div style={{
       position: 'fixed',
@@ -24,23 +25,18 @@ const HeartBackground = ({ isDark }) => {
       zIndex: -1,
       overflow: 'hidden'
     }}>
-      {hearts.map((h, i) => (
-        <div key={i} className="floating-heart" style={{
-          left: h.left,
-          animationDuration: h.duration,
-          animationDelay: h.delay,
-          '--scale': h.scale,
-          '--max-opacity': h.opacity,
-        }}>
-          {i % 3 === 0 ? '💕' : i % 2 === 0 ? '💖' : '🌸'}
-        </div>
-      ))}
       <div style={{
         position: 'absolute',
         inset: 0,
         background: isDark ? 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.6) 100%)' : 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(255,182,193,0.3) 100%)',
         pointerEvents: 'none'
       }} />
+      <div className="hanging-heart" style={{ left: '10%', height: '35%', animationDelay: '0s' }}><div className="string"></div><HeartSVG width={45} /></div>
+      <div className="hanging-heart" style={{ left: '22%', height: '50%', animationDelay: '-2s' }}><div className="string"></div><HeartSVG width={60} /></div>
+      <div className="hanging-heart" style={{ left: '34%', height: '25%', animationDelay: '-4s' }}><div className="string"></div><HeartSVG width={40} /></div>
+      <div className="hanging-heart" style={{ right: '10%', height: '40%', animationDelay: '-1s' }}><div className="string"></div><HeartSVG width={50} /></div>
+      <div className="hanging-heart" style={{ right: '22%', height: '55%', animationDelay: '-3s' }}><div className="string"></div><HeartSVG width={65} /></div>
+      <div className="hanging-heart" style={{ right: '34%', height: '30%', animationDelay: '-5s' }}><div className="string"></div><HeartSVG width={45} /></div>
     </div>
   );
 };
@@ -84,7 +80,7 @@ export default function CouplePhoneScreen() {
 
   return (
     <>
-      <HeartBackground isDark={isDark} />
+      <HangingHeartsBackground isDark={isDark} />
       <Layout
         showBack
         onBack={() => navigate('/group-type')}
@@ -317,22 +313,27 @@ export default function CouplePhoneScreen() {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        @keyframes floatUp {
-          0% { transform: translateY(100vh) rotate(0deg) scale(var(--scale, 1)); opacity: 0; }
-          10% { opacity: var(--max-opacity, 0.6); }
-          90% { opacity: var(--max-opacity, 0.6); }
-          100% { transform: translateY(-20vh) rotate(360deg) scale(var(--scale, 1)); opacity: 0; }
+        .hanging-heart {
+          position: absolute;
+          top: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          transform-origin: top center;
+          animation: swing 6s ease-in-out infinite;
+        }
+        .string {
+          width: 1.5px;
+          flex-grow: 1;
+          background: #d50032;
+        }
+        @keyframes swing {
+          0%, 100% { transform: rotate(-5deg); }
+          50% { transform: rotate(5deg); }
         }
         @keyframes pulseHeart {
           0%, 100% { transform: scale(1); box-shadow: 0 16px 40px rgba(255, 20, 147, 0.4), inset 0 4px 12px rgba(255, 255, 255, 0.4); }
           50% { transform: scale(1.05); box-shadow: 0 20px 50px rgba(255, 20, 147, 0.6), inset 0 4px 12px rgba(255, 255, 255, 0.4); }
-        }
-        .floating-heart {
-          position: absolute;
-          bottom: -50px;
-          font-size: 32px;
-          animation: floatUp linear infinite;
-          filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
         }
         .couple-phone-card {
           border-radius: 32px;
