@@ -1,12 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Silk from './Silk';
+import SparkleBackground from '../components/SparkleBackground';
 
 export default function FriendSizeScreen() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
+
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true;
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
 
   const options = [
     { value: 2, label: 'Me + 1 Friend', emoji: '👥', price: '₹49', perPerson: '₹24.50' },
@@ -27,20 +41,10 @@ export default function FriendSizeScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
-        <Silk
-          speed={5}
-          scale={1}
-          color="#ff6627"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
-      </div>
+      <SparkleBackground />
       <Layout
         title="How Many Friends?"
         subtitle="Select your squad size"
-        titleColor="#ffffff"
-        subtitleColor="rgba(255, 255, 255, 0.9)"
         showBack
         onBack={() => navigate('/group-type')}
       >
@@ -130,11 +134,11 @@ export default function FriendSizeScreen() {
                 key={opt.value}
                 onClick={() => setSelected(opt.value)}
                 style={{
-                  background: selected === opt.value
-                    ? 'rgba(0, 0, 0, 0.7)'
-                    : 'rgba(0, 0, 0, 0.4)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
+                  background: isDark
+                    ? (selected === opt.value ? 'rgba(20, 10, 15, 0.8)' : 'rgba(0, 0, 0, 0.6)')
+                    : (selected === opt.value ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.6)'),
+                  backdropFilter: 'blur(30px)',
+                  WebkitBackdropFilter: 'blur(30px)',
                   borderRadius: 18,
                   padding: '24px 28px',
                   display: 'flex',
@@ -143,10 +147,10 @@ export default function FriendSizeScreen() {
                   cursor: 'pointer',
                   border: selected === opt.value
                     ? '2px solid var(--primary)'
-                    : '1px solid rgba(255, 255, 255, 0.1)',
+                    : (isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(240, 105, 34, 0.1)'),
                   boxShadow: selected === opt.value
-                    ? 'var(--shadow-glow)'
-                    : '0 4px 15px rgba(0,0,0,0.2)',
+                    ? (isDark ? '0 0 40px rgba(240, 105, 34, 0.3), inset 0 0 0 1px rgba(240, 105, 34, 0.4)' : '0 0 40px rgba(240, 105, 34, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 1)')
+                    : (isDark ? '0 8px 32px rgba(0,0,0,0.4)' : '0 8px 32px rgba(240, 105, 34, 0.05)'),
                   transform: showOptions
                     ? selected === opt.value ? 'scale(1.02)' : 'scale(1)'
                     : 'translateX(-20px)',
@@ -160,7 +164,7 @@ export default function FriendSizeScreen() {
                   width: 28,
                   height: 28,
                   borderRadius: '50%',
-                  border: selected === opt.value ? 'none' : '2px solid rgba(255, 255, 255, 0.5)',
+                  border: selected === opt.value ? 'none' : (isDark ? '2px solid rgba(255, 255, 255, 0.5)' : '2px solid rgba(0, 0, 0, 0.2)'),
                   background: selected === opt.value
                     ? 'linear-gradient(135deg, #F06922 0%, #D95319 100%)'
                     : 'transparent',
@@ -178,18 +182,18 @@ export default function FriendSizeScreen() {
 
                 {/* Content */}
                 <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: 17, fontWeight: 700, color: '#fff', marginBottom: 4 }}>
+                  <p style={{ fontSize: 17, fontWeight: 700, color: isDark ? '#fff' : '#111', marginBottom: 4 }}>
                     {opt.label}
                   </p>
-                  <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.8)', fontWeight: 600 }}>
+                  <p style={{ fontSize: 13, color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.6)', fontWeight: 600 }}>
                     {opt.perPerson} per person
                   </p>
                 </div>
 
                 {/* Price */}
                 <div style={{ textAlign: 'right' }}>
-                  <p style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>{opt.price}</p>
-                  <p style={{ fontSize: 12, color: 'rgba(255, 255, 255, 0.6)' }}>total/week</p>
+                  <p style={{ fontSize: 22, fontWeight: 800, color: isDark ? '#fff' : '#111' }}>{opt.price}</p>
+                  <p style={{ fontSize: 12, color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)' }}>total/week</p>
                 </div>
               </div>
             ))}
@@ -203,14 +207,14 @@ export default function FriendSizeScreen() {
               width: '100%',
               background: selected
                 ? 'linear-gradient(135deg, #F06922 0%, #D95319 100%)'
-                : 'rgba(255, 255, 255, 0.2)',
+                : (isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.05)'),
               backdropFilter: selected ? 'none' : 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)',
               borderRadius: 16,
               padding: '20px',
               fontSize: 18,
               fontWeight: 700,
-              color: selected ? 'var(--white)' : 'rgba(255, 255, 255, 0.4)',
+              color: selected ? 'var(--white)' : (isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.3)'),
               cursor: selected ? 'pointer' : 'not-allowed',
               boxShadow: selected ? '0 10px 40px rgba(240, 105, 34, 0.35)' : 'none',
               transition: 'all 0.3s ease',

@@ -1,11 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import Silk from './Silk';
+import SparkleBackground from '../components/SparkleBackground';
 
 export default function WeeklyFriendsPayScreen() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    return saved ? saved === "dark" : true;
+  });
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDark(saved ? saved === "dark" : true);
+    };
+    window.addEventListener('themeChange', handleThemeChange);
+    return () => window.removeEventListener('themeChange', handleThemeChange);
+  }, []);
+
   const friendCount = parseInt(localStorage.getItem('friendCount') || '3');
 
   const pricing = {
@@ -28,31 +43,21 @@ export default function WeeklyFriendsPayScreen() {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
-        <Silk
-          speed={5}
-          scale={1}
-          color="#ff6627"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
-      </div>
+      <SparkleBackground />
       <Layout
         title="Friends Weekly Plan"
         subtitle={`Your squad of ${friendCount} is ready to transform!`}
-        titleColor="#ffffff"
-        subtitleColor="rgba(255, 255, 255, 0.9)"
         showBack
         onBack={() => navigate('/friend-questions')}
       >
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
         <div className="main-card-padding" style={{
-          background: 'rgba(0, 0, 0, 0.4)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+          background: isDark ? 'rgba(20, 10, 15, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(30px)',
+          WebkitBackdropFilter: 'blur(30px)',
           borderRadius: 28,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: isDark ? '0 0 60px rgba(240, 105, 34, 0.25), inset 0 0 0 1px rgba(240, 105, 34, 0.35)' : '0 0 60px rgba(240, 105, 34, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 1)',
+          border: 'none',
           marginBottom: 28,
           animation: 'slideUpFade 0.6s ease-out forwards',
         }}>
@@ -63,27 +68,27 @@ export default function WeeklyFriendsPayScreen() {
             gap: 'clamp(12px, 3vw, 20px)',
             marginBottom: 32,
             paddingBottom: 28,
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)',
           }}>
             <div style={{
               width: 72,
               height: 72,
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(240, 105, 34, 0.1)',
               borderRadius: 20,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#FFF',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              color: isDark ? '#FFF' : 'var(--primary)',
+              border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(240, 105, 34, 0.2)',
               animation: 'pulseGlow 3s ease-in-out infinite',
             }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800, color: '#FFF', marginBottom: 4 }}>
+              <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800, color: isDark ? '#FFF' : 'var(--gray-900)', marginBottom: 4 }}>
                 Squad of {friendCount}
               </h2>
-              <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: 'rgba(255, 255, 255, 0.7)' }}>
+              <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--gray-600)' }}>
                 All members covered • Valid 7 days
               </p>
             </div>
@@ -91,12 +96,12 @@ export default function WeeklyFriendsPayScreen() {
               <div style={{
                 fontSize: 'clamp(28px, 6vw, 36px)',
                 fontWeight: 800,
-                color: '#FFF',
+                color: isDark ? '#FFF' : 'var(--gray-900)',
                 lineHeight: 1,
               }}>
                 ₹{total}
               </div>
-              <div style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.5)', fontWeight: 600 }}>
+              <div style={{ fontSize: 13, color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'var(--gray-500)', fontWeight: 600 }}>
                 total per week
               </div>
             </div>
@@ -116,13 +121,13 @@ export default function WeeklyFriendsPayScreen() {
                 style={{
                   width: 56,
                   height: 56,
-                  background: i === 0 ? 'var(--white)' : 'rgba(255, 255, 255, 0.1)',
+                  background: i === 0 ? (isDark ? 'var(--white)' : 'var(--primary)') : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(240, 105, 34, 0.1)'),
                   borderRadius: 16,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: i === 0 ? 'var(--primary)' : 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: i === 0 ? (isDark ? 'var(--primary)' : '#FFF') : (isDark ? 'rgba(255, 255, 255, 0.8)' : 'var(--primary)'),
+                  border: i === 0 ? 'none' : (isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(240, 105, 34, 0.2)'),
                   animation: 'float 3s ease-in-out infinite',
                   animationDelay: `${i * 0.2}s`,
                   boxShadow: i === 0 ? 'var(--shadow-glow)' : 'none',
@@ -156,16 +161,16 @@ export default function WeeklyFriendsPayScreen() {
                   alignItems: 'center',
                   gap: 16,
                   padding: '16px 20px',
-                  background: 'rgba(0, 0, 0, 0.4)',
+                  background: isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.6)',
                   borderRadius: 16,
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(240, 105, 34, 0.1)',
                   opacity: 0,
                   animation: 'slideUpFade 0.5s ease-out forwards',
                   animationDelay: `${0.3 + (i * 0.1)}s`,
                 }}
               >
-                <span style={{ color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 24 }}>{f.icon}</span>
-                <span style={{ fontSize: 14, color: 'rgba(255, 255, 255, 0.9)', fontWeight: 600 }}>{f.text}</span>
+                <span style={{ color: isDark ? '#FFFFFF' : 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 24 }}>{f.icon}</span>
+                <span style={{ fontSize: 14, color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'var(--gray-800)', fontWeight: 600 }}>{f.text}</span>
               </div>
             ))}
           </div>
@@ -189,10 +194,10 @@ export default function WeeklyFriendsPayScreen() {
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             </span>
             <div>
-              <p style={{ fontSize: 15, fontWeight: 800, color: '#34D399', margin: '0 0 4px 0' }}>
+              <p style={{ fontSize: 15, fontWeight: 800, color: '#059669', margin: '0 0 4px 0' }}>
                 Only ₹{perPerson.toFixed(0)} per person
               </p>
-              <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.7)', margin: 0, fontWeight: 500 }}>
+              <p style={{ fontSize: 13, color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'var(--gray-700)', margin: 0, fontWeight: 600 }}>
                 Split equally among {friendCount} friends!
               </p>
             </div>
@@ -204,15 +209,15 @@ export default function WeeklyFriendsPayScreen() {
             disabled={loading}
             style={{
               width: '100%',
-              background: 'var(--white)',
+              background: isDark ? 'var(--white)' : 'var(--primary)',
               border: 'none',
               borderRadius: 16,
               padding: '22px',
               fontSize: 18,
               fontWeight: 800,
-              color: 'var(--primary)',
+              color: isDark ? 'var(--primary)' : '#FFF',
               cursor: loading ? 'wait' : 'pointer',
-              boxShadow: '0 12px 40px rgba(255, 255, 255, 0.2)',
+              boxShadow: isDark ? '0 12px 40px rgba(255, 255, 255, 0.2)' : 'var(--shadow-glow)',
               transition: 'all 0.3s ease',
               display: 'flex',
               alignItems: 'center',
@@ -245,11 +250,12 @@ export default function WeeklyFriendsPayScreen() {
         <div style={{
           textAlign: 'center',
           fontSize: 13,
-          color: 'rgba(255,255,255,0.5)',
+          color: isDark ? 'rgba(255,255,255,0.5)' : 'var(--gray-500)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: 8,
+          fontWeight: 600,
         }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Secure payment via Razorpay
