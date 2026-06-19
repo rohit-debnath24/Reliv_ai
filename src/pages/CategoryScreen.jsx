@@ -358,35 +358,38 @@ export default function CategoryScreen() {
         </div>
 
         {/* Continue Button */}
-        <button
-          onClick={handleContinue}
-          disabled={!selected}
-          style={{
-            width: '100%',
-            background: selected
-              ? selected === 'hero-training' && currentHero
-                ? `linear-gradient(135deg, ${currentHero.color} 0%, ${currentHero.color}dd 100%)`
-                : (isDark ? 'var(--white)' : 'linear-gradient(135deg, #F06922 0%, #E85C25 100%)')
-              : (isDark ? 'rgba(0, 0, 0, 0.6)' : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)'),
-            border: 'none',
-            borderRadius: 16,
-            padding: '20px',
-            fontSize: 18,
-            fontWeight: 800,
-            color: selected 
-              ? (isDark && selected !== 'hero-training' ? 'var(--primary)' : 'var(--white)') 
-              : (isDark ? 'rgba(255,255,255,0.4)' : 'var(--gray-400)'),
-            cursor: selected ? 'pointer' : 'not-allowed',
-            boxShadow: selected
-              ? selected === 'hero-training' && currentHero
-                ? `0 10px 40px ${currentHero.color}40`
-                : (isDark ? '0 12px 40px rgba(255,255,255,0.2)' : '0 10px 40px rgba(240, 105, 34, 0.35)')
-              : 'none',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          {selected === 'hero-training' ? `Start ${celebrityName} Challenge →` : 'Continue →'}
-        </button>
+        {(() => {
+          const activeCat = categories.find(c => c.id === selected);
+          const activeColor = activeCat ? activeCat.color : '#F06922';
+          
+          return (
+            <button
+              onClick={handleContinue}
+              disabled={!selected}
+              style={{
+                width: '100%',
+                background: selected
+                  ? `linear-gradient(135deg, ${activeColor} 0%, ${activeColor}dd 100%)`
+                  : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)'),
+                border: selected ? 'none' : (isDark ? '1px solid rgba(255,255,255,0.1)' : 'none'),
+                borderRadius: 16,
+                padding: '20px',
+                fontSize: 18,
+                fontWeight: 800,
+                color: selected 
+                  ? '#FFF'
+                  : (isDark ? 'rgba(255,255,255,0.3)' : 'var(--gray-400)'),
+                cursor: selected ? 'pointer' : 'not-allowed',
+                boxShadow: selected
+                  ? (isDark ? `0 12px 40px ${activeColor}50` : `0 10px 30px ${activeColor}40`)
+                  : 'none',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              {selected === 'hero-training' ? `Start ${celebrityName} Challenge →` : 'Continue →'}
+            </button>
+          );
+        })()}
       </div>
     </Layout>
     </>
