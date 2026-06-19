@@ -175,8 +175,14 @@ export default function CoupleQuestionsScreen() {
             </p>
           </div>
 
-        {/* Progress */}
-        <div style={{ marginBottom: 32 }}>
+        {/* Progress Card */}
+        <div className="progress-glass-card" style={{
+          background: isDark ? 'rgba(20, 10, 15, 0.7)' : 'rgba(255, 255, 255, 0.85)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          marginBottom: 32,
+          boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1)' : '0 8px 30px rgba(213, 0, 50, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.9)',
+        }}>
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -329,6 +335,10 @@ export default function CoupleQuestionsScreen() {
           border-radius: 24px;
           padding: 24px;
         }
+        .progress-glass-card {
+          border-radius: 24px;
+          padding: 20px 24px;
+        }
         .question-glass-card {
           border-radius: 24px;
           padding: 40px 36px;
@@ -345,6 +355,11 @@ export default function CoupleQuestionsScreen() {
           }
           .title-glass-card p {
             font-size: 14px !important;
+          }
+          .progress-glass-card {
+            border-radius: 20px;
+            padding: 16px 20px;
+            margin-bottom: 24px !important;
           }
           .question-glass-card {
             border-radius: 20px;
