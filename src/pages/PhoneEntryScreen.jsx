@@ -58,6 +58,8 @@ export default function PhoneEntryScreen() {
           transition: background 0.3s ease;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           box-sizing: border-box;
+          position: relative;
+          overflow-x: hidden;
         }
         
         .phone-container {
@@ -70,6 +72,8 @@ export default function PhoneEntryScreen() {
           animation: fadeIn 0.4s ease-out;
           box-sizing: border-box;
           padding: 40px 24px;
+          position: relative;
+          z-index: 1;
         }
 
         /* Native Mobile Viewports */
@@ -81,6 +85,45 @@ export default function PhoneEntryScreen() {
           .page-wrapper {
             align-items: flex-start;
           }
+        }
+
+        /* Dust roaming effect styles */
+        .dust {
+          position: absolute;
+          bottom: -20px;
+          width: 4px;
+          height: 4px;
+          background: ${isDark ? 'rgba(255, 230, 200, 0.6)' : 'rgba(240, 105, 34, 0.5)'};
+          border-radius: 50%;
+          box-shadow: 0 0 8px ${isDark ? 'rgba(240, 105, 34, 0.8)' : 'rgba(240, 105, 34, 0.4)'};
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        .dust:nth-child(odd) { animation: float-dust-1 12s linear infinite; }
+        .dust:nth-child(even) { animation: float-dust-2 15s linear infinite; }
+
+        .dust.d1 { left: 10%; animation-delay: 0s; animation-duration: 14s; }
+        .dust.d2 { left: 25%; animation-delay: 3s; animation-duration: 18s; }
+        .dust.d3 { left: 40%; animation-delay: 1s; animation-duration: 15s; }
+        .dust.d4 { left: 55%; animation-delay: 5s; animation-duration: 20s; }
+        .dust.d5 { left: 70%; animation-delay: 2s; animation-duration: 13s; }
+        .dust.d6 { left: 85%; animation-delay: 6s; animation-duration: 17s; }
+        .dust.d7 { left: 45%; animation-delay: 4s; animation-duration: 16s; }
+        .dust.d8 { left: 90%; animation-delay: 8s; animation-duration: 22s; }
+
+        @keyframes float-dust-1 {
+          0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+          15% { opacity: 0.7; }
+          85% { opacity: 0.7; }
+          100% { transform: translate(40px, -105vh) scale(1.2); opacity: 0; }
+        }
+
+        @keyframes float-dust-2 {
+          0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+          15% { opacity: 0.6; }
+          85% { opacity: 0.6; }
+          100% { transform: translate(-40px, -105vh) scale(1.5); opacity: 0; }
         }
 
         @keyframes spin {
@@ -95,6 +138,13 @@ export default function PhoneEntryScreen() {
           color: ${isDark ? '#4E5361' : '#9CA3AF'} !important;
         }
       `}</style>
+
+      {/* Floating Dust Wrapper Behind Content */}
+      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+        {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+          <div key={i} className={`dust d${i}`}></div>
+        ))}
+      </div>
 
       <div className="phone-container">
         
