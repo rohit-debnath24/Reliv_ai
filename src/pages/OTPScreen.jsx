@@ -493,12 +493,12 @@ export default function OTPScreen() {
               background: isComplete 
                 ? (success 
                   ? '#22C55E' 
-                  : (isDark ? '#1C1F26' : '#FFFFFF'))
+                  : '#F06922')
                 : (isDark ? '#12141A' : '#F3F4F6'),
               border: isComplete 
                 ? (success 
                   ? '1px solid #22C55E' 
-                  : (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #CBD5E1'))
+                  : '1px solid #F06922')
                 : (isDark ? '1px solid #23262F' : '1px solid #E5E7EB'),
               borderRadius: '16px',
               padding: '16px 20px',
@@ -514,18 +514,18 @@ export default function OTPScreen() {
               fontWeight: '700',
               fontSize: '15px',
               boxShadow: isComplete 
-                ? (isDark ? '0 4px 12px rgba(0,0,0,0.2)' : '0 4px 12px rgba(0,0,0,0.05)') 
+                ? '0 4px 12px rgba(240, 105, 34, 0.2)' 
                 : 'none',
             }}
             onMouseEnter={(e) => {
               if (isComplete && !loading && !success) {
-                e.currentTarget.style.background = isDark ? '#2A2D36' : '#F9FAFB';
+                e.currentTarget.style.background = '#E85C25';
                 e.currentTarget.style.transform = 'translateY(-1px)';
               }
             }}
             onMouseLeave={(e) => {
               if (isComplete && !loading && !success) {
-                e.currentTarget.style.background = isDark ? '#1C1F26' : '#FFFFFF';
+                e.currentTarget.style.background = '#F06922';
                 e.currentTarget.style.transform = 'translateY(0)';
               }
             }}
