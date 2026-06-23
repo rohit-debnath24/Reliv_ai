@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
-import { C, api } from '../utils/constants';
+import { api } from '../utils/constants';
 
 export default function PhoneEntryScreen() {
   const navigate = useNavigate();
@@ -47,223 +46,387 @@ export default function PhoneEntryScreen() {
   };
 
   return (
-    <>
-      <div className={isDark ? 'dark-mode' : 'light-mode'} style={{ 
-        position: 'fixed', 
-        inset: 0, 
-        zIndex: -1, 
-        overflow: 'hidden', 
-        background: isDark ? '#11140F' : '#F9F6F0',
-        transition: 'background 0.4s ease'
-      }}>
-        {/* Left Spotlight */}
-        <div className="spotlight-lamp left">
-          <div className="lamp-wire"></div>
-          <div className="lamp-head"></div>
-          <div className="lamp-cone">
-            <div className="lamp-beam"></div>
-            <div className="lamp-dust-wrapper">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                <div key={i} className={`dust d${i}`}></div>
-              ))}
-            </div>
-          </div>
-        </div>
+    <div className="page-wrapper">
+      <style>{`
+        .page-wrapper {
+          min-height: 100vh;
+          width: 100%;
+          background: ${isDark ? '#0C0D11' : '#F4F5F8'};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.3s ease;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          box-sizing: border-box;
+        }
+        
+        .phone-container {
+          width: 100%;
+          max-width: 600px;
+          color: ${isDark ? '#FFFFFF' : '#111827'};
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+          animation: fadeIn 0.4s ease-out;
+          box-sizing: border-box;
+          padding: 40px 24px;
+        }
 
-        {/* Right Spotlight */}
-        <div className="spotlight-lamp right">
-          <div className="lamp-wire"></div>
-          <div className="lamp-head"></div>
-          <div className="lamp-cone">
-            <div className="lamp-beam"></div>
-            <div className="lamp-dust-wrapper">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                <div key={i} className={`dust d${i}`}></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <Layout 
-        title="Let's Get Started" 
-        subtitle="Enter your phone number to begin your health transformation" 
-        titleColor={isDark ? "#ffffff" : "#11140F"}
-        subtitleColor={isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(17, 20, 15, 0.7)"}
-        showBack 
-        onBack={() => navigate('/')}
-      >
-        <div className="w-full px-4 sm:px-0" style={{ maxWidth: 600, margin: '0 auto' }}>
-        {/* Main Card */}
-        <div 
-          className="main-card-padding"
-          style={{
-            background: 'var(--white)',
-            borderRadius: 32,
-            boxShadow: 'var(--shadow-xl)',
-            border: '1px solid var(--gray-200)',
+        /* Native Mobile Viewports */
+        @media (max-width: 599px) {
+          .phone-container {
+            max-width: 100%;
+            padding: 24px 20px 48px;
+          }
+          .page-wrapper {
+            align-items: flex-start;
+          }
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        input::placeholder {
+          color: ${isDark ? '#4E5361' : '#9CA3AF'} !important;
+        }
+      `}</style>
+
+      <div className="phone-container">
+        
+        {/* Custom Header */}
+        <header style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
         }}>
-            {/* Icon Header */}
-            <div style={{
-              width: 80,
-              height: 80,
-              background: 'var(--cream-200)',
-              borderRadius: 24,
+          {/* Back Button */}
+          <button 
+            onClick={() => navigate('/')} 
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '50%',
+              background: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)',
+              border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 28px',
-              border: '1px solid var(--cream-400)',
-              color: 'var(--primary)',
-              fontSize: 40,
+              color: isDark ? '#FFFFFF' : '#111827',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              outline: 'none',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)';
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+
+          {/* Logo Pill in Center */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#F06922',
+            padding: '6px 16px',
+            borderRadius: '24px',
+            boxShadow: '0 4px 12px rgba(240, 105, 34, 0.25)',
+          }}>
+            <img 
+              src="/relivlogo.jpeg" 
+              alt="Reliv" 
+              style={{
+                width: '18px',
+                height: '18px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '1px solid rgba(255,255,255,0.4)',
+              }}
+            />
+            <span style={{
+              color: '#FFFFFF',
+              fontWeight: '800',
+              fontSize: '14px',
+              letterSpacing: '-0.3px',
             }}>
-              📱
-            </div>
+              Reliv
+            </span>
+          </div>
 
-            {/* WhatsApp Setup Accordion */}
-            <div style={{
-              background: 'var(--white)',
-              border: '1px solid var(--gray-200)',
-              borderRadius: 16,
-              marginBottom: 24,
-              overflow: 'hidden',
-            }}>
-              <div
-                onClick={() => setShowSetup(!showSetup)}
-                style={{
-                  padding: '16px 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                  background: showSetup ? 'var(--gray-50)' : 'transparent',
-                  borderBottom: showSetup ? '1px solid var(--gray-200)' : 'none',
-                }}
-              >
-                <div style={{
-                  width: 36, height: 36, borderRadius: 10,
-                  background: 'var(--cream-200)',
-                  color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 18, border: '1px solid var(--cream-400)'
-                }}>
-                  💬
-                </div>
-                <div style={{ flex: 1 }}>
-                  <span style={{ fontSize: 15, color: 'var(--gray-900)', fontWeight: 700, display: 'block' }}>
-                    First time? Setup WhatsApp first
-                  </span>
-                  <span style={{ fontSize: 13, color: 'var(--gray-500)', display: 'block', marginTop: 2 }}>
-                    Required one-time step to receive OTP
-                  </span>
-                </div>
-                <span style={{
-                  fontSize: 14,
-                  color: 'var(--gray-400)',
-                  transition: 'transform 0.3s ease',
-                  transform: showSetup ? 'rotate(180deg)' : 'rotate(0deg)',
-                }}>▼</span>
-              </div>
+          {/* Help Button */}
+          <button 
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '50%',
+              background: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)',
+              border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: isDark ? '#FFFFFF' : '#111827',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              outline: 'none',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)';
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </button>
+        </header>
 
-              <div style={{
-                maxHeight: showSetup ? 400 : 0,
-                overflow: 'hidden',
-                transition: 'max-height 0.4s ease',
-              }}>
-                <div style={{ padding: '20px' }}>
-                  <p style={{ color: 'var(--gray-700)', fontSize: 14, margin: '0 0 16px', lineHeight: 1.6 }}>
-                    1. Save our official number <strong>+1 (415) 523-8886</strong> to your contacts.<br />
-                    2. Send the message <strong>"join observe-ear"</strong> to activate the sandbox.<br />
-                    3. Once you receive a confirmation reply, you can request an OTP below!
-                  </p>
-                </div>
-              </div>
-            </div>
+        {/* Center Phone Icon Badge */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '8px',
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '20px',
+            background: isDark ? 'rgba(240, 105, 34, 0.12)' : 'rgba(240, 105, 34, 0.08)',
+            border: isDark ? '1px solid rgba(240, 105, 34, 0.2)' : '1px solid rgba(240, 105, 34, 0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F06922" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+          </div>
+        </div>
 
-            {/* Phone Input Section */}
-            <div style={{ marginBottom: 28 }}>
-              <label style={{
-                display: 'block',
-                fontSize: 14,
-                color: 'var(--gray-600)',
-                marginBottom: 12,
-                fontWeight: 600,
-                letterSpacing: '0.3px',
-              }}>
-                Phone Number
-              </label>
-              <div 
-                className="flex items-stretch gap-3"
-              >
-                {/* Country Code Block */}
-                <div 
-                  className="px-4 sm:px-5 flex items-center gap-2"
-                  style={{
-                    background: 'var(--cream-200)',
-                    border: '1px solid var(--cream-400)',
-                    borderRadius: 14,
-                    color: 'var(--primary)',
-                    fontWeight: 700,
-                    fontSize: 16,
-                  }}>
-                  +91
-                </div>
+        {/* Intro Headings */}
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <h1 style={{
+            fontSize: '28px',
+            fontWeight: '800',
+            color: isDark ? '#FFFFFF' : '#111827',
+            margin: 0,
+            letterSpacing: '-0.5px',
+          }}>
+            Let's get started
+          </h1>
+          <p style={{
+            fontSize: '14px',
+            color: isDark ? '#8A8F98' : '#4B5563',
+            margin: '0 auto',
+            maxWidth: '300px',
+            lineHeight: '1.5',
+          }}>
+            Enter your number to begin your health transformation
+          </p>
+        </div>
 
-                {/* Phone Input Box */}
-                <div style={{
-                  flex: 1,
-                  background: focused === 'phone' ? 'var(--white)' : 'var(--gray-50)',
-                  border: `1px solid ${focused === 'phone' ? 'var(--primary)' : error ? 'var(--error)' : 'var(--gray-200)'}`,
-                  borderRadius: 14,
-                  transition: 'all 0.3s ease',
-                  boxShadow: focused === 'phone' ? '0 0 0 1px var(--primary)' : 'none',
-                  display: 'flex',
-                }}>
-                  <input
-                    type="tel"
-                    maxLength="10"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                    onFocus={() => setFocused('phone')}
-                    onBlur={() => setFocused(null)}
-                    placeholder="Enter 10-digit number"
-                    className="flex-1 w-full text-[16px] sm:text-[18px]"
-                    style={{
-                      padding: '18px 24px',
-                      background: 'transparent',
-                      border: 'none',
-                      fontWeight: 600,
-                      color: 'var(--gray-900)',
-                      outline: 'none',
-                      letterSpacing: '1px',
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
+        {/* Form Container (Card) */}
+        <div style={{
+          width: '100%',
+          background: isDark ? '#16181E' : '#FFFFFF',
+          border: isDark ? '1px solid #23262F' : '1px solid #E5E7EB',
+          borderRadius: '24px',
+          padding: '32px 28px',
+          boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.15)' : '0 10px 30px rgba(240, 105, 34, 0.04)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px',
+        }}>
 
-            {/* Referral Code Section */}
-            <div style={{ marginBottom: 32 }}>
-              <label style={{
+          {/* WhatsApp Accordion Banner */}
+          <div style={{
+            border: '1px solid rgba(34, 197, 94, 0.15)',
+            background: isDark ? 'rgba(34, 197, 94, 0.04)' : 'rgba(34, 197, 94, 0.02)',
+            borderRadius: '16px',
+            overflow: 'hidden',
+          }}>
+            <div 
+              onClick={() => setShowSetup(!showSetup)}
+              style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
-                fontSize: 14,
-                color: 'var(--gray-600)',
-                marginBottom: 12,
-                fontWeight: 600,
+                gap: '14px',
+                padding: '14px 16px',
+                cursor: 'pointer',
+                userSelect: 'none',
+              }}
+            >
+              <div style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                background: '#22C55E',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
               }}>
-                Referral Code
-                <span style={{
-                  color: 'var(--gray-400)',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  background: 'var(--gray-100)',
-                  padding: '3px 10px',
-                  borderRadius: 20,
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <h4 style={{
+                  fontSize: '14px',
+                  color: isDark ? '#4ADE80' : '#15803D',
+                  fontWeight: '700',
+                  margin: 0,
                 }}>
-                  OPTIONAL
-                </span>
+                  First time? Set up WhatsApp
+                </h4>
+                <p style={{
+                  fontSize: '11px',
+                  color: isDark ? '#7C9885' : '#6B7280',
+                  margin: '2px 0 0',
+                }}>
+                  Required once to receive your OTP
+                </p>
+              </div>
+              <span style={{
+                color: isDark ? '#4ADE80' : '#15803D',
+                fontSize: '12px',
+                transition: 'transform 0.3s ease',
+                transform: showSetup ? 'rotate(180deg)' : 'rotate(0deg)',
+              }}>
+                ▼
+              </span>
+            </div>
+
+            {/* Accordion Expandable Content */}
+            <div style={{
+              maxHeight: showSetup ? '300px' : '0px',
+              overflow: 'hidden',
+              transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              borderTop: showSetup ? (isDark ? '1px solid rgba(34, 197, 94, 0.1)' : '1px solid rgba(34, 197, 94, 0.05)') : 'none',
+            }}>
+              <div style={{
+                padding: '16px',
+                fontSize: '13px',
+                color: isDark ? '#A7AC9D' : '#4B5563',
+                lineHeight: '1.6',
+                background: isDark ? 'rgba(34, 197, 94, 0.01)' : 'rgba(34, 197, 94, 0.01)',
+              }}>
+                1. Save our official number <strong>+1 (415) 523-8886</strong> to your contacts.<br />
+                2. Send the message <strong>"join observe-ear"</strong> to activate the sandbox.<br />
+                3. Once you receive a confirmation reply, you can request an OTP below!
+              </div>
+            </div>
+          </div>
+
+          {/* Phone Input Box */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label style={{
+              fontSize: '11px',
+              fontWeight: '700',
+              color: isDark ? '#8A8F98' : '#6B7280',
+              letterSpacing: '0.8px',
+            }}>
+              PHONE NUMBER
+            </label>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: isDark ? '#12141A' : '#F3F4F6',
+                border: isDark ? '1px solid #2D313E' : '1px solid #E5E7EB',
+                borderRadius: '12px',
+                padding: '0 16px',
+                color: '#F06922',
+                fontWeight: '700',
+                fontSize: '15px',
+              }}>
+                +91
+              </div>
+              <div style={{
+                flex: 1,
+                background: isDark ? '#12141A' : '#F3F4F6',
+                border: focused === 'phone' ? '1px solid #F06922' : error ? '1px solid #EF4444' : (isDark ? '1px solid #2D313E' : '1px solid #E5E7EB'),
+                borderRadius: '12px',
+                transition: 'border-color 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+              }}>
+                <input
+                  type="tel"
+                  maxLength="10"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                  onFocus={() => setFocused('phone')}
+                  onBlur={() => setFocused(null)}
+                  placeholder="Enter 10-digit number"
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: isDark ? '#FFFFFF' : '#111827',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    letterSpacing: phone.length > 0 ? '1px' : 'normal',
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Referral Code Box */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <label style={{
+                fontSize: '11px',
+                fontWeight: '700',
+                color: isDark ? '#8A8F98' : '#6B7280',
+                letterSpacing: '0.8px',
+              }}>
+                REFERRAL CODE
               </label>
+              <span style={{
+                fontSize: '9px',
+                fontWeight: '700',
+                background: isDark ? '#23262F' : '#E5E7EB',
+                color: isDark ? '#8A8F98' : '#4B5563',
+                padding: '2px 8px',
+                borderRadius: '20px',
+              }}>
+                optional
+              </span>
+            </div>
+            <div style={{
+              background: isDark ? '#12141A' : '#F3F4F6',
+              border: focused === 'referral' ? '1px solid #F06922' : (isDark ? '1px solid #2D313E' : '1px solid #E5E7EB'),
+              borderRadius: '12px',
+              transition: 'border-color 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+            }}>
               <input
                 type="text"
                 maxLength="6"
@@ -274,290 +437,191 @@ export default function PhoneEntryScreen() {
                 placeholder="Enter code for bonus"
                 style={{
                   width: '100%',
-                  background: focused === 'referral' ? 'var(--white)' : 'var(--gray-50)',
-                  border: `1px solid ${focused === 'referral' ? 'var(--primary)' : 'var(--gray-200)'}`,
-                  borderRadius: 14,
-                  padding: '18px 20px',
-                  fontSize: 16,
-                  fontWeight: 500,
-                  color: 'var(--gray-900)',
+                  padding: '14px 16px',
+                  background: 'transparent',
+                  border: 'none',
                   outline: 'none',
-                  transition: 'all 0.3s ease',
-                  letterSpacing: '1px',
-                  boxShadow: focused === 'referral' ? '0 0 0 1px var(--primary)' : 'none',
+                  color: isDark ? '#FFFFFF' : '#111827',
+                  fontSize: '15px',
+                  fontWeight: '500',
                 }}
               />
-              <p style={{
-                fontSize: 13,
-                color: 'var(--gray-500)',
-                marginTop: 10,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-              }}>
-                <span>💡</span>
-                Invite 3 friends & → Get FREE fitness plan worth ₹49
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '12px',
+              color: '#F06922',
+              fontWeight: '500',
+              marginTop: '2px',
+            }}>
+              <span>🎁</span>
+              <span>Invite 3 friends → FREE fitness plan worth ₹49</span>
+            </div>
+          </div>
+
+          {/* Setup Completion Checkbox */}
+          <div
+            onClick={() => setHasConfirmedSetup(!hasConfirmedSetup)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '14px 16px',
+              borderRadius: '14px',
+              background: hasConfirmedSetup ? (isDark ? 'rgba(34, 197, 94, 0.05)' : 'rgba(34, 197, 94, 0.02)') : (isDark ? '#12141A' : '#F3F4F6'),
+              border: hasConfirmedSetup ? '1px solid rgba(34, 197, 94, 0.25)' : (isDark ? '1px solid #2D313E' : '1px solid #E5E7EB'),
+              cursor: 'pointer',
+              userSelect: 'none',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <div style={{
+              width: '20px',
+              height: '20px',
+              borderRadius: '6px',
+              border: hasConfirmedSetup ? 'none' : (isDark ? '1px solid #4E5361' : '1px solid #CBD5E1'),
+              background: hasConfirmedSetup ? '#22C55E' : 'transparent',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              {hasConfirmedSetup && (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              )}
+            </div>
+            <span style={{
+              fontSize: '13px',
+              fontWeight: '500',
+              color: hasConfirmedSetup ? (isDark ? '#4ADE80' : '#15803D') : (isDark ? '#8A8F98' : '#4B5563'),
+              lineHeight: 1.4,
+            }}>
+              I have completed WhatsApp setup
+            </span>
+          </div>
+
+          {/* Validation/API Error Message */}
+          {error && (
+            <div style={{
+              background: isDark ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.05)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+            }}>
+              <span style={{ fontSize: '18px' }}>⚠️</span>
+              <p style={{ fontSize: '13px', color: '#EF4444', fontWeight: '600', margin: 0 }}>
+                {error}
               </p>
             </div>
+          )}
 
-            {/* Confirmation Checkbox */}
-            <div
-              onClick={() => setHasConfirmedSetup(!hasConfirmedSetup)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 14,
-                padding: '16px 20px',
-                marginBottom: 24,
-                background: hasConfirmedSetup ? 'rgba(34, 197, 94, 0.05)' : 'var(--gray-50)',
-                border: hasConfirmedSetup ? '1px solid var(--success)' : '1px solid var(--gray-200)',
-                borderRadius: 14,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                userSelect: 'none',
-              }}
-            >
-              <div style={{
-                width: 24,
-                height: 24,
-                borderRadius: 6,
-                border: hasConfirmedSetup ? 'none' : '1px solid var(--gray-300)',
-                background: hasConfirmedSetup ? 'var(--success)' : 'var(--white)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                {hasConfirmedSetup && (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
+          {/* Submit Button */}
+          <button
+            onClick={handleSubmit}
+            disabled={loading || phone.length !== 10 || !hasConfirmedSetup}
+            style={{
+              width: '100%',
+              background: (phone.length === 10 && hasConfirmedSetup) 
+                ? (isDark ? '#1C1F26' : '#FFFFFF') 
+                : (isDark ? '#12141A' : '#F3F4F6'),
+              border: (phone.length === 10 && hasConfirmedSetup) 
+                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #CBD5E1') 
+                : (isDark ? '1px solid #23262F' : '1px solid #E5E7EB'),
+              borderRadius: '16px',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: (phone.length === 10 && hasConfirmedSetup && !loading) ? 'pointer' : 'not-allowed',
+              color: (phone.length === 10 && hasConfirmedSetup) 
+                ? (isDark ? '#FFFFFF' : '#111827') 
+                : (isDark ? '#4E5361' : '#9CA3AF'),
+              transition: 'all 0.2s ease',
+              fontWeight: '700',
+              fontSize: '15px',
+              boxShadow: (phone.length === 10 && hasConfirmedSetup) 
+                ? (isDark ? '0 4px 12px rgba(0,0,0,0.2)' : '0 4px 12px rgba(0,0,0,0.05)') 
+                : 'none',
+            }}
+            onMouseEnter={(e) => {
+              if (phone.length === 10 && hasConfirmedSetup && !loading) {
+                e.currentTarget.style.background = isDark ? '#2A2D36' : '#F9FAFB';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (phone.length === 10 && hasConfirmedSetup && !loading) {
+                e.currentTarget.style.background = isDark ? '#1C1F26' : '#FFFFFF';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }
+            }}
+          >
+            {loading ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', justifyContent: 'center' }}>
+                <span style={{
+                  width: '18px',
+                  height: '18px',
+                  border: '2.5px solid currentColor',
+                  borderTopColor: 'transparent',
+                  borderRadius: '50%',
+                  animation: 'spin 0.8s linear infinite',
+                }} />
+                <span>Sending OTP...</span>
+              </div>
+            ) : (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <svg 
+                    width="18" 
+                    height="18" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    style={{ 
+                      color: (phone.length === 10 && hasConfirmedSetup) ? '#22C55E' : 'currentColor',
+                      transition: 'color 0.2s ease'
+                    }}
+                  >
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                   </svg>
-                )}
-              </div>
-              <span style={{
-                fontSize: 14,
-                fontWeight: 500,
-                color: hasConfirmedSetup ? 'var(--success-light)' : 'var(--gray-700)',
-                lineHeight: 1.4,
-              }}>
-                I have completed WhatsApp setup
-              </span>
-            </div>
-
-            {/* Error Message */}
-            {error && (
-              <div style={{
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.5)',
-                borderRadius: 14,
-                padding: '16px 20px',
-                marginBottom: 24,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                animation: 'shake 0.5s ease',
-              }}>
-                <span style={{ fontSize: 20 }}>⚠️</span>
-                <p style={{ fontSize: 14, color: '#FCA5A5', fontWeight: 600, margin: 0 }}>{error}</p>
-              </div>
+                  <span>Send OTP via WhatsApp</span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </>
             )}
+          </button>
 
-            {/* Submit Button */}
-            <button
-              onClick={handleSubmit}
-              disabled={loading || phone.length !== 10 || !hasConfirmedSetup}
-              style={{
-                width: '100%',
-                background: (phone.length === 10 && hasConfirmedSetup) ? 'var(--primary)' : 'var(--gray-200)',
-                border: 'none',
-                borderRadius: 16,
-                padding: '18px 20px',
-                fontSize: 18,
-                fontWeight: 700,
-                color: (phone.length === 10 && hasConfirmedSetup) ? 'var(--white)' : 'var(--gray-400)',
-                cursor: (phone.length === 10 && hasConfirmedSetup && !loading) ? 'pointer' : 'not-allowed',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 12,
-                transform: loading ? 'scale(0.98)' : 'scale(1)',
-              }}
-            >
-              {loading ? (
-                <>
-                  <span style={{
-                    width: 22,
-                    height: 22,
-                    border: '3px solid rgba(255,255,255,0.3)',
-                    borderTopColor: 'var(--white)',
-                    borderRadius: '50%',
-                    animation: 'spin 0.8s linear infinite',
-                  }} />
-                  Sending OTP...
-                </>
-              ) : (
-                <>
-                  Send OTP via WhatsApp →
-                </>
-              )}
-            </button>
-          </div>
-          
-          {/* Bottom Security Text */}
-          <p style={{
-            textAlign: 'center',
-            marginTop: 20,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 8,
-            color: 'var(--gray-400)',
-            fontSize: 13,
-          }}>
-            <span style={{ fontSize: 16 }}>🔒</span>
-            <span>Your data is encrypted and never shared</span>
-          </p>
         </div>
 
-        {/* Animation Keyframes */}
-        <style>{`
-        .spotlight-lamp {
-          position: absolute;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          z-index: 0;
-          pointer-events: none;
-          transform-origin: top center;
-        }
+        {/* Bottom Security Footer */}
+        <div style={{
+          textAlign: 'center',
+          fontSize: '12px',
+          color: isDark ? '#5C606C' : '#9CA3AF',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '6px',
+          marginTop: '8px',
+        }}>
+          <span>🔒</span>
+          <span>Your data is encrypted and never shared</span>
+        </div>
 
-        /* Mobile: Centered, pointing straight down */
-        .spotlight-lamp.left {
-          left: 50%;
-          top: -10%;
-          transform: translateX(-50%) rotate(0deg);
-        }
-
-        /* Mobile: Hide second lamp */
-        .spotlight-lamp.right {
-          display: none;
-        }
-
-        /* Desktop: Dual angled lamps */
-        @media (min-width: 640px) {
-          .spotlight-lamp.left {
-            left: 5%;
-            top: -20px;
-            transform: rotate(-25deg); /* Overrides mobile transform */
-          }
-          .spotlight-lamp.right {
-            display: flex;
-            right: 5%;
-            top: -20px;
-            transform: rotate(25deg);
-          }
-        }
-
-        .lamp-wire {
-          width: 2px;
-          height: 80px;
-          background: rgba(255,255,255,0.12);
-        }
-
-        .light-mode .lamp-wire {
-          background: rgba(17,20,15,0.12);
-        }
-
-        .lamp-head {
-          width: 32px;
-          height: 16px;
-          background: #F06922;
-          border-top-left-radius: 16px;
-          border-top-right-radius: 16px;
-          position: relative;
-          box-shadow: 0 -2px 10px rgba(240,105,34,0.5);
-          z-index: 2;
-        }
-
-        .lamp-cone {
-          position: relative;
-          width: 450px;
-          height: 650px;
-          margin-top: -2px;
-        }
-
-        .lamp-beam, 
-        .lamp-dust-wrapper {
-          position: absolute;
-          inset: 0;
-          clip-path: polygon(45% 0, 55% 0, 100% 100%, 0% 100%);
-        }
-
-        .lamp-beam {
-          background: linear-gradient(to bottom, rgba(240, 105, 34, 0.22) 0%, rgba(240, 105, 34, 0) 100%);
-          filter: blur(14px);
-          animation: lamp-flicker 4s infinite alternate ease-in-out;
-        }
-
-        @keyframes lamp-flicker {
-          0% { opacity: 0.5; filter: blur(10px); }
-          100% { opacity: 1; filter: blur(16px); }
-        }
-
-        .dust {
-          position: absolute;
-          width: 3px;
-          height: 3px;
-          background: rgba(255, 230, 200, 0.9);
-          border-radius: 50%;
-          box-shadow: 0 0 6px rgba(240, 105, 34, 0.8);
-          opacity: 0;
-          pointer-events: none;
-        }
-
-        .light-mode .dust {
-          background: rgba(240, 105, 34, 0.8);
-          box-shadow: 0 0 6px rgba(240, 105, 34, 0.4);
-        }
-
-        .dust:nth-child(odd) { animation: float-dust-1 8s linear infinite; }
-        .dust:nth-child(even) { animation: float-dust-2 9s linear infinite; }
-
-        .dust.d1 { left: 30%; bottom: 0; animation-delay: 0s; animation-duration: 8s; }
-        .dust.d2 { left: 50%; bottom: 0; animation-delay: 2s; animation-duration: 11s; }
-        .dust.d3 { left: 70%; bottom: 0; animation-delay: 4s; animation-duration: 9s; }
-        .dust.d4 { left: 40%; bottom: 0; animation-delay: 1s; animation-duration: 10s; }
-        .dust.d5 { left: 60%; bottom: 0; animation-delay: 3s; animation-duration: 7s; }
-        .dust.d6 { left: 20%; bottom: 0; animation-delay: 5s; animation-duration: 12s; }
-        .dust.d7 { left: 80%; bottom: 0; animation-delay: 1.5s; animation-duration: 8.5s; }
-        .dust.d8 { left: 45%; bottom: 0; animation-delay: 3.5s; animation-duration: 9.5s; }
-
-        @keyframes float-dust-1 {
-          0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-          15% { opacity: 0.8; }
-          85% { opacity: 0.8; }
-          100% { transform: translate(25px, -650px) scale(1.2); opacity: 0; }
-        }
-
-        @keyframes float-dust-2 {
-          0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
-          15% { opacity: 0.7; }
-          85% { opacity: 0.7; }
-          100% { transform: translate(-25px, -650px) scale(1.5); opacity: 0; }
-        }
-
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-          20%, 40%, 60%, 80% { transform: translateX(4px); }
-        }
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-      </Layout>
-    </>
+      </div>
+    </div>
   );
 }
