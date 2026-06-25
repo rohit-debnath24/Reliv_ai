@@ -1,4 +1,4 @@
-# Frontend Routes Documentation
+#    Frontend Routes Documentation
 
 This document provides a comprehensive list of all frontend routes defined in the application, mapping each path to its corresponding React component. These routes are configured in `src/App.jsx`.
 
