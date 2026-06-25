@@ -639,6 +639,11 @@ export default function ProductShowcaseBoard() {
     return p.type.toLowerCase() === activeFilter;
   });
 
+  const formatType = (t) => {
+    if (!t) return "";
+    return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+  };
+
   return (
     <div className={`shouthouse-container ${isDark ? 'dark-mode' : 'light-mode'}`}>
       <style>{FONTS + CSS}</style>
@@ -697,7 +702,7 @@ export default function ProductShowcaseBoard() {
         <div className="board-grid">
           {filteredPosts.map((p, i) => (
             <div className={`card ${p.live ? 'is-live' : ''}`} key={i} style={{ animationDelay: `${0.05 * i}s` }}>
-              <div className="card-badge">{p.type}</div>
+              <div className="card-badge">{formatType(p.type)}</div>
               <div className="card-body">
                 <div className="card-avi-container">
                   <img
@@ -715,7 +720,7 @@ export default function ProductShowcaseBoard() {
                   {p.type.toLowerCase() === "instagram" && "📸"}
                   {p.type.toLowerCase() === "product" && "☕"}
                   {p.type.toLowerCase() === "star" && "⭐"}
-                  <span>{p.type}</span>
+                  <span>{formatType(p.type)}</span>
                 </div>
                 <div className="card-msg">"{p.message}"</div>
                 <div className="card-footer">

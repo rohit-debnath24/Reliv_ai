@@ -3,6 +3,300 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import SparkleBackground from '../components/SparkleBackground';
 
+const CSS = `
+.summary-container {
+  min-height: 100vh;
+  position: relative;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Dark Mode Variable overrides */
+.summary-container.dark-mode {
+  --bg-main: #11140F;
+  --bg-card: rgba(27, 31, 23, 0.45);
+  --bg-card-hover: rgba(35, 41, 30, 0.65);
+  --text-main: #F7F4EC;
+  --text-muted: #A0A596;
+  --text-muted-faint: #4E5446;
+  --border-card: rgba(255, 92, 53, 0.15);
+  --border-card-hover: rgba(255, 92, 53, 0.45);
+  --orange: #FF5C35;
+  --orange-light: #FF8566;
+  --orange-pale: rgba(255, 92, 53, 0.15);
+  --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --shadow-hover: 0 24px 64px rgba(255, 92, 53, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --item-bg: rgba(255, 255, 255, 0.03);
+  --item-border: rgba(255, 255, 255, 0.06);
+}
+
+/* Light Mode Variable overrides */
+.summary-container.light-mode {
+  --bg-main: #F9F6F0;
+  --bg-card: rgba(255, 255, 255, 0.65);
+  --bg-card-hover: rgba(255, 255, 255, 0.85);
+  --text-main: #11140F;
+  --text-muted: #75786C;
+  --text-muted-faint: #B8BBAE;
+  --border-card: rgba(255, 92, 53, 0.12);
+  --border-card-hover: rgba(255, 92, 53, 0.35);
+  --orange: #FF5C35;
+  --orange-light: #FF8566;
+  --orange-pale: rgba(255, 92, 53, 0.08);
+  --shadow-card: 0 12px 40px rgba(255, 92, 53, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-hover: 0 24px 64px rgba(255, 92, 53, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --item-bg: rgba(0, 0, 0, 0.02);
+  --item-border: rgba(0, 0, 0, 0.04);
+}
+
+.summary-wrap {
+  max-width: 540px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.summary-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  border: 1px solid var(--border-card);
+  padding: 40px 32px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.summary-card:hover {
+  border-color: var(--border-card-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--item-border);
+  transition: all 0.4s ease;
+}
+
+.summary-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: #FFF;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.summary-plan-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.summary-plan-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.summary-plan-price-box {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.summary-plan-price {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.summary-plan-price-period {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.summary-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.summary-details-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--item-bg);
+  border: 1.5px solid var(--item-border);
+  border-radius: 16px;
+  transition: all 0.25s ease;
+}
+.summary-details-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-card);
+  background: var(--bg-card-hover);
+}
+
+.summary-details-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.summary-details-value {
+  font-size: 15px;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+/* What's Included Banner */
+.included-banner {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.03) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 18px;
+  padding: 22px 26px;
+  margin-bottom: 28px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+.summary-container.light-mode .included-banner {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border: 1px solid #A7F3D0;
+}
+
+.included-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #10B981;
+  margin-bottom: 14px;
+}
+.summary-container.light-mode .included-title {
+  color: #059669;
+}
+
+.included-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.included-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.included-check {
+  color: #10B981;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.summary-container.light-mode .included-check {
+  color: #059669;
+}
+
+.included-text {
+  font-size: 13.5px;
+  color: var(--text-main);
+  font-weight: 600;
+  opacity: 0.9;
+}
+.summary-container.dark-mode .included-text {
+  color: #D1FAE5;
+}
+
+/* Activate Button */
+.activate-btn {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFF;
+  cursor: pointer;
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.35);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.activate-btn::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+  pointer-events: none;
+}
+.activate-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 45px rgba(34, 197, 94, 0.5);
+}
+.activate-btn:active {
+  transform: scale(0.98);
+}
+.activate-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.loader-ring {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: #FFF;
+  border-radius: 50%;
+  animation: spin-loader 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin-loader {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Trust list */
+.trust-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+@media(max-width:600px){
+  .summary-card{padding: 32px 20px;}
+  .included-grid{grid-template-columns: 1fr;}
+  .trust-badges{gap: 14px;}
+}
+`;
+
 export default function SummaryScreen() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -55,6 +349,7 @@ export default function SummaryScreen() {
   };
 
   const formatTime = (time) => {
+    if (!time) return '';
     const [h, m] = time.split(':');
     const hour = parseInt(h);
     const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -63,204 +358,121 @@ export default function SummaryScreen() {
   };
 
   return (
-    <>
+    <div className={`summary-container ${isDark ? 'dark-mode' : 'light-mode'}`}>
+      <style>{CSS}</style>
       <SparkleBackground isDark={isDark} />
       <Layout
         title="Plan Summary"
         subtitle="Review your personalized health plan"
         showBack
-        onBack={() => navigate('/meal-time')}
+        onBack={() => navigate(-1)}
       >
-        <div style={{ maxWidth: 580, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        {/* Main Card */}
-        <div style={{
-          background: isDark ? 'rgba(20, 10, 15, 0.8)' : 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(30px)',
-          WebkitBackdropFilter: 'blur(30px)',
-          borderRadius: 28,
-          padding: '36px 32px',
-          boxShadow: isDark ? `0 0 60px ${plan.color}25, inset 0 0 0 1px ${plan.color}35` : `0 20px 60px ${plan.color}15, inset 0 0 0 1px rgba(255, 255, 255, 1)`,
-          border: 'none',
-          marginBottom: 28,
-        }}>
-          {/* Plan Header */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 20,
-            paddingBottom: 24,
-            marginBottom: 24,
-            borderBottom: isDark ? `1px solid ${plan.color}30` : '1px solid #F5F5F5',
-            opacity: showItems ? 1 : 0,
-            transform: showItems ? 'translateY(0)' : 'translateY(10px)',
-            transition: 'all 0.4s ease',
-          }}>
-            <div style={{
-              width: 64,
-              height: 64,
-              background: isDark ? `linear-gradient(135deg, ${plan.color} 0%, ${plan.color}80 100%)` : `linear-gradient(135deg, ${plan.color}15 0%, ${plan.color}25 100%)`,
-              borderRadius: 18,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 30,
-              boxShadow: isDark ? `0 8px 20px ${plan.color}40` : 'none',
+        <div className="summary-wrap">
+          {/* Main Card */}
+          <div className="summary-card">
+            {/* Plan Header */}
+            <div className="summary-header" style={{
+              opacity: showItems ? 1 : 0,
+              transform: showItems ? 'translateY(0)' : 'translateY(10px)',
             }}>
-              {plan.icon}
-            </div>
-            <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, color: isDark ? '#FFF' : '#111', marginBottom: 4 }}>
-                {plan.name}
-              </h2>
-              <p style={{ fontSize: 14, color: isDark ? 'rgba(255,255,255,0.6)' : '#666' }}>7 days • Starting today</p>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <p style={{ fontSize: 28, fontWeight: 800, color: plan.color }}>{plan.price}</p>
-              <p style={{ fontSize: 12, color: isDark ? 'rgba(255,255,255,0.4)' : 'var(--gray-400)' }}>per week</p>
-            </div>
-          </div>
-
-          {/* Details */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 18,
-            marginBottom: 28,
-          }}>
-            {[
-              { label: 'Focus Area', value: categoryNames[category] || category, delay: 0.1 },
-              { label: 'Breakfast Reminder', value: formatTime(mealTimes.breakfast), delay: 0.15 },
-              { label: 'Lunch Reminder', value: formatTime(mealTimes.lunch), delay: 0.2 },
-              { label: 'Dinner Reminder', value: formatTime(mealTimes.dinner), delay: 0.25 },
-            ].map((item, i) => (
-              <div
-                key={item.label}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '16px 20px',
-                  background: isDark ? 'rgba(255,255,255,0.05)' : 'var(--gray-50)',
-                  borderRadius: 14,
-                  border: isDark ? '1px solid rgba(255,255,255,0.08)' : 'none',
-                  opacity: showItems ? 1 : 0,
-                  transform: showItems ? 'translateY(0)' : 'translateY(10px)',
-                  transition: 'all 0.4s ease',
-                  transitionDelay: `${item.delay}s`,
-                }}
-              >
-                <span style={{ fontSize: 14, color: isDark ? 'rgba(255,255,255,0.6)' : '#666', fontWeight: 500 }}>{item.label}</span>
-                <span style={{ fontSize: 15, color: isDark ? '#FFF' : '#111', fontWeight: 700 }}>{item.value}</span>
+              <div className="summary-icon-wrapper" style={{
+                background: isDark ? `linear-gradient(135deg, ${plan.color} 0%, ${plan.color}80 100%)` : `linear-gradient(135deg, ${plan.color}15 0%, ${plan.color}25 100%)`,
+              }}>
+                {plan.icon}
               </div>
-            ))}
-          </div>
+              <div style={{ flex: 1 }}>
+                <h2 className="summary-plan-title">
+                  {plan.name}
+                </h2>
+                <p className="summary-plan-sub">7 days • Starting today</p>
+              </div>
+              <div className="summary-plan-price-box">
+                <p className="summary-plan-price" style={{ color: plan.color }}>{plan.price}</p>
+                <p className="summary-plan-price-period">per week</p>
+              </div>
+            </div>
 
-          {/* What's Included */}
-          <div style={{
-            background: isDark ? 'rgba(16, 185, 129, 0.15)' : 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
-            borderRadius: 16,
-            padding: '20px 24px',
-            marginBottom: 28,
-            border: isDark ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(34, 197, 94, 0.2)',
-            opacity: showItems ? 1 : 0,
-            transform: showItems ? 'translateY(0)' : 'translateY(10px)',
-            transition: 'all 0.4s ease 0.3s',
-          }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: isDark ? '#34D399' : '#059669', marginBottom: 14 }}>
-              ✅ What's Included
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              {['Daily meal plans', 'WhatsApp reminders', 'Progress tracking', 'AI coaching'].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: isDark ? '#34D399' : '#22C55E', fontSize: 12 }}>✓</span>
-                  <span style={{ fontSize: 13, color: isDark ? 'rgba(255,255,255,0.85)' : '#065F46', fontWeight: 500 }}>{item}</span>
+            {/* Details List */}
+            <div className="summary-details-list">
+              {[
+                { label: 'Focus Area', value: categoryNames[category] || category, delay: 0.1 },
+                { label: 'Breakfast Reminder', value: formatTime(mealTimes.breakfast), delay: 0.15 },
+                { label: 'Lunch Reminder', value: formatTime(mealTimes.lunch), delay: 0.2 },
+                { label: 'Dinner Reminder', value: formatTime(mealTimes.dinner), delay: 0.25 },
+              ].map((item, i) => (
+                <div
+                  key={item.label}
+                  className="summary-details-item"
+                  style={{
+                    opacity: showItems ? 1 : 0,
+                    transform: showItems ? 'translateY(0)' : 'translateY(10px)',
+                    transitionDelay: `${item.delay}s`,
+                  }}
+                >
+                  <span className="summary-details-label">{item.label}</span>
+                  <span className="summary-details-value">{item.value}</span>
                 </div>
               ))}
             </div>
+
+            {/* What's Included */}
+            <div className="included-banner" style={{
+              opacity: showItems ? 1 : 0,
+              transform: showItems ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'all 0.4s ease 0.3s',
+            }}>
+              <h3 className="included-title">
+                ✓ What's Included
+              </h3>
+              <div className="included-grid">
+                {['Daily meal plans', 'WhatsApp reminders', 'Progress tracking', 'AI coaching'].map((item, i) => (
+                  <div key={i} className="included-item">
+                    <span className="included-check">✓</span>
+                    <span className="included-text">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Activate Button */}
+            <button
+              onClick={handleActivate}
+              disabled={loading}
+              className="activate-btn"
+              type="button"
+            >
+              {loading ? (
+                <>
+                  <span className="loader-ring" />
+                  Activating Your Plan...
+                </>
+              ) : (
+                <>
+                  ✨ Activate My Plan
+                </>
+              )}
+            </button>
           </div>
 
-          {/* Activate Button */}
-          <button
-            onClick={handleActivate}
-            disabled={loading}
-            style={{
-              width: '100%',
-              background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
-              border: 'none',
-              borderRadius: 16,
-              padding: '22px',
-              fontSize: 18,
-              fontWeight: 700,
-              color: 'var(--white)',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              boxShadow: isDark ? '0 12px 40px rgba(34, 197, 94, 0.4)' : '0 10px 40px rgba(34, 197, 94, 0.35)',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 12,
-            }}
-          >
-            {loading ? (
-              <>
-                <span style={{
-                  width: 24,
-                  height: 24,
-                  border: '3px solid rgba(255,255,255,0.3)',
-                  borderTopColor: 'var(--white)',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite',
-                }} />
-                Activating Your Plan...
-              </>
-            ) : (
-              <>
-                ✨ Activate My Plan
-              </>
-            )}
-          </button>
+          {/* Trust Badges */}
+          <div className="trust-badges" style={{
+            opacity: showItems ? 1 : 0,
+            transform: showItems ? 'translateY(0)' : 'translateY(10px)',
+            transition: 'all 0.4s ease 0.4s',
+          }}>
+            {[
+              { icon: '🔒', text: 'Secure' },
+              { icon: '📱', text: 'WhatsApp' },
+              { icon: '❤️', text: '50K+ Users' },
+            ].map((badge, i) => (
+              <div key={i} className="trust-item">
+                <span>{badge.icon}</span>
+                {badge.text}
+              </div>
+            ))}
+          </div>
         </div>
-
-        {/* Trust Badges */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 20,
-          opacity: showItems ? 1 : 0,
-          transform: showItems ? 'translateY(0)' : 'translateY(10px)',
-          transition: 'all 0.4s ease 0.4s',
-        }}>
-          {[
-            { icon: '🔒', text: 'Secure' },
-            { icon: '📱', text: 'WhatsApp' },
-            { icon: '❤️', text: '50K+ Users' },
-          ].map((badge, i) => (
-            <div
-              key={i}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                fontSize: 13,
-                color: 'var(--gray-400)',
-                fontWeight: 500,
-              }}
-            >
-              <span>{badge.icon}</span>
-              {badge.text}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-    </Layout>
-    </>
+      </Layout>
+    </div>
   );
 }

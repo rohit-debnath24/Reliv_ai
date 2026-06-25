@@ -4,6 +4,273 @@ import Layout from '../components/Layout';
 import SparkleBackground from '../components/SparkleBackground';
 import { C } from '../utils/constants';
 
+const CSS = `
+.mealtimes-container {
+  min-height: 100vh;
+  position: relative;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Dark Mode Variable overrides */
+.mealtimes-container.dark-mode {
+  --bg-main: #11140F;
+  --bg-card: rgba(27, 31, 23, 0.45);
+  --bg-card-hover: rgba(35, 41, 30, 0.65);
+  --text-main: #F7F4EC;
+  --text-muted: #A0A596;
+  --text-muted-faint: #4E5446;
+  --border-card: rgba(255, 92, 53, 0.15);
+  --border-card-hover: rgba(255, 92, 53, 0.45);
+  --orange: #FF5C35;
+  --orange-light: #FF8566;
+  --orange-pale: rgba(255, 92, 53, 0.15);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --shadow-hover: 0 20px 50px rgba(255, 92, 53, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --btn-green: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --btn-green-hover: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  --btn-green-shadow: 0 8px 30px rgba(16, 185, 129, 0.35);
+  --btn-green-hover-shadow: 0 14px 40px rgba(16, 185, 129, 0.5);
+  --input-bg: rgba(0, 0, 0, 0.3);
+  --input-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Light Mode Variable overrides */
+.mealtimes-container.light-mode {
+  --bg-main: #F9F6F0;
+  --bg-card: rgba(255, 255, 255, 0.65);
+  --bg-card-hover: rgba(255, 255, 255, 0.85);
+  --text-main: #11140F;
+  --text-muted: #75786C;
+  --text-muted-faint: #B8BBAE;
+  --border-card: rgba(255, 92, 53, 0.12);
+  --border-card-hover: rgba(255, 92, 53, 0.35);
+  --orange: #FF5C35;
+  --orange-light: #FF8566;
+  --orange-pale: rgba(255, 92, 53, 0.08);
+  --shadow-card: 0 10px 30px rgba(255, 92, 53, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-hover: 0 20px 50px rgba(255, 92, 53, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --btn-green: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --btn-green-hover: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  --btn-green-shadow: 0 8px 30px rgba(16, 185, 129, 0.2);
+  --btn-green-hover-shadow: 0 14px 40px rgba(16, 185, 129, 0.35);
+  --input-bg: #FFFFFF;
+  --input-border: #E5E7EB;
+}
+
+.mealtimes-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.mealtimes-grid {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.mealtimes-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  border: 1.5px solid var(--border-card);
+  padding: 18px 24px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mealtimes-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-card-hover);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+.mealtimes-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mealtimes-card-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mealtimes-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+/* Category specific outline glows */
+.mealtimes-icon-box.breakfast {
+  background: linear-gradient(135deg, rgba(255, 92, 53, 0.12) 0%, rgba(255, 92, 53, 0.03) 100%);
+  border: 1px solid rgba(255, 92, 53, 0.25);
+  color: #FF5C35;
+}
+.mealtimes-card:hover .mealtimes-icon-box.breakfast {
+  border-color: #FF5C35;
+  box-shadow: 0 0 15px rgba(255, 92, 53, 0.25);
+  transform: scale(1.05);
+}
+
+.mealtimes-icon-box.snack {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0.03) 100%);
+  border: 1px solid rgba(236, 72, 153, 0.25);
+  color: #EC4899;
+}
+.mealtimes-card:hover .mealtimes-icon-box.snack {
+  border-color: #EC4899;
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.25);
+  transform: scale(1.05);
+}
+
+.mealtimes-icon-box.lunch {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.03) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #10B981;
+}
+.mealtimes-card:hover .mealtimes-icon-box.lunch {
+  border-color: #10B981;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+  transform: scale(1.05);
+}
+
+.mealtimes-icon-box.dinner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.03) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #3B82F6;
+}
+.mealtimes-card:hover .mealtimes-icon-box.dinner {
+  border-color: #3B82F6;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+  transform: scale(1.05);
+}
+
+.mealtimes-card-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 3px;
+  font-family: 'Fraunces', serif;
+}
+
+.mealtimes-card-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.mealtimes-input {
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  outline: none;
+  width: 120px;
+  text-align: center;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.mealtimes-input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px var(--orange-pale);
+  background: var(--bg-card);
+}
+
+/* Water Info Banner */
+.water-banner {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.03) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 18px;
+  padding: 18px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.03);
+}
+.mealtimes-container.light-mode .water-banner {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 1px solid #93C5FD;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.05);
+}
+
+.water-banner-icon {
+  font-size: 28px;
+  animation: floatWater 3s infinite ease-in-out;
+  flex-shrink: 0;
+}
+@keyframes floatWater {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.water-banner-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #3B82F6;
+  margin-bottom: 2px;
+}
+.mealtimes-container.light-mode .water-banner-title {
+  color: #1D4ED8;
+}
+
+.water-banner-sub {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Confirm Button */
+.confirm-btn {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--btn-green);
+  color: #FFF;
+  box-shadow: var(--btn-green-shadow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.confirm-btn::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+  pointer-events: none;
+}
+.confirm-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--btn-green-hover-shadow);
+}
+.confirm-btn:active {
+  transform: scale(0.98);
+}
+`;
+
 export default function MealTimesScreen() {
   const navigate = useNavigate();
   const mealFreq = parseInt(localStorage.getItem('mealFreq')) || 3;
@@ -25,24 +292,24 @@ export default function MealTimesScreen() {
   const getMealConfig = () => {
     if (mealFreq === 5) {
       return [
-        { id: 'breakfast', icon: '🍳', label: 'Breakfast', default: '08:00' },
-        { id: 'snack1', icon: '🥤', label: 'Morning Snack', default: '10:30' },
-        { id: 'lunch', icon: '🍲', label: 'Lunch', default: '13:00' },
-        { id: 'snack2', icon: '🍌', label: 'Evening Snack', default: '16:30' },
-        { id: 'dinner', icon: '🍛', label: 'Dinner', default: '20:00' }
+        { id: 'breakfast', type: 'breakfast', label: 'Breakfast', default: '08:00' },
+        { id: 'snack1', type: 'snack', label: 'Morning Snack', default: '10:30' },
+        { id: 'lunch', type: 'lunch', label: 'Lunch', default: '13:00' },
+        { id: 'snack2', type: 'snack', label: 'Evening Snack', default: '16:30' },
+        { id: 'dinner', type: 'dinner', label: 'Dinner', default: '20:00' }
       ];
     } else if (mealFreq === 4) {
       return [
-        { id: 'breakfast', icon: '🍳', label: 'Breakfast', default: '08:00' },
-        { id: 'snack', icon: '🥜', label: 'Snack', default: '11:00' },
-        { id: 'lunch', icon: '🍲', label: 'Lunch', default: '13:00' },
-        { id: 'dinner', icon: '🍛', label: 'Dinner', default: '20:00' }
+        { id: 'breakfast', type: 'breakfast', label: 'Breakfast', default: '08:00' },
+        { id: 'snack', type: 'snack', label: 'Snack', default: '11:00' },
+        { id: 'lunch', type: 'lunch', label: 'Lunch', default: '13:00' },
+        { id: 'dinner', type: 'dinner', label: 'Dinner', default: '20:00' }
       ];
     }
     return [
-      { id: 'breakfast', icon: '🍳', label: 'Breakfast', default: '08:00' },
-      { id: 'lunch', icon: '🍲', label: 'Lunch', default: '13:00' },
-      { id: 'dinner', icon: '🍛', label: 'Dinner', default: '20:00' }
+      { id: 'breakfast', type: 'breakfast', label: 'Breakfast', default: '08:00' },
+      { id: 'lunch', type: 'lunch', label: 'Lunch', default: '13:00' },
+      { id: 'dinner', type: 'dinner', label: 'Dinner', default: '20:00' }
     ];
   };
   
@@ -53,109 +320,92 @@ export default function MealTimesScreen() {
     return obj;
   });
 
+  const renderLargeMealIcon = (type) => {
+    switch (type) {
+      case 'breakfast':
+        return (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M17 8h1a4 4 0 1 1 0 8h-1M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8zM6 2v2M10 2v2M14 2v2"/>
+          </svg>
+        );
+      case 'snack':
+        return (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M13 2L3 14h9l-1 8L21 10h-9L13 2z"/>
+          </svg>
+        );
+      case 'lunch':
+        return (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        );
+      case 'dinner':
+        return (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <>
+    <div className={`mealtimes-container ${isDark ? 'dark-mode' : 'light-mode'}`}>
+      <style>{CSS}</style>
       <SparkleBackground isDark={isDark} />
       <Layout title="Set Your Meal Times" subtitle="WhatsApp will remind you 15 minutes before each meal" showBack onBack={() => navigate(-1)}>
-        <div style={{ maxWidth: 500, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        {/* Meal Time Cards */}
-        <div style={{ display: 'grid', gap: 14, marginBottom: 28 }}>
-          {mealConfig.map(meal => (
-            <div 
-              key={meal.id} 
-              style={{ 
-                background: isDark ? 'rgba(255, 255, 255, 0.05)' : '#FFF', 
-                borderRadius: 16, 
-                padding: '18px 20px', 
-                border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid #FFD296',
-                boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.2)' : '0 2px 10px rgba(240, 105, 34, 0.06)',
-                backdropFilter: 'blur(10px)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ 
-                    width: 48, 
-                    height: 48, 
-                    borderRadius: 12, 
-                    background: isDark ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #FFF5F0 0%, #FFEEE5 100%)', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    fontSize: 24,
-                    border: isDark ? '1px solid rgba(255,255,255,0.05)' : 'none'
-                  }}>{meal.icon}</div>
-                  <div>
-                    <label style={{ display: 'block', fontSize: 15, fontWeight: 600, color: isDark ? '#FFF' : '#111' }}>{meal.label}</label>
-                    <p style={{ fontSize: 12, color: isDark ? 'rgba(255,255,255,0.6)' : '#666' }}>Reminder: {formatTime(times[meal.id], -15)}</p>
+        <div className="mealtimes-wrap">
+          {/* Meal Time Cards */}
+          <div className="mealtimes-grid">
+            {mealConfig.map(meal => (
+              <div key={meal.id} className="mealtimes-card">
+                <div className="mealtimes-card-content">
+                  <div className="mealtimes-card-left">
+                    <div className={`mealtimes-icon-box ${meal.type}`}>{renderLargeMealIcon(meal.type)}</div>
+                    <div>
+                      <label className="mealtimes-card-label">{meal.label}</label>
+                      <p className="mealtimes-card-sub">Reminder: {formatTime(times[meal.id] || meal.default, -15)}</p>
+                    </div>
                   </div>
+                  <input 
+                    type="time" 
+                    value={times[meal.id] || meal.default} 
+                    onChange={(e) => setTimes({ ...times, [meal.id]: e.target.value })} 
+                    className="mealtimes-input"
+                  />
                 </div>
-                <input 
-                  type="time" 
-                  value={times[meal.id]} 
-                  onChange={(e) => setTimes({ ...times, [meal.id]: e.target.value })} 
-                  style={{ 
-                    background: isDark ? 'rgba(0,0,0,0.3)' : '#F9FAFB', 
-                    border: isDark ? '1px solid rgba(255,255,255,0.2)' : '2px solid #E5E7EB', 
-                    borderRadius: 10, 
-                    padding: '12px 14px', 
-                    fontSize: 16, 
-                    color: isDark ? '#FFF' : '#111', 
-                    outline: 'none',
-                    fontWeight: 600,
-                    width: 110,
-                    textAlign: 'center'
-                  }} 
-                />
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Water Reminder Info */}
-        <div style={{ 
-          background: isDark ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%)' : 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)', 
-          border: isDark ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid #93C5FD', 
-          borderRadius: 14, 
-          padding: '16px 20px', 
-          marginBottom: 24,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 14
-        }}>
-          <span style={{ fontSize: 28 }}>💧</span>
-          <div>
-            <p style={{ fontSize: 14, fontWeight: 600, color: isDark ? '#60A5FA' : '#1D4ED8' }}>Water reminders included!</p>
-            <p style={{ fontSize: 12, color: isDark ? 'rgba(255,255,255,0.7)' : '#3B82F6' }}>4 glasses spread throughout your day</p>
+            ))}
           </div>
-        </div>
 
-        {/* Continue Button */}
-        <button 
-          onClick={() => { localStorage.setItem('mealTimes', JSON.stringify(times)); navigate('/summary'); }} 
-          style={{ 
-            width: '100%', 
-            background: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)', 
-            border: 'none', 
-            borderRadius: 14, 
-            padding: '18px', 
-            fontSize: 17, 
-            fontWeight: 700, 
-            color: 'var(--white)', 
-            cursor: 'pointer',
-            boxShadow: isDark ? '0 8px 30px rgba(34, 197, 94, 0.4)' : '0 6px 25px rgba(34, 197, 94, 0.35)',
-            transition: 'all 0.2s'
-          }}
-        >
-          ✓ Confirm Times
-        </button>
-      </div>
-    </Layout>
-    </>
+          {/* Water Reminder Info */}
+          <div className="water-banner">
+            <span className="water-banner-icon">💧</span>
+            <div>
+              <p className="water-banner-title">Water reminders included!</p>
+              <p className="water-banner-sub">4 glasses spread throughout your day</p>
+            </div>
+          </div>
+
+          {/* Continue Button */}
+          <button 
+            onClick={() => { localStorage.setItem('mealTimes', JSON.stringify(times)); navigate('/summary'); }} 
+            className="confirm-btn"
+            type="button"
+          >
+            ✓ Confirm Times
+          </button>
+        </div>
+      </Layout>
+    </div>
   );
 }
 
 function formatTime(time, offsetMin) {
+  if (!time) return "";
   const [h, m] = time.split(':').map(Number);
   const date = new Date(2000, 0, 1, h, m + offsetMin);
   return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
