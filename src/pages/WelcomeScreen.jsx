@@ -3,6 +3,106 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../utils/constants";
 import PillNav from "./PillNav";
 import "./WelcomeScreen.css";
+import { gsap } from "gsap";
+
+function CountUpNumber({ targetVal, type, duration = 2.5, startOnMount = false }) {
+  const [val, setVal] = useState(0);
+  const elementRef = useRef(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (!startOnMount) return;
+    
+    // Animate on mount
+    const valObj = { value: 0 };
+    gsap.to(valObj, {
+      value: targetVal,
+      duration: duration,
+      ease: "power2.out",
+      onUpdate: () => {
+        setVal(valObj.value);
+      }
+    });
+    setHasAnimated(true);
+  }, [targetVal, startOnMount, duration]);
+
+  useEffect(() => {
+    if (startOnMount || hasAnimated) return;
+
+    const el = elementRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const valObj = { value: 0 };
+          gsap.to(valObj, {
+            value: targetVal,
+            duration: duration,
+            ease: "power2.out",
+            onUpdate: () => {
+              setVal(valObj.value);
+            }
+          });
+          setHasAnimated(true);
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [targetVal, startOnMount, hasAnimated, duration]);
+
+  const renderFormatted = () => {
+    if (!hasAnimated && !startOnMount) {
+      if (type === 'stories') {
+        const parts = targetVal.toLocaleString('en-US').split(',');
+        return parts.length > 1 
+          ? <>{parts[0]}<span>,</span>{parts[1]}<span>+</span></>
+          : <>{parts[0]}<span>+</span></>;
+      } else if (type === 'rating') {
+        return <>{targetVal.toFixed(1)}<span>★</span></>;
+      } else if (type === 'workout') {
+        return <>{targetVal}<span>min</span></>;
+      } else if (type === 'price') {
+        return <>₹<span>{targetVal}</span></>;
+      } else if (type === 'users') {
+        return <>{targetVal}<span>+</span></>;
+      }
+    }
+
+    if (type === 'stories') {
+      const currentVal = Math.floor(val);
+      const parts = currentVal.toLocaleString('en-US').split(',');
+      return parts.length > 1 
+        ? <>{parts[0]}<span>,</span>{parts[1]}<span>+</span></>
+        : <>{parts[0]}<span>+</span></>;
+    } else if (type === 'rating') {
+      const currentVal = val.toFixed(1);
+      return <>{currentVal}<span>★</span></>;
+    } else if (type === 'workout') {
+      const currentVal = Math.floor(val);
+      return <>{currentVal}<span>min</span></>;
+    } else if (type === 'price') {
+      const currentVal = Math.floor(val);
+      return <>₹<span>{currentVal}</span></>;
+    } else if (type === 'users') {
+      const currentVal = Math.floor(val);
+      return <>{currentVal}<span>+</span></>;
+    }
+    return Math.floor(val);
+  };
+
+  return (
+    <span ref={elementRef} className="num-animate-container">
+      {renderFormatted()}
+    </span>
+  );
+}
 
 export default function WelcomeScreen() {
   const navigate = useNavigate();
@@ -13,11 +113,16 @@ export default function WelcomeScreen() {
     todayUsers: 47,
     successStories: 12847,
   });
-  const [inactive, setInactive] = useState(false);
   const [shoutouts, setShoutouts] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const timerRef = useRef();
-  const cycleRef = useRef();
+  const [showNotification, setShowNotification] = useState(false);
+  const [progress, setProgress] = useState(100);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(() => {
+    return sessionStorage.getItem("shoutoutDismissed") === "true";
+  });
+  const cursorDotRef = useRef(null);
+  const cursorGlowRef = useRef(null);
 
   // Theme State
   const [isDark, setIsDark] = useState(() => {
@@ -40,36 +145,146 @@ export default function WelcomeScreen() {
     }
   }, []);
 
-  // Cycle through shoutouts every 4 seconds when inactive
+  // Cycle through shoutouts toast notifications with progress bar & pause-on-hover
   useEffect(() => {
-    if (inactive && shoutouts.length > 1) {
-      cycleRef.current = setInterval(() => {
-        setCurrentIdx(prev => (prev + 1) % shoutouts.length);
-      }, 4000);
-    }
-    return () => { if (cycleRef.current) clearInterval(cycleRef.current); };
-  }, [inactive, shoutouts.length]);
+    if (shoutouts.length === 0 || isDismissed) return;
 
-  // Reset inactivity timer on any interaction
-  const resetInactivity = () => {
-    setInactive(false);
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setInactive(true), 16000);
-  };
+    let tickInterval;
+    let transitionTimeout;
+
+    // Initial delay of 3 seconds before showing the first notification
+    if (!showNotification && progress === 100 && currentIdx === 0) {
+      transitionTimeout = setTimeout(() => {
+        setShowNotification(true);
+      }, 3000);
+      return () => clearTimeout(transitionTimeout);
+    }
+
+    if (showNotification && !isHovered) {
+      const tickRate = 100; // ms
+      const totalTicks = 7000 / tickRate; // 7 seconds total visible time
+      const decrement = 100 / totalTicks;
+
+      tickInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev - decrement <= 0) {
+            clearInterval(tickInterval);
+            setShowNotification(false);
+            transitionTimeout = setTimeout(() => {
+              setCurrentIdx((idx) => (idx + 1) % shoutouts.length);
+              setProgress(100);
+              setShowNotification(true);
+            }, 500); // 500ms slide-out animation time
+            return 0;
+          }
+          return prev - decrement;
+        });
+      }, tickRate);
+    }
+
+    return () => {
+      if (tickInterval) clearInterval(tickInterval);
+      if (transitionTimeout) clearTimeout(transitionTimeout);
+    };
+  }, [showNotification, isHovered, isDismissed, shoutouts.length, currentIdx]);
 
   useEffect(() => {
     api.call("/stats/today").then(setStats).catch(() => { });
-    resetInactivity();
-    const events = ["mousemove", "mousedown", "keydown", "touchstart"];
-    const handler = resetInactivity;
-    events.forEach(e => window.addEventListener(e, handler));
+  }, []);
+
+  // Custom Follow Cursor
+  useEffect(() => {
+    const dot = cursorDotRef.current;
+    const glow = cursorGlowRef.current;
+    if (!dot || !glow) return;
+
+    gsap.set(dot, { xPercent: -50, yPercent: -50 });
+    gsap.set(glow, { xPercent: -50, yPercent: -50 });
+
+    const handleMouseMove = (e) => {
+      gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.08, ease: "power2.out" });
+      gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.35, ease: "power2.out" });
+    };
+
+    const handleMouseOver = (e) => {
+      const target = e.target;
+      if (target && target.closest && target.closest("button, a, .bcard, .testi, .testimonial-card, .price-card, .pricing-card, .nominee-badge, .theme-toggle, .mobile-only-logo")) {
+        gsap.to(glow, { scale: 1.6, background: "rgba(255, 92, 53, 0.12)", borderColor: "var(--coral)", duration: 0.3 });
+        gsap.to(dot, { scale: 0.6, opacity: 0.3, duration: 0.3 });
+      } else {
+        gsap.to(glow, { scale: 1, background: "transparent", borderColor: "rgba(255, 92, 53, 0.3)", duration: 0.3 });
+        gsap.to(dot, { scale: 1, opacity: 1, duration: 0.3 });
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseover", handleMouseOver);
+
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      events.forEach(e => window.removeEventListener(e, handler));
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseover", handleMouseOver);
     };
   }, []);
 
-  // Scroll and Reveal Observer
+  // 3D Tilt Effect on cards
+  useEffect(() => {
+    const cards = document.querySelectorAll(".bcard, .price-card, .pricing-card, .testi, .testimonial-card");
+    
+    const handleMove = (e) => {
+      const card = e.currentTarget;
+      const box = card.getBoundingClientRect();
+      const x = e.clientX - box.left - box.width / 2;
+      const y = e.clientY - box.top - box.height / 2;
+      
+      const tiltX = (y / (box.height / 2)) * -5;
+      const tiltY = (x / (box.width / 2)) * 5;
+      
+      gsap.to(card, {
+        rotateX: tiltX,
+        rotateY: tiltY,
+        transformPerspective: 1000,
+        ease: "power2.out",
+        duration: 0.3
+      });
+    };
+    
+    const handleLeave = (e) => {
+      const card = e.currentTarget;
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        ease: "power2.out",
+        duration: 0.5
+      });
+    };
+    
+    cards.forEach(card => {
+      card.addEventListener("mousemove", handleMove);
+      card.addEventListener("mouseleave", handleLeave);
+    });
+    
+    return () => {
+      cards.forEach(card => {
+        card.removeEventListener("mousemove", handleMove);
+        card.removeEventListener("mouseleave", handleLeave);
+      });
+    };
+  }, []);
+
+  // Staggered Entrance Animations on load
+  useEffect(() => {
+    gsap.fromTo(".hero-eyebrow, .hero-gradient-title, .hero .lead, .hero-ctas, .hero-stats", 
+      { opacity: 0, y: 30 }, 
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.15 }
+    );
+    
+    gsap.fromTo(".phone", 
+      { opacity: 0, scale: 0.75, rotate: -4 }, 
+      { opacity: 1, scale: 0.9, rotate: 5, duration: 1.6, ease: "elastic.out(1, 0.75)", delay: 0.5 }
+    );
+  }, []);
+
+  // Scroll and GSAP Reveal Observer
   useEffect(() => {
     const nav = document.getElementById('nav');
     const handleScroll = () => {
@@ -79,16 +294,34 @@ export default function WelcomeScreen() {
     window.addEventListener('scroll', handleScroll);
 
     const revealEls = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          const targets = entry.target.querySelectorAll('h2, p, .bcard, .testi, .price-card, .day-col, .price-checklist li');
+          
+          if (targets.length > 0) {
+            gsap.fromTo(targets,
+              { opacity: 0, y: 25 },
+              { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: "power3.out" }
+            );
+          } else {
+            gsap.fromTo(entry.target,
+              { opacity: 0, y: 25 },
+              { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }
+            );
+          }
+          observer.unobserve(entry.target);
+        }
       });
-    }, {threshold: 0.15});
-    revealEls.forEach(el => obs.observe(el));
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => observer.observe(el));
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      obs.disconnect();
+      observer.disconnect();
     };
   }, []);
 
@@ -100,77 +333,76 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <div className={`welcome-landing ${isDark ? 'dark-mode' : 'light-mode'}`} onMouseMove={resetInactivity} onKeyDown={resetInactivity} onClick={resetInactivity} onTouchStart={resetInactivity}>
-      {/* Attract/advertisement overlay after inactivity */}
-      {inactive && shoutouts.length > 0 && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'rgba(5,5,5,0.97)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            transition: 'background 0.4s',
-          }}
-          onClick={resetInactivity}
+    <div className={`welcome-landing ${isDark ? 'dark-mode' : 'light-mode'}`}>
+      {/* Custom Cursor elements */}
+      <div className="custom-cursor-dot" ref={cursorDotRef}></div>
+      <div className="custom-cursor-glow" ref={cursorGlowRef}></div>
+      {/* Ambient background glow blobs */}
+      <div className="ambient-glow glow-1"></div>
+      <div className="ambient-glow glow-2"></div>
+      
+      {/* Floating Award Nominee Badge */}
+      <div className="nominee-badge" onClick={() => navigate('/ProductShowcaseBoard')}>
+        <div className="nominee-badge-inner">
+          <span className="star-icon">★</span>
+          <div>
+            <div className="nominee-title">Site of the Day</div>
+            <div className="nominee-subtitle">Awwwards Nominee</div>
+          </div>
+          <span className="year-tag">2026</span>
+        </div>
+      </div>
+
+      {/* Side Popup Toast Notification */}
+      {shoutouts.length > 0 && !isDismissed && (
+        <div 
+          className={`shoutout-toast ${showNotification ? 'visible' : ''}`} 
+          onClick={() => navigate('/ProductShowcaseBoard')}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          <div style={{
-            background: 'linear-gradient(135deg,#F4610A,#FB923C)',
-            borderRadius: 32,
-            boxShadow: '0 24px 80px rgba(244,97,10,0.3)',
-            padding: 48,
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            maxWidth: 420,
-            transition: 'all 0.4s ease',
-          }}>
-            <div style={{ position: 'relative' }}>
+          <button 
+            className="close-toast" 
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              setShowNotification(false); 
+              setIsDismissed(true); 
+              sessionStorage.setItem("shoutoutDismissed", "true");
+            }}
+            aria-label="Close notification"
+          >
+            ×
+          </button>
+          <div className="toast-body">
+            <div className="toast-avatar-container">
               <img 
                 src={shoutouts[currentIdx]?.image || "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=200&h=200&q=80"} 
-                alt="Shoutout" 
-                style={{ 
-                  width: 120, height: 120, borderRadius: '50%', marginBottom: 16, 
-                  border: '4px solid #fff', boxShadow: '0 4px 24px #F97316',
-                  objectFit: 'cover', transition: 'opacity 0.3s',
-                }} 
+                alt={shoutouts[currentIdx]?.name} 
+                className="toast-avatar"
               />
-              <span style={{
-                position: 'absolute', bottom: 12, right: -8,
-                background: '#fff', color: '#F4610A', fontWeight: 700,
-                fontSize: 11, padding: '4px 10px', borderRadius: 12,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-              }}>
+              <span className="toast-badge-emoji">
                 {shoutouts[currentIdx]?.type === "Birthday" && "🎂"}
                 {shoutouts[currentIdx]?.type === "Instagram" && "📸"}
                 {shoutouts[currentIdx]?.type === "Product" && "☕"}
                 {shoutouts[currentIdx]?.type === "Star" && "⭐"}
-                {shoutouts[currentIdx]?.type || "Shoutout"}
+                {shoutouts[currentIdx]?.type || "💬"}
               </span>
             </div>
-            <h2 style={{ fontFamily: 'Playfair Display,serif', fontSize: 26, fontWeight: 900, color: '#fff', marginBottom: 6, textAlign: 'center', letterSpacing: '0' }}>
-              {shoutouts[currentIdx]?.name || "Your Name Here"}
-            </h2>
-            <p style={{ color: '#FED7AA', fontSize: 16, fontWeight: 500, textAlign: 'center', marginBottom: 18, fontStyle: 'italic', maxWidth: 300 }}>
-              "{shoutouts[currentIdx]?.message || "Your message here..."}"
-            </p>
-            <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
-              {shoutouts.map((_, i) => (
-                <div key={i} style={{
-                  width: i === currentIdx ? 20 : 8, height: 8, borderRadius: 4,
-                  background: i === currentIdx ? '#fff' : 'rgba(255,255,255,0.4)',
-                  transition: 'all 0.3s',
-                }} />
-              ))}
+            <div className="toast-content">
+              <div className="toast-header-info">
+                <span className="toast-name">{shoutouts[currentIdx]?.name}</span>
+                <div className="toast-live-badge">
+                  <span className="toast-pulse-dot"></span>
+                  <span className="toast-live-txt">Live</span>
+                </div>
+              </div>
+              <p className="toast-message">"{shoutouts[currentIdx]?.message}"</p>
+              <span className="toast-action-lbl">Click to view board →</span>
             </div>
-            <button
-              onClick={(e) => { e.stopPropagation(); setInactive(false); navigate('/ProductShowcaseBoard'); }}
-              style={{
-                background: 'linear-gradient(135deg,#F97316,#F4610A)',
-                color: '#fff', fontWeight: 700, fontSize: 18,
-                padding: '18px 44px', borderRadius: 18, border: 'none',
-                boxShadow: '0 8px 32px rgba(244,97,10,.18)', cursor: 'pointer', marginTop: 10,
-              }}
-            >
-              🚀 See Public Board
-            </button>
-            <p style={{ color: '#fff', fontSize: 13, marginTop: 10, opacity: 0.8 }}>Tap anywhere to return</p>
+          </div>
+          {/* Toast dynamic progress bar */}
+          <div className="toast-progress-bar">
+            <div className="toast-progress-fill" style={{ width: `${progress}%` }}></div>
           </div>
         </div>
       )}
@@ -178,7 +410,7 @@ export default function WelcomeScreen() {
       <header className="nav" id="nav">
         {/* Left Spacer / Mobile Logo */}
         <div className="nav-left">
-          <img src="/relivlogo.jpeg" alt="Reliv Logo" className="mobile-only-logo" />
+          <div className="logo mobile-only-logo">Rel<span>i</span>v</div>
         </div>
 
         {/* Center: PillNav */}
@@ -214,7 +446,7 @@ export default function WelcomeScreen() {
       </header>
 
       {/* ============ MARQUEE ============ */}
-      <div className="marquee" style={{ marginTop: '80px' }}>
+      <div className="marquee" style={{ marginTop: '64px' }}>
         <div className="marquee-track" id="marquee" style={{ animation: 'scrollx 38s linear infinite' }}>
           <div className="marquee-item"><span className="strong">{stats.successStories}+</span> success stories <span className="sep">◆</span></div>
           <div className="marquee-item"><span className="strong">4.9★</span> average rating <span className="sep">◆</span></div>
@@ -233,12 +465,12 @@ export default function WelcomeScreen() {
       </div>
 
       {/* ============ HERO ============ */}
-      <section className="hero" style={{ paddingTop: '80px' }}>
+      <section className="hero">
         <div className="wrap hero-grid">
           <div className="hero-content">
             <div className="hero-text">
               <span className="hero-eyebrow"><span className="dot"></span> AI-Powered Personal Health</span>
-              <h1>Transform your health,<br/>one <span style={{color: 'var(--coral)'}}>WhatsApp</span><br/>message at a time.</h1>
+              <h1 className="hero-gradient-title">Transform your health,<br/>one <span className="coral-glow">WhatsApp</span><br/>message at a time.</h1>
               <p className="lead">
                 Reliv's AI coach builds your diet plan, your workout routine, and your daily reminders —
                 then sends them straight to the app you already check 40 times a day. All for <strong>less than your daily chai</strong>,
@@ -250,9 +482,22 @@ export default function WelcomeScreen() {
               <button onClick={() => navigate('/ProductShowcaseBoard')} className="btn-ghost">Public shoutout board</button>
             </div>
             <div className="hero-stats">
-              <div className="hero-stat"><span className="num">{stats.todayUsers}+</span><span className="lbl">Users Today</span></div>
-              <div className="hero-stat"><span className="num">4.9</span><span className="lbl">Average rating</span></div>
-              <div className="hero-stat"><span className="num">HIPAA</span><span className="lbl">Compliant by design</span></div>
+              <div className="hero-stat">
+                <span className="num" id="hero-stat-users">
+                  <CountUpNumber targetVal={stats.todayUsers || 47} type="users" startOnMount={true} duration={2.5} />
+                </span>
+                <span className="lbl">Users Today</span>
+              </div>
+              <div className="hero-stat">
+                <span className="num" id="hero-stat-rating">
+                  <CountUpNumber targetVal={4.9} type="rating" startOnMount={true} duration={2.5} />
+                </span>
+                <span className="lbl">Avg Rating</span>
+              </div>
+              <div className="hero-stat">
+                <span className="num">HIPAA</span>
+                <span className="lbl">Compliant</span>
+              </div>
             </div>
           </div>
 
@@ -274,6 +519,17 @@ export default function WelcomeScreen() {
                   <div className="typing"><span></span><span></span><span></span></div>
                   <div className="bubble in">You're 3 days into your streak 🔥 Log dinner when you're ready.<span className="time">9:10 PM</span></div>
                 </div>
+                <div className="wa-quick-replies">
+                  <button className="wa-qr">Swap breakfast 🔄</button>
+                  <button className="wa-qr">Skip workout</button>
+                  <button className="wa-qr">Water intake 💧</button>
+                </div>
+                <div className="wa-progress-row">
+                  <div className="wa-progress-label">Daily goal — 68% complete</div>
+                  <div className="wa-progress-bar-bg">
+                    <div className="wa-progress-bar-fill"></div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="float-card streak" style={{ top: '10%', right: '-15%', padding: '12px 20px', gap: '10px', transform: 'rotate(-2deg)' }}>
@@ -293,7 +549,7 @@ export default function WelcomeScreen() {
         <div className="wrap">
           <div className="head reveal">
             <span className="tag">A typical day</span>
-            <h2>Three nudges. Zero apps to open.</h2>
+            <h2 className="section-gradient-title">Three nudges. Zero apps to open.</h2>
             <p>No dashboards to check, no logging marathons. Reliv reaches you exactly when it matters — and quietly rebuilds tomorrow's plan around how today went.</p>
           </div>
           <div className="day-rail reveal">
@@ -337,7 +593,7 @@ export default function WelcomeScreen() {
         <div className="wrap">
           <div className="head reveal">
             <span className="tag">What's inside</span>
-            <h2>Everything a trainer and dietitian do — minus the waitlist.</h2>
+            <h2 className="section-gradient-title">Everything a trainer and dietitian do — minus the waitlist.</h2>
             <p>Four systems, one quiet daily habit.</p>
           </div>
           <div className="bento">
@@ -379,6 +635,7 @@ export default function WelcomeScreen() {
       </section>
 
       {/* ============ PRICING ============ */}
+      {/* ============ PRICING ============ */}
       <section className="pricing" id="pricing">
         <div className="lamp-container">
           <div className="lamp-wire"></div>
@@ -394,32 +651,63 @@ export default function WelcomeScreen() {
         </div>
         <div className="wrap price-shell">
           <div className="reveal">
-            <span className="tag">Pricing</span>
-            <h2>Cheaper than the coffee you'll skip.</h2>
-            <p className="lede">One transparent price. No hidden tiers, no surprise renewals — cancel from WhatsApp, anytime, in one message.</p>
-            <ul className="price-checklist">
-              <li><span className="tick">✓</span> Personalized diet & workout plans, updated weekly</li>
-              <li><span className="tick">✓</span> Daily WhatsApp coaching — no app to install</li>
-              <li><span className="tick">✓</span> Progress tracking & weekly summaries</li>
-              <li><span className="tick">✓</span> Bank-grade security, HIPAA-compliant by design</li>
-            </ul>
-            <div className="hero-ctas">
-              <button onClick={() => navigate('/phone')} className="btn-primary">Start your free trial</button>
+            <span className="eyebrow">Pricing</span>
+            <h2 className="section-title">Cheaper than the<br /><em>coffee</em> you'll skip.</h2>
+            <p className="section-sub">One transparent price. No hidden tiers, no surprise renewals — cancel from WhatsApp, anytime, in one message.</p>
+            <div className="desktop-only-action-ctas">
+              <button onClick={() => navigate('/phone')} className="btn-primary" style={{ marginRight: '12px' }}>Start your free trial</button>
               <button onClick={() => navigate('/code')} className="btn-ghost">Returning user? Log in</button>
             </div>
           </div>
-          <div className="price-card reveal">
-            <div className="price-tag-row">
-              <span className="price-amount">₹9</span>
-              <span className="price-period">/ day, billed monthly</span>
+
+          <div className="pricing-card reveal">
+            <div className="pricing-badge">One plan. Everything included.</div>
+            <div className="pricing-amount">
+              <span className="pricing-currency">₹</span>
+              <span className="pricing-number">9</span>
+              <span className="pricing-per">/ day, billed monthly</span>
             </div>
-            <div className="price-note">That's ₹270/month for a coach, a nutritionist, and a planner.</div>
-            <div className="compare">
-              <div className="crow"><span className="item">☕ Cup of chai</span><span className="amt">₹10–15</span></div>
-              <div className="crow"><span className="item">🚗 Short auto ride</span><span className="amt">₹30–50</span></div>
-              <div className="crow"><span className="item">🥤 Café cold coffee</span><span className="amt">₹120+</span></div>
-              <div className="crow hi"><span className="item">🤖 Reliv — full day of AI coaching</span><span className="amt">₹9</span></div>
+            <div className="pricing-note">That's ₹270/month for a personal coach, a nutritionist, and a planner.</div>
+
+            <div className="pricing-compare">
+              <div className="pricing-row">
+                <div className="pricing-row-label"><span>☕</span> Cup of chai</div>
+                <div className="pricing-row-val">₹10–15</div>
+              </div>
+              <div className="pricing-row">
+                <div className="pricing-row-label"><span>🛺</span> Short auto ride</div>
+                <div className="pricing-row-val">₹30–50</div>
+              </div>
+              <div className="pricing-row">
+                <div className="pricing-row-label"><span>🧃</span> Café cold coffee</div>
+                <div className="pricing-row-val">₹120+</div>
+              </div>
+              <div className="pricing-row highlight">
+                <div className="pricing-row-label"><span>⚡</span> Reliv — full day of AI coaching</div>
+                <div className="pricing-row-val">₹9</div>
+              </div>
             </div>
+
+            <div className="pricing-features">
+              <div className="pricing-feature">
+                <div className="pricing-check">✓</div>
+                Personalized diet & workout plans, updated weekly
+              </div>
+              <div className="pricing-feature">
+                <div className="pricing-check">✓</div>
+                Daily WhatsApp coaching — no app to install
+              </div>
+              <div className="pricing-feature">
+                <div className="pricing-check">✓</div>
+                Progress tracking & weekly summaries
+              </div>
+              <div className="pricing-feature">
+                <div className="pricing-check">✓</div>
+                Bank-grade security, HIPAA-compliant by design
+              </div>
+            </div>
+
+            <button onClick={() => navigate('/phone')} className="btn-primary-lg" style={{ width: '100%', textAlign: 'center' }}>Start your free trial</button>
           </div>
         </div>
       </section>
@@ -428,33 +716,74 @@ export default function WelcomeScreen() {
       <section id="proof">
         <div className="wrap">
           <div className="head reveal">
-            <span className="tag">Trusted by thousands</span>
-            <h2>Real people, real streaks.</h2>
+            <span className="eyebrow">Real People, Real Streaks</span>
+            <h2 className="section-title">Trusted by<br /><em>thousands.</em></h2>
           </div>
-          <div className="stat-row">
-            <div className="stat reveal"><span className="num">{stats.successStories}+</span><span className="lbl">SUCCESS STORIES</span></div>
-            <div className="stat reveal"><span className="num">4.9★</span><span className="lbl">AVERAGE RATING</span></div>
-            <div className="stat reveal"><span className="num">12min</span><span className="lbl">AVG. DAILY WORKOUT</span></div>
-            <div className="stat reveal"><span className="num">₹9</span><span className="lbl">PER DAY, ALL-IN</span></div>
-          </div>
-          <div className="testi-grid">
-            <div className="testi reveal">
-              <span className="quote-mark">"</span>
-              <div className="stars">★★★★★</div>
-              <p>I stopped overthinking what to eat. Reliv just tells me, and I do it. Six kilos down in two months.</p>
-              <div className="who"><div className="av">PS</div> Priya S., Pune</div>
+          {(() => {
+            const storiesVal = stats.successStories || 12847;
+            return (
+              <div className="stats-strip">
+                <div className="stat-item reveal">
+                  <div className="stat-n">
+                    <CountUpNumber targetVal={storiesVal} type="stories" duration={2.8} />
+                  </div>
+                  <div className="stat-l">SUCCESS STORIES</div>
+                </div>
+                <div className="stat-item reveal">
+                  <div className="stat-n">
+                    <CountUpNumber targetVal={4.9} type="rating" duration={2.8} />
+                  </div>
+                  <div className="stat-l">AVERAGE RATING</div>
+                </div>
+                <div className="stat-item reveal">
+                  <div className="stat-n">
+                    <CountUpNumber targetVal={12} type="workout" duration={2.8} />
+                  </div>
+                  <div className="stat-l">AVG. DAILY WORKOUT</div>
+                </div>
+                <div className="stat-item reveal">
+                  <div className="stat-n">
+                    <CountUpNumber targetVal={9} type="price" duration={2.8} />
+                  </div>
+                  <div className="stat-l">PER DAY, ALL-IN</div>
+                </div>
+              </div>
+            );
+          })()}
+
+          <div className="testimonials">
+            <div className="testimonial-card reveal">
+              <div className="t-stars">★★★★★</div>
+              <p className="t-quote">"I stopped overthinking what to eat. Reliv just tells me, and I do it. Six kilos down in two months."</p>
+              <div className="t-author">
+                <div className="t-avatar">PS</div>
+                <div>
+                  <div className="t-name">Priya S.</div>
+                  <div className="t-loc">Pune</div>
+                </div>
+              </div>
             </div>
-            <div className="testi reveal">
-              <span className="quote-mark">"</span>
-              <div className="stars">★★★★★</div>
-              <p>The WhatsApp reminders are the whole trick. I never open another fitness app, and I never miss a day.</p>
-              <div className="who"><div className="av">RK</div> Rohit K., Bengaluru</div>
+            <div className="testimonial-card reveal">
+              <div className="t-stars">★★★★★</div>
+              <p className="t-quote">"The WhatsApp reminders are the whole trick. I never opened another fitness app, and I never miss a day."</p>
+              <div className="t-author">
+                <div className="t-avatar">RK</div>
+                <div>
+                  <div className="t-name">Rohit K.</div>
+                  <div className="t-loc">Bengaluru</div>
+                </div>
+              </div>
             </div>
-            <div className="testi reveal">
-              <span className="quote-mark">"</span>
-              <div className="stars">★★★★★</div>
-              <p>Felt like having a dietitian on call for the price of a cutting chai. Worth every rupee.</p>
-              <div className="who"><div className="av">AM</div> Anjali M., Delhi</div>
+            <div className="testimonial-card reveal">
+              <div className="t-stars">★★★★★</div>
+              <p className="t-quote">"Felt like having a dietitian on call for the price of a cutting chai. Worth every rupee."</p>
+              <div className="t-author">
+                <div className="t-avatar">AM</div>
+                <div>
+                  <div className="t-name">Anjali M.</div>
+                  <div className="t-loc">Delhi</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -468,6 +797,11 @@ export default function WelcomeScreen() {
           <div className="hero-ctas reveal">
             <button onClick={() => navigate('/phone')} className="btn-primary">Start your free trial</button>
             <button onClick={() => navigate('/code')} className="btn-ghost">Returning user? Log in</button>
+          </div>
+          <div className="trust-note reveal">
+            <span>🔒 Bank-grade security</span>
+            <span>🏥 HIPAA compliant</span>
+            <span>❌ No credit card needed</span>
           </div>
         </div>
       </section>

@@ -8,57 +8,7 @@ export default function BotPurchaseScreen() {
   const [show, setShow] = useState(false);
   const [hovered, setHovered] = useState(false);
 
-  // Inactivity timer state
-  const [inactive, setInactive] = useState(false);
-  const [shoutouts, setShoutouts] = useState([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const timerRef = useRef();
-  const cycleRef = useRef();
 
-  // Load shoutouts from localStorage
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem("userShoutouts") || "[]");
-      const defaultShoutouts = [
-        { name: "Priya Sharma", message: "My birthday shoutout was amazing! 🎂", image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=200&h=200&q=80", type: "Birthday" },
-        { name: "Raj Mehta", message: "Got 50+ new followers from my IG card! 📸", image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=facearea&w=200&h=200&q=80", type: "Instagram" },
-        { name: "Sara Khan", message: "Promoted my new café here — best decision! ☕", image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=facearea&w=200&h=200&q=80", type: "Product" },
-      ];
-      setShoutouts(saved.length > 0 ? [...saved, ...defaultShoutouts] : defaultShoutouts);
-    } catch (e) {
-      console.error("Error loading shoutouts:", e);
-    }
-  }, []);
-
-  // Cycle through shoutouts every 4 seconds when inactive
-  useEffect(() => {
-    if (inactive && shoutouts.length > 1) {
-      cycleRef.current = setInterval(() => {
-        setCurrentIdx(prev => (prev + 1) % shoutouts.length);
-      }, 4000);
-    }
-    return () => { if (cycleRef.current) clearInterval(cycleRef.current); };
-  }, [inactive, shoutouts.length]);
-
-  // Reset inactivity timer on any interaction
-  const resetInactivity = () => {
-    setInactive(false);
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => setInactive(true), 15000);
-  };
-
-  useEffect(() => {
-    // Start inactivity timer on mount
-    resetInactivity();
-    // Listen for user activity
-    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
-    const handler = resetInactivity;
-    events.forEach(e => window.addEventListener(e, handler));
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      events.forEach(e => window.removeEventListener(e, handler));
-    };
-  }, []);
 
   useEffect(() => { setTimeout(() => setShow(true), 150); }, []);
 
@@ -93,10 +43,6 @@ export default function BotPurchaseScreen() {
         background: 'linear-gradient(180deg, #0F0F12 0%, #1A1A2E 40%, #16213E 100%)',
         fontFamily: "'Inter', 'Outfit', sans-serif", position: 'relative', overflow: 'hidden',
       }}
-      onMouseMove={resetInactivity}
-      onKeyDown={resetInactivity}
-      onClick={resetInactivity}
-      onTouchStart={resetInactivity}
     >
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(240,105,34,0.12) 0%, transparent 70%)', borderRadius: '50%', animation: 'floatO1 20s ease-in-out infinite' }} />
@@ -110,79 +56,7 @@ export default function BotPurchaseScreen() {
         color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: 600, cursor: 'pointer',
       }}>← Back</button>
 
-      {/* Inactivity attract screen overlay */}
-      {inactive && shoutouts.length > 0 && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 100,
-            background: 'rgba(255,255,255,0.96)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            transition: 'background 0.4s',
-          }}
-          onClick={resetInactivity}
-        >
-          <div style={{
-            background: 'linear-gradient(135deg,#F4610A,#FB923C)',
-            borderRadius: 32,
-            boxShadow: '0 24px 80px rgba(244,97,10,0.18)',
-            padding: 48,
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            maxWidth: 420,
-            transition: 'all 0.4s ease',
-          }}>
-            <div style={{ position: 'relative' }}>
-              <img 
-                src={shoutouts[currentIdx]?.image || "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=200&h=200&q=80"} 
-                alt="Shoutout" 
-                style={{ 
-                  width: 120, height: 120, borderRadius: '50%', marginBottom: 16,
-                  border: '4px solid #fff', boxShadow: '0 4px 24px #F97316',
-                  objectFit: 'cover', transition: 'opacity 0.3s',
-                }} 
-              />
-              <span style={{
-                position: 'absolute', bottom: 12, right: -8,
-                background: '#fff', color: '#F4610A', fontWeight: 700,
-                fontSize: 11, padding: '4px 10px', borderRadius: 12,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-              }}>
-                {shoutouts[currentIdx]?.type === "Birthday" && "🎂"}
-                {shoutouts[currentIdx]?.type === "Instagram" && "📸"}
-                {shoutouts[currentIdx]?.type === "Product" && "☕"}
-                {shoutouts[currentIdx]?.type === "Star" && "⭐"}
-                {shoutouts[currentIdx]?.type || "Shoutout"}
-              </span>
-            </div>
-            <h2 style={{ fontFamily: 'Playfair Display,serif', fontSize: 26, fontWeight: 900, color: '#fff', marginBottom: 6, textAlign: 'center' }}>
-              {shoutouts[currentIdx]?.name || "Your Name Here"}
-            </h2>
-            <p style={{ color: '#FED7AA', fontSize: 16, fontWeight: 500, textAlign: 'center', marginBottom: 18, fontStyle: 'italic', maxWidth: 300 }}>
-              "{shoutouts[currentIdx]?.message || "Your message here..."}"
-            </p>
-            <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
-              {shoutouts.map((_, i) => (
-                <div key={i} style={{
-                  width: i === currentIdx ? 20 : 8, height: 8, borderRadius: 4,
-                  background: i === currentIdx ? '#fff' : 'rgba(255,255,255,0.4)',
-                  transition: 'all 0.3s',
-                }} />
-              ))}
-            </div>
-            <button
-              onClick={() => { setInactive(false); navigate('/ProductShowcaseBoard'); }}
-              style={{
-                background: 'linear-gradient(135deg,#F97316,#F4610A)',
-                color: '#fff', fontWeight: 700, fontSize: 18,
-                padding: '18px 44px', borderRadius: 18, border: 'none',
-                boxShadow: '0 8px 32px rgba(244,97,10,.18)', cursor: 'pointer', marginTop: 10,
-              }}
-            >
-              🚀 See Public Board
-            </button>
-            <p style={{ color: '#fff', fontSize: 13, marginTop: 10, opacity: 0.8 }}>Tap anywhere to return</p>
-          </div>
-        </div>
-      )}
+
 
       <div style={{
         position: 'relative', zIndex: 10, maxWidth: 580, margin: '0 auto', padding: '80px 24px 40px',

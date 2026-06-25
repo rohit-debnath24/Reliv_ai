@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Reliv — AI Health Coach on WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ─── DARK THEME (default) ────────────────────── */
+  :root, [data-theme="dark"] {
+    --bg:        #0C0B09;
+    --bg2:       #141310;
+    --card:      #1A1915;
+    --card2:     #201E18;
+    --border:    rgba(255,255,255,0.07);
+    --border-hover: rgba(255,107,44,0.22);
+    --orange:    #FF6B2C;
+    --orange-dim:#C4491A;
+    --cream:     #F0EBE1;
+    --muted:     #8A8270;
+    --muted2:    #4A4740;
+    --green:     #4CAF82;
+    --font-d:    'Fraunces', Georgia, serif;
+    --font-b:    'Inter', system-ui, sans-serif;
+    --nav-bg:    rgba(12,11,9,0.88);
+    --marquee-bg: #141310;
+    --wa-body-bg: #0D1418;
+    --wa-card-bg: #1B2027;
+    --wa-header-bg: #1F2C34;
+    --wa-from:   #1F2C34;
+    --wa-to:     #005C4B;
+    --wa-text:   #E9EDEF;
+    --wa-muted:  #8696A0;
+    --mini-chat-bg: #0D1418;
+    --mini-from: #1F2C34;
+    --mini-to:   #005C4B;
+    --shadow-card: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,107,44,0.08);
+    --pricing-bg: #141310;
+    --theme-toggle-bg: rgba(255,255,255,0.07);
+    --theme-toggle-color: #8A8270;
+  }
+
+  /* ─── LIGHT THEME ────────────────────────────── */
+  [data-theme="light"] {
+    --bg:        #FAF9F6;
+    --bg2:       #F3F1EC;
+    --card:      #FFFFFF;
+    --card2:     #F7F5F1;
+    --border:    rgba(0,0,0,0.08);
+    --border-hover: rgba(255,107,44,0.3);
+    --orange:    #E85A1A;
+    --orange-dim:#C4491A;
+    --cream:     #1A1510;
+    --muted:     #6B6358;
+    --muted2:    #B0A898;
+    --green:     #2E8B5A;
+    --nav-bg:    rgba(250,249,246,0.92);
+    --marquee-bg: #F3F1EC;
+    --wa-body-bg: #E5DDD5;
+    --wa-card-bg: #FFFFFF;
+    --wa-header-bg: #075E54;
+    --wa-from:   #FFFFFF;
+    --wa-to:     #DCF8C6;
+    --wa-text:   #1A1A1A;
+    --wa-muted:  #667781;
+    --mini-chat-bg: #E5DDD5;
+    --mini-from: #FFFFFF;
+    --mini-to:   #DCF8C6;
+    --shadow-card: 0 8px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,107,44,0.1);
+    --pricing-bg: #F7F5F1;
+    --theme-toggle-bg: rgba(0,0,0,0.06);
+    --theme-toggle-color: #6B6358;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--font-b);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  /* ─── THEME TOGGLE ────────────────────────────── */
+  .theme-toggle {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--theme-toggle-bg);
+    color: var(--theme-toggle-color);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    border-color: rgba(255,107,44,0.3);
+    transform: rotate(20deg);
+  }
+
+  /* ─── NAV ─────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px) saturate(1.4);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .logo {
+    font-family: var(--font-d);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--cream);
+  }
+  .logo span { color: var(--orange); }
+
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-family: var(--font-b);
+    font-size: 13px;
+    cursor: pointer;
+    transition: color .2s, border-color .2s;
+  }
+  .btn-ghost:hover { color: var(--cream); border-color: rgba(255,107,44,0.3); }
+
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 999px;
+    font-family: var(--font-b);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { background: #FF7D42; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  /* ─── HERO ────────────────────────────────────── */
+  .hero {
+    min-height: 100svh;
+    padding: 110px 24px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 340px; height: 340px;
+    background: radial-gradient(ellipse at center, rgba(255,107,44,0.22) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,107,44,0.12);
+    border: 1px solid rgba(255,107,44,0.25);
+    padding: 5px 12px 5px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+  .hero-pill-dot {
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero h1 {
+    font-family: var(--font-d);
+    font-size: clamp(38px, 9vw, 52px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    color: var(--cream);
+    margin-bottom: 20px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--orange);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 340px;
+    margin-bottom: 32px;
+  }
+  .hero-sub strong { color: var(--cream); font-weight: 500; }
+
+  .hero-ctas {
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .btn-primary-lg {
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-family: var(--font-b);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, box-shadow .2s, transform .15s;
+    box-shadow: 0 4px 24px rgba(255,107,44,0.35);
+  }
+  .btn-primary-lg:hover {
+    background: #FF7D42;
+    box-shadow: 0 6px 32px rgba(255,107,44,0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-link {
+    background: transparent; border: none;
+    color: var(--muted); font-family: var(--font-b);
+    font-size: 13px; cursor: pointer;
+    text-decoration: underline; text-underline-offset: 3px;
+    transition: color .2s;
+  }
+  .btn-link:hover { color: var(--cream); }
+
+  /* Stats strip */
+  .hero-stats {
+    display: flex; gap: 28px; flex-wrap: wrap;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .hero-stat-n {
+    font-family: var(--font-d);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .hero-stat-l {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 3px;
+  }
+
+  /* ─── MARQUEE ─────────────────────────────────── */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    background: var(--marquee-bg);
+    transition: background 0.3s ease;
+  }
+  .marquee-track {
+    display: flex; gap: 40px;
+    white-space: nowrap;
+    animation: marquee 22s linear infinite;
+  }
+  .marquee-item {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .marquee-dot { color: var(--orange); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── WHATSAPP AI COACH CARD ──────────────────── */
+  .mockup-section {
+    padding: 16px 24px 48px;
+    position: relative;
+  }
+
+  .mockup-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .mockup-label-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(76,175,130,0.2);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .mockup-glow-wrap { position: relative; }
+
+  .mockup-bg-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px; height: 280px;
+    background: radial-gradient(ellipse, rgba(255,107,44,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Floating stat chips around card */
+  .mockup-chip {
+    position: absolute;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--cream);
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    animation: chipFloat 4s ease-in-out infinite;
+    z-index: 2;
+    white-space: nowrap;
+  }
+  .mockup-chip .chip-icon { font-size: 14px; }
+  .mockup-chip .chip-val { color: var(--orange); font-weight: 700; }
+
+  .chip-1 { top: 18px; right: -4px; animation-delay: 0s; }
+  .chip-2 { bottom: 48px; right: -4px; animation-delay: 1.5s; }
+  .chip-3 { bottom: 18px; left: -4px; animation-delay: 0.8s; }
+
+  @keyframes chipFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .whatsapp-card {
+    background: var(--wa-card-bg);
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  [data-theme="light"] .whatsapp-card {
+    border-color: rgba(0,0,0,0.1);
+  }
+
+  /* Phone-style top bar */
+  .wa-phone-bar {
+    background: var(--wa-header-bg);
+    padding: 10px 16px 6px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wa-phone-time { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 600; }
+  .wa-phone-icons { font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 2px; }
+
+  .wa-header {
+    background: var(--wa-header-bg);
+    padding: 10px 16px 14px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.3s ease;
+  }
+  .wa-back { color: rgba(255,255,255,0.7); font-size: 18px; margin-right: 2px; }
+  .wa-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), var(--orange-dim));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-d);
+    font-weight: 700; font-size: 16px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .wa-header-info { flex: 1; }
+  .wa-name { font-size: 14px; font-weight: 600; color: #E9EDEF; }
+  .wa-status { font-size: 11px; color: rgba(255,255,255,0.55); display: flex; align-items: center; gap: 4px; }
+  .wa-status-dot { width: 6px; height: 6px; background: #4CAF82; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+  .wa-header-icons { color: rgba(255,255,255,0.65); font-size: 18px; display: flex; gap: 14px; }
+
+  .wa-date-divider {
+    text-align: center;
+    margin: 8px 0 4px;
+  }
+  .wa-date-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    color: var(--wa-muted);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  [data-theme="light"] .wa-date-pill { background: rgba(0,0,0,0.1); }
+
+  .wa-body {
+    padding: 12px 14px 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    min-height: 220px;
+    background: var(--wa-body-bg);
+    transition: background 0.3s ease;
+  }
+
+  .wa-msg {
+    max-width: 85%;
+    padding: 8px 12px 4px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .wa-msg.from {
+    background: var(--wa-from);
+    color: var(--wa-text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  .wa-msg.to {
+    background: var(--wa-to);
+    color: var(--wa-text);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  .wa-time {
+    font-size: 10px;
+    color: var(--wa-muted);
+    text-align: right;
+    margin-top: 3px;
+    display: flex; align-items: center; justify-content: flex-end; gap: 3px;
+  }
+  .wa-tick { font-size: 11px; color: #53BDEB; }
+
+  /* Quick reply chips */
+  .wa-quick-replies {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    padding: 0 14px 14px;
+    background: var(--wa-body-bg);
+    transition: background 0.3s ease;
+  }
+  .wa-qr {
+    background: transparent;
+    border: 1.5px solid var(--orange);
+    color: var(--orange);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .wa-qr:hover { background: rgba(255,107,44,0.1); }
+
+  /* Progress bar inside card */
+  .wa-progress-row {
+    padding: 0 14px 14px;
+    background: var(--wa-body-bg);
+    transition: background 0.3s ease;
+  }
+  .wa-progress-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--wa-muted);
+    margin-bottom: 6px;
+  }
+  .wa-progress-bar-bg {
+    height: 5px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  [data-theme="light"] .wa-progress-bar-bg { background: rgba(0,0,0,0.1); }
+  .wa-progress-bar-fill {
+    height: 100%;
+    width: 68%;
+    background: linear-gradient(90deg, var(--orange), #FF9F6B);
+    border-radius: 999px;
+    box-shadow: 0 0 8px rgba(255,107,44,0.5);
+  }
+
+  .wa-msg.animate { opacity: 0; transform: translateY(8px); }
+  .wa-msg.animate.visible {
+    animation: msgIn 0.4s ease forwards;
+  }
+  @keyframes msgIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTION COMMONS ─────────────────────────── */
+  section { padding: 64px 24px; }
+
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--orange);
+  }
+
+  .section-title {
+    font-family: var(--font-d);
+    font-size: clamp(28px, 7vw, 38px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+  .section-title em { font-style: italic; color: var(--orange); }
+
+  .section-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  /* ─── TIMELINE / TYPICAL DAY ──────────────────── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+
+  .tl-item {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 0 16px;
+    padding-bottom: 36px;
+    position: relative;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+
+  .tl-left {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .tl-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex-shrink: 0;
+    margin-top: 4px;
+    box-shadow: 0 0 0 3px rgba(255,107,44,0.15);
+  }
+  .tl-line {
+    width: 1px; flex: 1;
+    background: linear-gradient(to bottom, rgba(255,107,44,0.3), transparent);
+    margin-top: 6px;
+  }
+  .tl-item:last-child .tl-line { display: none; }
+
+  .tl-time {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+  .tl-heading {
+    font-family: var(--font-d);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 6px;
+    letter-spacing: -0.4px;
+  }
+  .tl-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+  .tl-bubble {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .tl-bubble-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 5px;
+  }
+  .tl-bubble-text {
+    font-size: 13px;
+    color: var(--cream);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ─── BENTO FEATURES (IMPROVED) ──────────────── */
+  .bento { display: grid; gap: 14px; }
+
+  .bento-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 26px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .25s, transform .22s, box-shadow .22s, background 0.3s ease;
+  }
+  .bento-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(255,107,44,0.1);
+  }
+  .bento-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,107,44,0.4), transparent);
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .bento-card:hover::before { opacity: 1; }
+
+  /* Subtle corner glow */
+  .bento-card::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(255,107,44,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .bento-card:hover::after { opacity: 1; }
+
+  .bento-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(255,107,44,0.1);
+    border: 1px solid rgba(255,107,44,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 18px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .bento-card:hover .bento-icon {
+    background: rgba(255,107,44,0.16);
+    transform: scale(1.05);
+  }
+
+  .bento-title {
+    font-family: var(--font-d);
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--cream);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .bento-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* Tag badge on bento */
+  .bento-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(76,175,130,0.12);
+    border: 1px solid rgba(76,175,130,0.2);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .bento-large { grid-column: 1 / -1; }
+
+  /* Two-col grid inside large card */
+  .bento-large-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Mini chat inside bento */
+  .mini-chat {
+    margin-top: 18px;
+    background: var(--mini-chat-bg);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex; flex-direction: column; gap: 9px;
+    border: 1px solid var(--border);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .mini-chat-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mini-chat-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; }
+  .mini-msg {
+    padding: 8px 11px;
+    border-radius: 9px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--wa-text);
+    max-width: 92%;
+  }
+  .mini-msg.from {
+    background: var(--mini-from);
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+    transition: background 0.3s ease;
+  }
+  .mini-msg.to {
+    background: var(--mini-to);
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+    transition: background 0.3s ease;
+  }
+  [data-theme="light"] .mini-msg { color: #1a1a1a; }
+  .mini-reply-btn {
+    align-self: flex-start;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .mini-reply-btn:hover { background: #FF7D42; transform: scale(1.02); }
+
+  /* Progress bars visual */
+  .progress-bars {
+    display: flex; align-items: flex-end; gap: 7px;
+    height: 52px;
+    margin-top: 20px;
+    padding: 0 4px;
+  }
+  .progress-bar {
+    flex: 1;
+    background: var(--card2);
+    border-radius: 5px;
+    transition: background 0.3s ease;
+  }
+  .progress-bar.active {
+    background: var(--orange);
+    box-shadow: 0 0 14px rgba(255,107,44,0.45);
+  }
+
+  /* ─── PRICING ─────────────────────────────────── */
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid rgba(255,107,44,0.2);
+    border-radius: 20px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+  .pricing-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top right, rgba(255,107,44,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .pricing-badge {
+    display: inline-block;
+    background: rgba(255,107,44,0.15);
+    border: 1px solid rgba(255,107,44,0.3);
+    color: var(--orange);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+
+  .pricing-amount {
+    display: flex; align-items: baseline; gap: 4px;
+    margin-bottom: 4px;
+  }
+  .pricing-currency {
+    font-family: var(--font-d);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .pricing-number {
+    font-family: var(--font-d);
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--cream);
+    letter-spacing: -3px;
+  }
+  .pricing-per {
+    font-size: 14px;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+  .pricing-note {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .pricing-compare {
+    display: flex; flex-direction: column; gap: 0;
+    background: var(--pricing-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .pricing-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    transition: border-color 0.3s ease;
+  }
+  .pricing-row:last-child { border-bottom: none; }
+  .pricing-row-label { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+  .pricing-row-label span { font-size: 15px; }
+  .pricing-row-val { font-weight: 500; color: var(--cream); }
+  .pricing-row.highlight .pricing-row-label { color: var(--cream); font-weight: 600; }
+  .pricing-row.highlight .pricing-row-val { color: var(--orange); font-weight: 700; font-size: 15px; }
+  .pricing-row.highlight { background: rgba(255,107,44,0.06); }
+
+  .pricing-features {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 28px;
+  }
+  .pricing-feature {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .pricing-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: rgba(76,175,130,0.15);
+    border: 1px solid rgba(76,175,130,0.25);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green);
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ─── TESTIMONIALS ────────────────────────────── */
+  .testimonials { display: flex; flex-direction: column; gap: 14px; }
+
+  .testimonial-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    transition: border-color .25s, background 0.3s ease;
+  }
+  .testimonial-card:hover { border-color: rgba(255,107,44,0.15); }
+
+  .t-stars { color: var(--orange); font-size: 12px; letter-spacing: 2px; margin-bottom: 10px; }
+
+  .t-quote {
+    font-family: var(--font-d);
+    font-size: 17px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .t-author { display: flex; align-items: center; gap: 10px; }
+  .t-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+  }
+  .t-name { font-size: 13px; font-weight: 500; color: var(--cream); }
+  .t-loc { font-size: 11px; color: var(--muted); }
+
+  /* ─── CTA ─────────────────────────────────────── */
+  .cta-section {
+    padding: 64px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(ellipse, rgba(255,107,44,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section .section-title { text-align: center; }
+  .cta-section .section-sub { text-align: center; max-width: 300px; margin: 0 auto 32px; }
+  .cta-buttons {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .trust-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 16px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    flex-wrap: wrap;
+  }
+  .trust-note span { display: flex; align-items: center; gap: 4px; }
+
+  /* ─── STATS SECTION ───────────────────────────── */
+  .stats-strip {
+    padding: 48px 24px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .stat-n {
+    font-family: var(--font-d);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: -1.5px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-n span { color: var(--orange); }
+  .stat-l {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  /* ─── DIVIDER ─────────────────────────────────── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 24px;
+    transition: background 0.3s ease;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────── */
+  footer {
+    padding: 40px 24px 32px;
+    border-top: 1px solid var(--border);
+    transition: border-color 0.3s ease;
+  }
+  .footer-logo {
+    font-family: var(--font-d);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .footer-logo span { color: var(--orange); }
+  .footer-tagline {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .footer-col-head {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 12px;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color .2s;
+  }
+  .footer-col a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex; flex-direction: column; gap: 6px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    transition: border-color 0.3s ease;
+  }
+  .footer-copy { font-size: 12px; color: var(--muted2); }
+  .footer-legal {
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .footer-legal span {
+    font-size: 11px;
+    color: var(--muted2);
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  /* ─── SCROLL REVEAL ───────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+  .reveal-d4 { transition-delay: 0.4s; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Rel<span>i</span>v</div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">☀️</button>
+    <button class="btn-ghost">Log in</button>
+    <button class="btn-primary">Start free trial</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-pill">
+    <div class="hero-pill-dot"></div>
+    AI-Powered Personal Health
+  </div>
+  <h1>
+    Transform your health,<br>
+    one <em>WhatsApp</em><br>
+    message at a time.
+  </h1>
+  <p class="hero-sub">
+    Reliv's AI coach builds your <strong>diet plan, workout routine,</strong> and daily reminders — delivered straight to WhatsApp. For <strong>less than your daily chai,</strong> at ₹9/day.
+  </p>
+  <div class="hero-ctas">
+    <button class="btn-primary-lg">Start your free trial</button>
+    <button class="btn-link">Public shoutout board →</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat-item">
+      <div class="hero-stat-n">47+</div>
+      <div class="hero-stat-l">Users Today</div>
+    </div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-n">4.9★</div>
+      <div class="hero-stat-l">Avg Rating</div>
+    </div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-n">HIPAA</div>
+      <div class="hero-stat-l">Compliant</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE — moved directly below hero/navbar area -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="marquee-dot">◆</span> No app to download</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Personalized diet plans</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> WhatsApp-native</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Adaptive workouts</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> HIPAA compliant</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> ₹9 per day</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Cancel anytime</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Progress tracking</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> No app to download</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Personalized diet plans</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> WhatsApp-native</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Adaptive workouts</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> HIPAA compliant</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> ₹9 per day</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Cancel anytime</div>
+    <div class="marquee-item"><span class="marquee-dot">◆</span> Progress tracking</div>
+  </div>
+</div>
+
+<!-- WHATSAPP AI COACH CARD — improved -->
+<div class="mockup-section">
+  <div class="mockup-label">
+    <span class="mockup-label-dot"></span>
+    Live conversation · Reliv AI Coach
+  </div>
+  <div class="mockup-glow-wrap">
+    <div class="mockup-bg-glow"></div>
+
+    <!-- Floating stat chips -->
+    <div class="mockup-chip chip-1">
+      <span class="chip-icon">🔥</span>
+      <span>Streak <span class="chip-val">14 days</span></span>
+    </div>
+    <div class="mockup-chip chip-2">
+      <span class="chip-icon">⚖️</span>
+      <span>–<span class="chip-val">2.4 kg</span> this month</span>
+    </div>
+    <div class="mockup-chip chip-3">
+      <span class="chip-icon">💧</span>
+      <span><span class="chip-val">6/8</span> glasses</span>
+    </div>
+
+    <div class="whatsapp-card">
+      <!-- Phone status bar -->
+      <div class="wa-phone-bar">
+        <span class="wa-phone-time">9:41</span>
+        <span class="wa-phone-icons">▲ ● ▬</span>
+      </div>
+      <!-- WhatsApp header -->
+      <div class="wa-header">
+        <span class="wa-back">‹</span>
+        <div class="wa-avatar">R</div>
+        <div class="wa-header-info">
+          <div class="wa-name">Reliv AI Coach</div>
+          <div class="wa-status"><span class="wa-status-dot"></span> online</div>
+        </div>
+        <div class="wa-header-icons">
+          <span>⊘</span>
+          <span>⋮</span>
+        </div>
+      </div>
+      <!-- Messages -->
+      <div class="wa-body">
+        <div class="wa-date-divider">
+          <span class="wa-date-pill">TODAY</span>
+        </div>
+        <div class="wa-msg from animate">
+          Good morning Aarav 🌟 Here's today's plan — goal: lose 4 kg by August.
+          <div class="wa-time">7:01 AM</div>
+        </div>
+        <div class="wa-msg from animate">
+          🥗 Breakfast: Moong dal chilla + curd — 320 kcal. Want the recipe?
+          <div class="wa-time">7:02 AM</div>
+        </div>
+        <div class="wa-msg to animate">
+          Yes please 🙌
+          <div class="wa-time">7:05 AM <span class="wa-tick">✓✓</span></div>
+        </div>
+        <div class="wa-msg from animate">
+          💪 Workout: 25-min lower body at 6 PM. I'll check in after!
+          <div class="wa-time">5:55 PM</div>
+        </div>
+      </div>
+      <!-- Quick reply chips -->
+      <div class="wa-quick-replies">
+        <button class="wa-qr">Swap breakfast 🔄</button>
+        <button class="wa-qr">Skip workout</button>
+        <button class="wa-qr">Water intake 💧</button>
+      </div>
+      <!-- Daily progress bar -->
+      <div class="wa-progress-row">
+        <div class="wa-progress-label">Daily goal — 68% complete</div>
+        <div class="wa-progress-bar-bg">
+          <div class="wa-progress-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TYPICAL DAY -->
+<section>
+  <div class="eyebrow reveal">A Typical Day</div>
+  <h2 class="section-title reveal reveal-d1">Three nudges.<br><em>Zero</em> apps to open.</h2>
+  <p class="section-sub reveal reveal-d2">No dashboards, no logging marathons. Reliv reaches you exactly when it matters — and quietly rebuilds tomorrow's plan around how today went.</p>
+
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-time">07:00 — Morning</div>
+        <div class="tl-heading">Your day, planned.</div>
+        <div class="tl-desc">A custom breakfast and macro target lands before you've poured your coffee.</div>
+        <div class="tl-bubble">
+          <div class="tl-bubble-label">Reliv AI Coach</div>
+          <div class="tl-bubble-text">"Breakfast: Moong dal chilla + curd — 320 kcal. Tap for the recipe."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-time">13:00 — Midday</div>
+        <div class="tl-heading">A gentle check-in.</div>
+        <div class="tl-desc">Reliv asks how lunch went and rebalances the rest of your day if you went off-script.</div>
+        <div class="tl-bubble">
+          <div class="tl-bubble-label">Reliv AI Coach</div>
+          <div class="tl-bubble-text">"Lunch logged ✅ Dinner's been adjusted — lighter on carbs tonight."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item reveal">
+      <div class="tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-time">18:00 — Evening</div>
+        <div class="tl-heading">Move, then unwind.</div>
+        <div class="tl-desc">A short, doable workout reminder — followed by tomorrow's preview nudge.</div>
+        <div class="tl-bubble">
+          <div class="tl-bubble-label">Reliv AI Coach</div>
+          <div class="tl-bubble-text">"25-min lower body session ready. I'll check in after 💪"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FEATURES BENTO — improved cards -->
+<section>
+  <div class="eyebrow reveal">What's Inside</div>
+  <h2 class="section-title reveal reveal-d1">Everything a trainer<br>and dietitian do —<br><em>minus the waitlist.</em></h2>
+  <p class="section-sub reveal reveal-d2">One WhatsApp number. All the expertise of a personal coach, nutritionist, and wellness planner — working together, 24/7.</p>
+
+  <div class="bento">
+    <!-- Large card with mini chat -->
+    <div class="bento-card bento-large reveal">
+      <div class="bento-tag">🥗 Nutrition</div>
+      <div class="bento-icon">🥗</div>
+      <div class="bento-title">Personalized diet plans</div>
+      <div class="bento-desc">Built around your goals, preferences, and what's actually in your kitchen — recalculated weekly as your weight and habits shift.</div>
+      <div class="mini-chat">
+        <div class="mini-chat-label"><span class="mini-chat-dot"></span> Live AI response</div>
+        <div class="mini-msg from">Tonight's dinner — palak paneer (light), 1 roti, cucumber salad. 410 kcal.</div>
+        <button class="mini-reply-btn">Swap paneer for tofu?</button>
+        <div class="mini-msg from">Done ✅ Updated to 365 kcal — protein target still on track.</div>
+      </div>
+    </div>
+
+    <div class="bento-card reveal">
+      <div class="bento-icon">💬</div>
+      <div class="bento-title">WhatsApp reminders</div>
+      <div class="bento-desc">Meals, workouts, water, and sleep — delivered where you already live. No extra app to download, ever.</div>
+    </div>
+
+    <div class="bento-card reveal reveal-d1">
+      <div class="bento-icon">🏋️</div>
+      <div class="bento-title">Adaptive workouts</div>
+      <div class="bento-desc">Routines that scale with your equipment, time, and energy — from 10-minute resets to full sessions.</div>
+    </div>
+
+    <div class="bento-card bento-large reveal">
+      <div class="bento-tag">📈 Progress</div>
+      <div class="bento-icon">📊</div>
+      <div class="bento-title">Progress tracking that actually adapts</div>
+      <div class="bento-desc">Streaks, weight trends, and weekly summaries your AI coach uses to fine-tune tomorrow's plan — visible at a glance on WhatsApp.</div>
+      <div class="progress-bars">
+        <div class="progress-bar" style="height: 30%;"></div>
+        <div class="progress-bar" style="height: 45%;"></div>
+        <div class="progress-bar" style="height: 55%;"></div>
+        <div class="progress-bar" style="height: 65%;"></div>
+        <div class="progress-bar" style="height: 70%;"></div>
+        <div class="progress-bar" style="height: 80%;"></div>
+        <div class="progress-bar active" style="height: 100%;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item reveal">
+    <div class="stat-n">12<span>,</span>847<span>+</span></div>
+    <div class="stat-l">Success Stories</div>
+  </div>
+  <div class="stat-item reveal reveal-d1">
+    <div class="stat-n">4.9<span>★</span></div>
+    <div class="stat-l">Average Rating</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-n">12<span>min</span></div>
+    <div class="stat-l">Avg. Daily Workout</div>
+  </div>
+  <div class="stat-item reveal reveal-d1">
+    <div class="stat-n">₹<span>9</span></div>
+    <div class="stat-l">Per Day, All-In</div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section>
+  <div class="eyebrow reveal">Pricing</div>
+  <h2 class="section-title reveal reveal-d1">Cheaper than the<br><em>coffee</em> you'll skip.</h2>
+  <p class="section-sub reveal reveal-d2">One transparent price. No hidden tiers, no surprise renewals — cancel from WhatsApp, anytime, in one message.</p>
+
+  <div class="pricing-card reveal">
+    <div class="pricing-badge">One plan. Everything included.</div>
+    <div class="pricing-amount">
+      <span class="pricing-currency">₹</span>
+      <span class="pricing-number">9</span>
+      <span class="pricing-per">/ day, billed monthly</span>
+    </div>
+    <div class="pricing-note">That's ₹270/month for a personal coach, a nutritionist, and a planner.</div>
+
+    <div class="pricing-compare">
+      <div class="pricing-row">
+        <div class="pricing-row-label"><span>☕</span> Cup of chai</div>
+        <div class="pricing-row-val">₹10–15</div>
+      </div>
+      <div class="pricing-row">
+        <div class="pricing-row-label"><span>🛺</span> Short auto ride</div>
+        <div class="pricing-row-val">₹30–50</div>
+      </div>
+      <div class="pricing-row">
+        <div class="pricing-row-label"><span>🧃</span> Café cold coffee</div>
+        <div class="pricing-row-val">₹120+</div>
+      </div>
+      <div class="pricing-row highlight">
+        <div class="pricing-row-label"><span>⚡</span> Reliv — full day of AI coaching</div>
+        <div class="pricing-row-val">₹9</div>
+      </div>
+    </div>
+
+    <div class="pricing-features">
+      <div class="pricing-feature">
+        <div class="pricing-check">✓</div>
+        Personalized diet &amp; workout plans, updated weekly
+      </div>
+      <div class="pricing-feature">
+        <div class="pricing-check">✓</div>
+        Daily WhatsApp coaching — no app to install
+      </div>
+      <div class="pricing-feature">
+        <div class="pricing-check">✓</div>
+        Progress tracking &amp; weekly summaries
+      </div>
+      <div class="pricing-feature">
+        <div class="pricing-check">✓</div>
+        Bank-grade security, HIPAA-compliant by design
+      </div>
+    </div>
+
+    <button class="btn-primary-lg" style="width: 100%; text-align: center;">Start your free trial</button>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="eyebrow reveal">Real People, Real Streaks</div>
+  <h2 class="section-title reveal reveal-d1">Trusted by<br><em>thousands.</em></h2>
+
+  <div class="testimonials">
+    <div class="testimonial-card reveal">
+      <div class="t-stars">★★★★★</div>
+      <div class="t-quote">"I stopped overthinking what to eat. Reliv just tells me, and I do it. Six kilos down in two months."</div>
+      <div class="t-author">
+        <div class="t-avatar">PS</div>
+        <div>
+          <div class="t-name">Priya S.</div>
+          <div class="t-loc">Pune</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card reveal reveal-d1">
+      <div class="t-stars">★★★★★</div>
+      <div class="t-quote">"The WhatsApp reminders are the whole trick. I never opened another fitness app, and I never miss a day."</div>
+      <div class="t-author">
+        <div class="t-avatar">RK</div>
+        <div>
+          <div class="t-name">Rohit K.</div>
+          <div class="t-loc">Bengaluru</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card reveal reveal-d2">
+      <div class="t-stars">★★★★★</div>
+      <div class="t-quote">"Felt like having a dietitian on call for the price of a cutting chai. Worth every rupee."</div>
+      <div class="t-author">
+        <div class="t-avatar">AM</div>
+        <div>
+          <div class="t-name">Anjali M.</div>
+          <div class="t-loc">Delhi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <h2 class="section-title reveal">Your AI coach is<br><em>one message</em> away.</h2>
+  <p class="section-sub reveal reveal-d1">Start your free trial today — no credit card, no app download, just WhatsApp.</p>
+  <div class="cta-buttons reveal reveal-d2">
+    <button class="btn-primary-lg">Start your free trial</button>
+    <button class="btn-link">Returning user? Log in</button>
+  </div>
+  <div class="trust-note reveal reveal-d3">
+    <span>🔒 Bank-grade security</span>
+    <span>🏥 HIPAA compliant</span>
+    <span>❌ No credit card needed</span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Rel<span>i</span>v</div>
+  <div class="footer-tagline">AI-powered personal health,<br>delivered on WhatsApp — for ₹9/day.</div>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-col-head">Product</div>
+      <a href="#">How it works</a>
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Company</div>
+      <a href="#">About</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-head">Legal</div>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Reliv. All rights reserved.</div>
+    <div class="footer-legal">
+      <span>🔒 Bank-grade security</span>
+      <span>🏥 HIPAA compliant</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── THEME TOGGLE ──────────────────────────────
+  const html = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('reliv-theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+  btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+
+  btn.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('reliv-theme', next);
+  });
+
+  // ─── SCROLL REVEAL ─────────────────────────────
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ─── WHATSAPP MESSAGE ANIMATION ────────────────
+  const msgs = document.querySelectorAll('.wa-msg.animate');
+  msgs.forEach(msg => {
+    msg.style.opacity = '0';
+    msg.style.transform = 'translateY(8px)';
+  });
+  msgs.forEach((msg, i) => {
+    setTimeout(() => {
+      msg.style.opacity = '1';
+      msg.style.transform = 'translateY(0)';
+      msg.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    }, 400 + i * 500);
+  });
+
+  // ─── QUICK REPLY DEMO ──────────────────────────
+  document.querySelectorAll('.wa-qr').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.style.background = 'rgba(255,107,44,0.15)';
+      setTimeout(() => { btn.style.background = ''; }, 600);
+    });
+  });
+</script>
+</body>
+</html>
