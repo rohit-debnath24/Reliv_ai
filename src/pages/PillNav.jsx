@@ -28,6 +28,8 @@ const PillNav = ({
   const navItemsRef = useRef(null);
   const logoRef = useRef(null);
 
+  const itemsSerialized = JSON.stringify(items);
+
   useEffect(() => {
     const layout = () => {
       circleRefs.current.forEach(circle => {
@@ -116,7 +118,7 @@ const PillNav = ({
     }
 
     return () => window.removeEventListener('resize', onResize);
-  }, [items, ease, initialLoadAnimation]);
+  }, [itemsSerialized, ease, initialLoadAnimation]);
 
   const handleEnter = i => {
     const tl = tlRefs.current[i];

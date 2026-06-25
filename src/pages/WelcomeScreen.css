@@ -1353,7 +1353,7 @@
 /* ============ PRICE LAMP WITH DUST ============ */
 .welcome-landing .lamp-container {
   position: absolute;
-  top: 0;
+  top: -75px;
   right: 0; /* Right most edge */
   display: flex;
   flex-direction: column;
@@ -1821,6 +1821,7 @@
   .welcome-landing .lamp-container {
     right: 50%;
     transform: translateX(50%) rotate(0deg);
+    top: -40px !important;
   }
 }
 
@@ -2042,7 +2043,6 @@
   left: 0;
   pointer-events: none;
   z-index: 9998;
-  transition: background 0.3s, border-color 0.3s;
 }
 
 /* Hide custom cursor elements on mobile/tablet touch screens */
@@ -2567,6 +2567,11 @@
    Matches layouts and visual aesthetics of reliv-redesign-v2 (1) (2).html
    ========================================================================== */
 @media (max-width: 768px) {
+  /* --- Hide Award Nominee Badge on Mobile --- */
+  .welcome-landing .nominee-badge {
+    display: none !important;
+  }
+
   /* --- Color Variables Overrides --- */
   .welcome-landing.light-mode {
     --bg-main: #FAF9F6;

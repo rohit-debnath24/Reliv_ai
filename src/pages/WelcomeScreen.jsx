@@ -104,6 +104,13 @@ function CountUpNumber({ targetVal, type, duration = 2.5, startOnMount = false }
   );
 }
 
+const NAV_ITEMS = [
+  { label: 'How it works', href: '#day' },
+  { label: 'Features', href: '#features' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Reviews', href: '#proof' }
+];
+
 export default function WelcomeScreen() {
   const navigate = useNavigate();
 
@@ -418,12 +425,7 @@ export default function WelcomeScreen() {
           <PillNav
             logo={"/relivlogo.jpeg"}
             logoAlt="Reliv Logo"
-            items={[
-              { label: 'How it works', href: '#day' },
-              { label: 'Features', href: '#features' },
-              { label: 'Pricing', href: '#pricing' },
-              { label: 'Reviews', href: '#proof' }
-            ]}
+            items={NAV_ITEMS}
             activeHref="#"
             ease="power2.easeOut"
             baseColor={isDark ? "#ffffff" : "#000000"}
@@ -637,19 +639,19 @@ export default function WelcomeScreen() {
       {/* ============ PRICING ============ */}
       {/* ============ PRICING ============ */}
       <section className="pricing" id="pricing">
-        <div className="lamp-container">
-          <div className="lamp-wire"></div>
-          <div className="lamp-head"></div>
-          <div className="lamp-cone">
-            <div className="lamp-beam"></div>
-            <div className="lamp-dust-wrapper">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                <div key={i} className={`dust d${i}`}></div>
-              ))}
+        <div className="wrap price-shell">
+          <div className="lamp-container">
+            <div className="lamp-wire"></div>
+            <div className="lamp-head"></div>
+            <div className="lamp-cone">
+              <div className="lamp-beam"></div>
+              <div className="lamp-dust-wrapper">
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                  <div key={i} className={`dust d${i}`}></div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="wrap price-shell">
           <div className="reveal">
             <span className="eyebrow">Pricing</span>
             <h2 className="section-title">Cheaper than the<br /><em>coffee</em> you'll skip.</h2>
