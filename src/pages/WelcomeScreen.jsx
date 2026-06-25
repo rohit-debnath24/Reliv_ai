@@ -639,19 +639,19 @@ export default function WelcomeScreen() {
       {/* ============ PRICING ============ */}
       {/* ============ PRICING ============ */}
       <section className="pricing" id="pricing">
-        <div className="wrap price-shell">
-          <div className="lamp-container">
-            <div className="lamp-wire"></div>
-            <div className="lamp-head"></div>
-            <div className="lamp-cone">
-              <div className="lamp-beam"></div>
-              <div className="lamp-dust-wrapper">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                  <div key={i} className={`dust d${i}`}></div>
-                ))}
-              </div>
+        <div className="lamp-container">
+          <div className="lamp-wire"></div>
+          <div className="lamp-head"></div>
+          <div className="lamp-cone">
+            <div className="lamp-beam"></div>
+            <div className="lamp-dust-wrapper">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <div key={i} className={`dust d${i}`}></div>
+              ))}
             </div>
           </div>
+        </div>
+        <div className="wrap price-shell">
           <div className="reveal">
             <span className="eyebrow">Pricing</span>
             <h2 className="section-title">Cheaper than the<br /><em>coffee</em> you'll skip.</h2>
