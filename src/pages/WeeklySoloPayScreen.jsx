@@ -52,46 +52,30 @@ export default function WeeklySoloPayScreen() {
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
         <div className="checkout-card">
           {/* Header */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'clamp(12px, 3vw, 20px)',
-            marginBottom: 32,
-            paddingBottom: 28,
+          <div className="checkout-header-row" style={{
             borderBottom: `1px solid ${isDark ? '#23262F' : '#E5E7EB'}`,
           }}>
-            <div style={{
-              width: 72,
-              height: 72,
+            <div className="checkout-header-icon" style={{
               background: isDark ? 'rgba(240, 105, 34, 0.12)' : 'rgba(240, 105, 34, 0.08)',
-              borderRadius: 20,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#F06922',
               border: `1px solid ${isDark ? 'rgba(240, 105, 34, 0.2)' : 'rgba(240, 105, 34, 0.15)'}`,
-              animation: 'pulseGlow 3s ease-in-out infinite',
             }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
             <div style={{ flex: 1 }}>
-              <h2 style={{ fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 800, color: isDark ? '#FFFFFF' : '#111827', marginBottom: 4 }}>
+              <h2 className="checkout-header-title" style={{ color: isDark ? '#FFFFFF' : '#111827' }}>
                 Solo Plan
               </h2>
-              <p style={{ fontSize: 'clamp(12px, 3vw, 14px)', color: isDark ? '#8A8F98' : '#6B7280' }}>
+              <p className="checkout-header-sub" style={{ color: isDark ? '#8A8F98' : '#6B7280' }}>
                 Just for you • Valid 7 days
               </p>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{
-                fontSize: 'clamp(28px, 6vw, 36px)',
-                fontWeight: 800,
+              <div className="checkout-header-price" style={{
                 color: isDark ? '#FFFFFF' : '#111827',
-                lineHeight: 1,
               }}>
                 ₹29
               </div>
-              <div style={{ fontSize: 13, color: isDark ? '#8A8F98' : '#6B7280', fontWeight: 600 }}>
+              <div className="checkout-header-price-sub" style={{ color: isDark ? '#8A8F98' : '#6B7280' }}>
                 per week
               </div>
             </div>
@@ -212,6 +196,44 @@ export default function WeeklySoloPayScreen() {
           box-shadow: ${isDark ? '0 12px 40px rgba(0, 0, 0, 0.4)' : '0 12px 40px rgba(0, 0, 0, 0.08)'};
         }
 
+        .checkout-header-row {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          margin-bottom: 32px;
+          padding-bottom: 28px;
+        }
+        .checkout-header-icon {
+          width: 72px;
+          height: 72px;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #F06922;
+          animation: pulseGlow 3s ease-in-out infinite;
+          flex-shrink: 0;
+        }
+        .checkout-header-title {
+          font-size: 24px;
+          font-weight: 800;
+          margin-top: 0;
+          margin-bottom: 4px;
+        }
+        .checkout-header-sub {
+          font-size: 14px;
+          margin: 0;
+        }
+        .checkout-header-price {
+          font-size: 36px;
+          font-weight: 800;
+          line-height: 1;
+        }
+        .checkout-header-price-sub {
+          font-size: 13px;
+          font-weight: 600;
+        }
+
         .features-scroll-box {
           width: 100%;
           display: grid;
@@ -324,6 +346,80 @@ export default function WeeklySoloPayScreen() {
             gap: 12px;
             align-items: flex-start;
             padding: 16px 20px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .checkout-card {
+            padding: 20px 16px;
+            margin-bottom: 20px;
+          }
+          .checkout-header-row {
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+          }
+          .checkout-header-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+          }
+          .checkout-header-icon svg {
+            width: 24px;
+            height: 24px;
+          }
+          .checkout-header-title {
+            font-size: 18px;
+          }
+          .checkout-header-sub {
+            font-size: 12px;
+          }
+          .checkout-header-price {
+            font-size: 26px;
+          }
+          .checkout-header-price-sub {
+            font-size: 11px;
+          }
+          .feature-item {
+            padding: 8px 12px;
+          }
+          .feature-item span {
+            font-size: 12.5px !important;
+          }
+          .feature-item svg {
+            width: 16px;
+            height: 16px;
+          }
+          .value-prop-box {
+            padding: 12px 14px;
+            gap: 12px;
+            margin-bottom: 24px;
+          }
+          .value-prop-box p {
+            font-size: 12px !important;
+          }
+          .value-prop-box p:first-of-type {
+            font-size: 13.5px !important;
+          }
+          .pay-btn {
+            padding: 14px 20px;
+            font-size: 15px;
+            border-radius: 12px;
+          }
+          .trust-box {
+            flex-direction: row !important;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 16px !important;
+            padding: 12px 14px;
+          }
+          .trust-box > div {
+            font-size: 11px !important;
+            gap: 4px !important;
+          }
+          .trust-box svg {
+            width: 14px;
+            height: 14px;
           }
         }
 

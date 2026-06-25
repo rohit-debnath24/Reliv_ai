@@ -269,6 +269,57 @@ const CSS = `
 .confirm-btn:active {
   transform: scale(0.98);
 }
+
+@media (max-width: 480px) {
+  .mealtimes-card {
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+  .mealtimes-card-left {
+    gap: 12px;
+  }
+  .mealtimes-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+  .mealtimes-icon-box svg {
+    width: 20px;
+    height: 20px;
+  }
+  .mealtimes-card-label {
+    font-size: 14px;
+  }
+  .mealtimes-card-sub {
+    font-size: 11.5px;
+  }
+  .mealtimes-input {
+    width: 96px;
+    padding: 8px 10px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  .water-banner {
+    padding: 12px 16px;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+  }
+  .water-banner-icon {
+    font-size: 22px;
+  }
+  .water-banner-title {
+    font-size: 13.5px;
+  }
+  .water-banner-sub {
+    font-size: 12px;
+  }
+  .confirm-btn {
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+}
 `;
 
 export default function MealTimesScreen() {

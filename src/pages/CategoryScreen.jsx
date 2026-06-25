@@ -207,10 +207,7 @@ export default function CategoryScreen() {
       >
         <div style={{ maxWidth: 700, margin: '0 auto' }}>
         {/* Categories Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 20,
+        <div className="category-grid" style={{
           marginBottom: 40,
         }}>
           {categories.map((c, index) => (
@@ -219,6 +216,7 @@ export default function CategoryScreen() {
               onClick={() => setSelected(c.id)}
               onMouseEnter={() => setHovered(c.id)}
               onMouseLeave={() => setHovered(null)}
+              className="category-card"
               style={{
                 background: isDark 
                   ? (selected === c.id 
@@ -261,7 +259,7 @@ export default function CategoryScreen() {
             >
               {/* Hero Badge */}
               {c.hero && (
-                <div style={{
+                <div className="category-card-badge" style={{
                   position: 'absolute',
                   top: -12,
                   right: '50%',
@@ -302,7 +300,7 @@ export default function CategoryScreen() {
               )}
 
               {/* Icon */}
-              <div style={{
+              <div className="category-card-icon-box" style={{
                 width: c.isHeroTraining ? 80 : 70,
                 height: c.isHeroTraining ? 80 : 70,
                 background: isDark ? `rgba(255, 255, 255, 0.05)` : `linear-gradient(135deg, ${c.color}15 0%, ${c.color}25 100%)`,
@@ -321,7 +319,7 @@ export default function CategoryScreen() {
               </div>
 
               {/* Title */}
-              <h3 style={{
+              <h3 className="category-card-title" style={{
                 fontSize: c.isHeroTraining ? 20 : 17,
                 fontWeight: 700,
                 color: selected === c.id ? c.color : (isDark ? '#FFF' : '#111'),
@@ -331,7 +329,7 @@ export default function CategoryScreen() {
               </h3>
 
               {/* Description */}
-              <p style={{
+              <p className="category-card-desc" style={{
                 fontSize: 13,
                 color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
                 lineHeight: 1.4,
@@ -366,6 +364,7 @@ export default function CategoryScreen() {
             <button
               onClick={handleContinue}
               disabled={!selected}
+              className="category-btn"
               style={{
                 width: '100%',
                 background: selected
@@ -391,6 +390,50 @@ export default function CategoryScreen() {
           );
         })()}
       </div>
+
+      <style>{`
+        .category-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+          .category-grid {
+            grid-template-columns: 1fr;
+            gap: 14px;
+          }
+          .category-card {
+            padding: 18px 20px !important;
+          }
+          .category-card-icon-box {
+            width: 56px !important;
+            height: 56px !important;
+            border-radius: 16px !important;
+            margin-bottom: 12px !important;
+          }
+          .category-card-icon-box svg {
+            width: 24px !important;
+            height: 24px !important;
+          }
+          .category-card-title {
+            font-size: 16px !important;
+            margin-bottom: 4px !important;
+          }
+          .category-card-desc {
+            font-size: 12.5px !important;
+          }
+          .category-card-badge {
+            padding: 4px 12px !important;
+            font-size: 10px !important;
+          }
+          .category-btn {
+            padding: 15px !important;
+            font-size: 15px !important;
+            border-radius: 12px !important;
+          }
+        }
+      `}</style>
     </Layout>
     </>
   );

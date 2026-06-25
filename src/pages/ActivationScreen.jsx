@@ -327,6 +327,96 @@ const CSS = `
     padding: 44px 24px;
   }
 }
+
+@media (max-width: 480px) {
+  .activation-content {
+    padding: 20px 12px;
+  }
+  .activation-card {
+    padding: 24px 16px;
+    border-radius: 24px;
+  }
+  .success-icon-badge {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .success-icon-badge svg {
+    width: 36px;
+    height: 36px;
+  }
+  .success-h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .success-sub {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  .access-code-box {
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 16px;
+  }
+  .access-code-label {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .access-code-digits {
+    gap: 8px;
+  }
+  .access-digit {
+    width: 40px;
+    height: 52px;
+    border-radius: 8px;
+    font-size: 20px;
+  }
+  .access-code-footer {
+    font-size: 11.5px;
+    margin-top: 12px;
+  }
+  .next-steps-panel {
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 16px;
+  }
+  .next-steps-title {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  .next-step-item {
+    gap: 10px;
+  }
+  .next-step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+  .next-step-text {
+    font-size: 12.5px;
+  }
+  .buttons-group {
+    gap: 10px;
+  }
+  .btn-primary {
+    padding: 14px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+  .btn-whatsapp {
+    padding: 14px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+  .btn-secondary {
+    padding: 12px;
+    font-size: 13.5px;
+    border-radius: 12px;
+  }
+}
 `;
 
 export default function ActivationScreen() {

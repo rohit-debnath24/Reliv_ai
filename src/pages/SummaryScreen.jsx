@@ -295,6 +295,81 @@ const CSS = `
   .included-grid{grid-template-columns: 1fr;}
   .trust-badges{gap: 14px;}
 }
+
+@media (max-width: 480px) {
+  .summary-card {
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+  .summary-header {
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+  .summary-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 22px;
+  }
+  .summary-plan-title {
+    font-size: 18px;
+  }
+  .summary-plan-sub {
+    font-size: 12px;
+  }
+  .summary-plan-price {
+    font-size: 22px;
+  }
+  .summary-plan-price-period {
+    font-size: 11px;
+  }
+  .summary-details-list {
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .summary-details-item {
+    padding: 10px 14px;
+    border-radius: 12px;
+  }
+  .summary-details-label {
+    font-size: 12.5px;
+  }
+  .summary-details-value {
+    font-size: 13px;
+  }
+  .included-banner {
+    padding: 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+  }
+  .included-title {
+    font-size: 13.5px;
+    margin-bottom: 10px;
+  }
+  .included-text {
+    font-size: 12px;
+  }
+  .included-check {
+    font-size: 12px;
+  }
+  .included-grid {
+    gap: 8px;
+  }
+  .activate-btn {
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+  .trust-badges {
+    gap: 10px 16px;
+    margin-top: 4px;
+  }
+  .trust-item {
+    font-size: 11px;
+    gap: 4px;
+  }
+}
 `;
 
 export default function SummaryScreen() {

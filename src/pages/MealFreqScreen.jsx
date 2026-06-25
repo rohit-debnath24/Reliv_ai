@@ -280,6 +280,61 @@ const CSS = `
 .mealfreq-btn.enabled:active {
   transform: scale(0.98);
 }
+
+@media (max-width: 480px) {
+  .mealfreq-card {
+    padding: 16px 18px;
+    border-radius: 16px;
+  }
+  .mealfreq-card-header {
+    margin-bottom: 12px;
+  }
+  .mealfreq-title {
+    font-size: 17px;
+  }
+  .mealfreq-desc {
+    font-size: 12.5px;
+  }
+  .mealfreq-checkbox {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+  }
+  .mealfreq-checkbox svg {
+    width: 10px;
+    height: 10px;
+  }
+  .mealfreq-badge-row {
+    gap: 6px;
+  }
+  .mealfreq-badge {
+    font-size: 10.5px;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+  .mealfreq-badge svg {
+    width: 11px;
+    height: 11px;
+    margin-right: 4px;
+  }
+  .whatsapp-banner {
+    padding: 12px 14px;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+  }
+  .whatsapp-banner-icon {
+    font-size: 18px;
+  }
+  .whatsapp-banner-text {
+    font-size: 12px;
+  }
+  .mealfreq-btn {
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+}
 `;
 
 export default function MealFreqScreen() {
